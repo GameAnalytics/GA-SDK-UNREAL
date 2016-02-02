@@ -13,5 +13,4 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 Changelog
 ---------
 **0.1.0**
-* first version
-* iOS-only to start with
+* initial version (iOS)
