@@ -1,0 +1,27 @@
+{
+	"FileVersion" : 3,
+	
+	"FriendlyName" : "GameAnalytics",
+	"Version" : 1,
+	"VersionName" : "1.0",
+	"CreatedBy" : "GameAnalytics",
+	"CreatedByURL" : "http://gameanalytics.com",
+	"EngineVersion" : "4.10.0",
+	"Description" : "GameAnalytics is a free analytics platform that helps game developers understand their players' behaviour by delivering relevant insights.",
+	"Category" : "Analytics",
+	
+	"Modules" :
+	[
+		{
+            "Name" : "GameAnalytics",
+            "Type" : "Runtime",
+            "LoadingPhase" : "PreDefault",
+            "WhitelistPlatforms" : [ "IOS" ]
+        },
+		{
+            "Name" : "GameAnalyticsEditor",
+            "Type" : "Developer",
+            "LoadingPhase" : "PreDefault"
+        }
+	]
+}
