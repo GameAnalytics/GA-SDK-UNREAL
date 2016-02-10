@@ -4,7 +4,9 @@
 
 #include "EngineVersion.h"
 
-#define GA_VERSION "1.0.0"
+#define GA_VERSION_MAJOR 0
+#define GA_VERSION_MINOR 1
+#define GA_VERSION_PATCH 1
 
 //#include "GameAnalyticsProjectSettings.h"
 
@@ -131,9 +133,10 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 	#endif
 			
 	////// Configure engine version 
-	FString EngineVersionString = FString::Printf(TEXT("Unreal %d.%d.%d"), GEngineVersion.GetMajor(), GEngineVersion.GetMinor(), GEngineVersion.GetPatch());	
+	FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), GEngineVersion.GetMajor(), GEngineVersion.GetMinor(), GEngineVersion.GetPatch());
 	gameanalytics::GameAnalytics::configureEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
-	gameanalytics::GameAnalytics::configureSdkVersion(GA_VERSION);
+    FString SdkVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), GA_VERSION_MAJOR, GA_VERSION_MINOR, GA_VERSION_PATCH);
+	gameanalytics::GameAnalytics::configureSdkVersion(TCHAR_TO_ANSI(*SdkVersionString));
 
 	////// Enable log
 	gameanalytics::GameAnalytics::setEnabledInfoLog(ProjectSettings.InfoLogBuild);
