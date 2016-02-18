@@ -44,3 +44,5 @@ void FGameAnalyticsEditor::ShutdownModule()
 }
 
 IMPLEMENT_MODULE(FGameAnalyticsEditor, GameAnalyticsEditor)
+
+#undef LOCTEXT_NAMESPACE

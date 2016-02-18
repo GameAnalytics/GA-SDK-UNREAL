@@ -12,6 +12,8 @@
 
 #include "Json.h"
 
+#define LOCTEXT_NAMESPACE "GameAnalyticsTargetSettingsCustomization"
+
 static void OnBrowserLinkClicked(const FSlateHyperlinkRun::FMetadata& Metadata)
 {
 	const FString* URL = Metadata.Find(TEXT("href"));
