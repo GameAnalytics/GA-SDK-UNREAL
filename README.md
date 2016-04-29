@@ -12,6 +12,9 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**0.1.2**
+* fixed compile warnings for Unreal Engine 4.11
+
 **0.1.1**
 * minor fixes
 

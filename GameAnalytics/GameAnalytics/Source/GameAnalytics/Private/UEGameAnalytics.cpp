@@ -6,7 +6,7 @@
 
 #define GA_VERSION_MAJOR 0
 #define GA_VERSION_MINOR 1
-#define GA_VERSION_PATCH 1
+#define GA_VERSION_PATCH 2
 
 //#include "GameAnalyticsProjectSettings.h"
 
