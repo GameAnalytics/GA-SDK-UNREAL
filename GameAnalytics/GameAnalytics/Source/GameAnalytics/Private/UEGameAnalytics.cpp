@@ -133,7 +133,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 	#endif
 			
 	////// Configure engine version 
-	FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), GEngineVersion.GetMajor(), GEngineVersion.GetMinor(), GEngineVersion.GetPatch());
+    FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
 	gameanalytics::GameAnalytics::configureEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
     FString SdkVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), GA_VERSION_MAJOR, GA_VERSION_MINOR, GA_VERSION_PATCH);
 	gameanalytics::GameAnalytics::configureSdkVersion(TCHAR_TO_ANSI(*SdkVersionString));

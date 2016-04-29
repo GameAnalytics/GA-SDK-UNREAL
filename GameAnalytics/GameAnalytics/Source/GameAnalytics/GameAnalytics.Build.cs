@@ -9,8 +9,7 @@ namespace UnrealBuildTool.Rules
 	{
         public GameAnalytics(TargetInfo Target)
 		{
-            var ModulePath = Path.GetDirectoryName(RulesCompiler.GetModuleFilename(this.GetType().Name));
-            var GameAnalyticsPath = Path.GetFullPath(Path.Combine(ModulePath, "..", "ThirdParty"));
+            var GameAnalyticsPath = Path.Combine( ModuleDirectory, "../../ThirdParty/" );
             var libPath = Path.Combine(GameAnalyticsPath, "lib");
 
             PublicIncludePaths.Add(Path.Combine(GameAnalyticsPath, "include"));
@@ -80,9 +79,9 @@ namespace UnrealBuildTool.Rules
 				}
                 );*/
 
-            PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModulePath, "Private")));
-            PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModulePath, "Public")));
-            PublicIncludePaths.Add(Path.GetFullPath(Path.Combine(ModulePath, "Public")));
+            PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "Private")));
+            PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "Public")));
+            PublicIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "Public")));
 
 
             PrivateDependencyModuleNames.AddRange(
