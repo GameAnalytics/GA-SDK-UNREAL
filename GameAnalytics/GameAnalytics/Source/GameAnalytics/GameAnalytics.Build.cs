@@ -9,7 +9,7 @@ namespace UnrealBuildTool.Rules
 	{
         public GameAnalytics(TargetInfo Target)
 		{
-            var GameAnalyticsPath = Path.Combine( ModuleDirectory, "../../ThirdParty/" );
+            var GameAnalyticsPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../../ThirdParty/" ));
             var libPath = Path.Combine(GameAnalyticsPath, "lib");
 
             PublicIncludePaths.Add(Path.Combine(GameAnalyticsPath, "include"));
