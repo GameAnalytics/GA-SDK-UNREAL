@@ -7,7 +7,7 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 > This release of the Unreal SDK only include support for **iOS**.<br>
 > 
 > Requirements:<br/>
-> **Unreal Engine:** 4.10+ 
+> **Unreal Engine:** 4.10+  
 > **iOS:** iOS 6+
 
 Changelog
