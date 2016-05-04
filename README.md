@@ -8,7 +8,7 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 > 
 > Requirements:<br/>
 > **Unreal Engine:** 4.10+  
-> **iOS:** iOS 6+
+> **iOS:** iOS 7+
 
 Changelog
 ---------
