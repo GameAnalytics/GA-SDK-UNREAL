@@ -55,8 +55,8 @@ public:
 
 	void OnStudioMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
 	void OnGameMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
-	//void OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
-	//void OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+	void OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
+	void OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
 
 public:
 	static FGameAnalyticsTargetSettingsCustomization& getInstance()
@@ -69,8 +69,8 @@ public:
 	TArray<STUDIO> StudiosAndGames;
 	STUDIO SelectedStudioIos;
 	GAME SelectedGameIos;
-	//STUDIO SelectedStudioAndroid;
-	//GAME SelectedGameAndroid;
+	STUDIO SelectedStudioAndroid;
+	GAME SelectedGameAndroid;
 
 private:
 	FGameAnalyticsTargetSettingsCustomization() {};
@@ -82,8 +82,10 @@ private:
 	FReply Login();
 	TSharedRef<SWidget> UpdateStudiosIos() const;
 	TSharedRef<SWidget> UpdateGamesIos() const;
-	//TSharedRef<SWidget> UpdateStudiosAndroid() const;
-	//TSharedRef<SWidget> UpdateGamesAndroid() const;
+	TSharedRef<SWidget> UpdateStudiosAndroid() const;
+	TSharedRef<SWidget> UpdateGamesAndroid() const;
+    
+    FORCEINLINE FString GetIniName() const { return FString::Printf(TEXT("%sDefaultEngine.ini"), *FPaths::SourceConfigDir()); }
 
 private:
 	IDetailLayoutBuilder* SavedLayoutBuilder;

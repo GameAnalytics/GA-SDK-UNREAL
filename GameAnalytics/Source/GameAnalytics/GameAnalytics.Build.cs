@@ -12,27 +12,20 @@ namespace UnrealBuildTool.Rules
             var GameAnalyticsPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../ThirdParty/" ));
             var libPath = Path.Combine(GameAnalyticsPath, "lib");
 
-            PublicIncludePaths.Add(Path.Combine(GameAnalyticsPath, "include"));
-
             switch (Target.Platform)
             {
                 case UnrealTargetPlatform.Win64:
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
+                    //PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
                     break;
                 case UnrealTargetPlatform.Win32:
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
+                    //PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
                     break;
-                /*case UnrealTargetPlatform.Android:
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "android-armeabi", "libGameAnalytics.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "android-armeabi-v7a", "libGameAnalytics.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "android-x86", "libGameAnalytics.a"));
-
-                    PrivateIncludePaths.AddRange(new string[] { "../../../../../../Source/Runtime/Launch/Private" });
-
-                    break;*/
+                case UnrealTargetPlatform.Android:
+                    PrivateDependencyModuleNames.Add("Launch");
+                    break;
                 case UnrealTargetPlatform.Mac:
                     //PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
-                    //break;
+                    break;
                 case UnrealTargetPlatform.IOS:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "ios", "libGameAnalytics.a"));
                     PublicFrameworks.AddRange(
@@ -50,7 +43,6 @@ namespace UnrealBuildTool.Rules
                     });
                     break;
 
-                case UnrealTargetPlatform.Android:
                 case UnrealTargetPlatform.XboxOne:
                 case UnrealTargetPlatform.PS4:
                 case UnrealTargetPlatform.WinRT:
@@ -100,6 +92,12 @@ namespace UnrealBuildTool.Rules
                     "Engine"
                 }
             );
+
+            if (Target.Platform == UnrealTargetPlatform.Android)
+            {
+                string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, BuildConfiguration.RelativeEnginePath);
+                AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "GameAnalytics_APL.xml")));
+            }
         }
 	}
 }

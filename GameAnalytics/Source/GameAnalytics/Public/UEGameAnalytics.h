@@ -30,7 +30,6 @@ public:
 	{
 		return FModuleManager::LoadModuleChecked< FAnalyticsGameAnalytics >( "GameAnalytics" );
 	}
-	
 
 	//--------------------------------------------------------------------------
 	// provider factory functions
@@ -48,14 +47,15 @@ public:
 		FString IosGameKey;
 		FString IosSecretKey;
 		FString IosBuild;
-		/*FString AndroidGameKey;
+		FString AndroidGameKey;
 		FString AndroidSecretKey;
-		FString AndroidBuild;*/
+		FString AndroidBuild;
 		TArray<FString> CustomDimensions01;
 		TArray<FString> CustomDimensions02;
 		TArray<FString> CustomDimensions03;
 		TArray<FString> ResourceCurrencies;
 		TArray<FString> ResourceItemTypes;
+        bool UseCustomId;
 		bool SubmitErrors;
 		bool SubmitAverageFPS;
 		bool SubmitCriticalFPS;
@@ -70,5 +70,6 @@ public:
 private:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+    
+    static FORCEINLINE FString GetIniName() { return FString::Printf(TEXT("%sDefaultEngine.ini"), *FPaths::SourceConfigDir()); }
 };
-

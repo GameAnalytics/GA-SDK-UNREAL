@@ -70,13 +70,13 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 
 	IDetailCategoryBuilder& SetupCategory = DetailLayout.EditCategory(TEXT("Account"), FText::GetEmpty(), ECategoryPriority::Variable);
 	IDetailCategoryBuilder& IosCategory = DetailLayout.EditCategory(TEXT("IosSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
-	//IDetailCategoryBuilder& AndroidCategory = DetailLayout.EditCategory(TEXT("AndroidSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
+	IDetailCategoryBuilder& AndroidCategory = DetailLayout.EditCategory(TEXT("AndroidSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
 
 	const FText StudioMenuStringIos = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name);
 	const FText GameMenuStringIos = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.Name);
-	//const FText StudioMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name);
-	//const FText GameMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.Name);
-	//const FText PlatformMenuString = LOCTEXT("PlatformMenu", "Select Platform");
+	const FText StudioMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name);
+	const FText GameMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.Name);
+	const FText PlatformMenuString = LOCTEXT("PlatformMenu", "Select Platform");
 
 	SetupCategory.AddCustomRow(LOCTEXT("DocumentationInfo", "Documentation Info"), false)
 		.WholeRowWidget
@@ -98,6 +98,10 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 				]
 			]
 		];
+    
+    FString tempUserName = "";
+    GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("Username"), tempUserName, GetIniName());
+    Username = FName(*tempUserName);
 
 	SetupCategory.AddCustomRow(LOCTEXT("LoginUserName", "Login User Name"), false)
 		.NameContent()
@@ -118,7 +122,7 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 			+ SHorizontalBox::Slot()
 			[
 				SNew(SEditableTextBox)
-				.Text(LOCTEXT("UserName", ""))
+				.Text(FText::FromString(tempUserName))
 				.ToolTipText(LOCTEXT("UserName_Tooltip", "Your GameAnalytics account user name."))
 				.OnTextCommitted(this, &FGameAnalyticsTargetSettingsCustomization::UsernameEntered)
 				.OnTextChanged(this, &FGameAnalyticsTargetSettingsCustomization::UsernameChanged)
@@ -261,8 +265,8 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 	}
 
 	//if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
-	//{
-	/*AndroidCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
+	{
+	AndroidCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
 		.NameContent()
 		[
 			SNew(SHorizontalBox)
@@ -298,10 +302,10 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 						.Font(DetailLayout.GetDetailFont())
 					]
 			]
-		];*/
-	//}
+		];
+	}
 
-	/*if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name.IsEmpty())
+	if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name.IsEmpty())
 	{
 		AndroidCategory.AddCustomRow(LOCTEXT("GamesRow", "Games"), false)
 			.NameContent()
@@ -340,131 +344,8 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 						]
 				]
 			];
-	}*/
-
-	/*if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGame.Name.IsEmpty())
-	{
-		SetupCategory.AddCustomRow(LOCTEXT("PlatformRow", "Platforms"), false)
-			.NameContent()
-			[
-				SNew(SHorizontalBox)
-				+ SHorizontalBox::Slot()
-				.Padding(FMargin(0, 1, 0, 1))
-				.FillWidth(1.0f)
-				[
-					SNew(STextBlock)
-					.Text(LOCTEXT("PlatformsLabel", "Platforms"))
-					.Font(DetailLayout.GetDetailFont())
-				]
-			]
-		.ValueContent()
-			[
-				SNew(SHorizontalBox)
-				+ SHorizontalBox::Slot()
-				.FillWidth(1.0f)
-				[
-					SNew(SComboButton)
-					.VAlign(VAlign_Center)
-					.ToolTipText(LOCTEXT("SelectPlatformTooltip", "Platform"))
-					.OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdatePlatforms)
-					.ButtonContent()
-					[
-						SNew(STextBlock)
-						.Text(PlatformMenuString)
-						.Font(IDetailLayoutBuilder::GetDetailFont())
-					]
-					.MenuContent()
-						[
-							SNew(STextBlock)
-							.Text(LOCTEXT("LoginToSelectPlatformLabel", "Please select a Studio and Game."))
-							.Font(DetailLayout.GetDetailFont())
-						]
-				]
-			];
-	}*/
+	}
 }
-
-/*void FGameAnalyticsTargetSettingsCustomization::OnIosMenuItemClicked()
-{
-	if (!GConfig) return;
-
-	UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
-
-	if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->AndroidGameKey)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
-		return;
-	}
-
-	FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
-
-	FString ConfigsPath = GEngineIni;//FPaths::SourceConfigDir();
-	//ConfigsPath += "DefaultEngine.ini";
-
-	GConfig->SetString(
-		*GameAnalyticsSection,
-		TEXT("IosGameKey"),
-		*(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey),
-		ConfigsPath
-		);
-
-	GConfig->SetString(
-		*GameAnalyticsSection,
-		TEXT("IosSecretKey"),
-		*(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.SecretKey),
-		ConfigsPath
-		);
-
-	GConfig->Flush(false, GEngineIni);
-
-	UE_LOG(LogTemp, Warning, TEXT("Platform selected: iOS, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey));
-	UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *ConfigsPath);
-
-	GameAnalyticsProjectSettings->ReloadConfig();
-
-	SavedLayoutBuilder->ForceRefreshDetails();
-}*/
-
-/*void FGameAnalyticsTargetSettingsCustomization::OnAndroidMenuItemClicked()
-{
-	if (!GConfig) return;
-
-	UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
-
-	if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->IosGameKey)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
-		return;
-	}
-
-	FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
-
-	FString ConfigsPath = GEngineIni;//FPaths::SourceConfigDir();
-	//ConfigsPath += "DefaultEngine.ini";
-
-	GConfig->SetString(
-		*GameAnalyticsSection,
-		TEXT("AndroidGameKey"),
-		*(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey),
-		ConfigsPath
-		);
-
-	GConfig->SetString(
-		*GameAnalyticsSection,
-		TEXT("AndroidSecretKey"),
-		*(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.SecretKey),
-		ConfigsPath
-		);
-
-	GConfig->Flush(false, GEngineIni);
-
-	UE_LOG(LogTemp, Warning, TEXT("Platform selected: Android, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey));
-	UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *ConfigsPath);
-
-	GameAnalyticsProjectSettings->ReloadConfig();
-
-	SavedLayoutBuilder->ForceRefreshDetails();
-}*/
 
 TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesIos() const
 {
@@ -483,7 +364,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesIos() 
 	return GameMenuBuilder.MakeWidget();
 }
 
-/*TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesAndroid() const
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesAndroid() const
 {
 	FMenuBuilder GameMenuBuilder(true, NULL);
 	{
@@ -498,7 +379,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesIos() 
 	}
 
 	return GameMenuBuilder.MakeWidget();
-}*/
+}
 
 void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
 {
@@ -510,28 +391,28 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAn
 
 	UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
 
-	/*if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->AndroidGameKey)
+	if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->AndroidGameKey)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
 		return;
-	}*/
+	}
 
 	FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
 
-	GConfig->SetString(*GameAnalyticsSection, TEXT("IosGameKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey), GEngineIni);
-	GConfig->SetString(*GameAnalyticsSection, TEXT("IosSecretKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.SecretKey), GEngineIni);
+	GConfig->SetString(*GameAnalyticsSection, TEXT("IosGameKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey), GetIniName());
+	GConfig->SetString(*GameAnalyticsSection, TEXT("IosSecretKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.SecretKey), GetIniName());
 
-	GConfig->Flush(false, GEngineIni);
+	GConfig->Flush(false, GetIniName());
 
 	UE_LOG(LogTemp, Warning, TEXT("Platform selected: iOS, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey));
-	UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GEngineIni);
+	UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
 
-	GameAnalyticsProjectSettings->ReloadConfig();
+	GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
 
 	SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-/*void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
 {
 	FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid = GameItem;
 
@@ -549,32 +430,19 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAn
 
 	FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
 
-	FString ConfigsPath = GEngineIni;//FPaths::SourceConfigDir();
-	//ConfigsPath += "DefaultEngine.ini";
+	GConfig->SetString(*GameAnalyticsSection, TEXT("AndroidGameKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey), GetIniName());
 
-	GConfig->SetString(
-		*GameAnalyticsSection,
-		TEXT("AndroidGameKey"),
-		*(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey),
-		ConfigsPath
-		);
+	GConfig->SetString(*GameAnalyticsSection, TEXT("AndroidSecretKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.SecretKey), GetIniName());
 
-	GConfig->SetString(
-		*GameAnalyticsSection,
-		TEXT("AndroidSecretKey"),
-		*(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.SecretKey),
-		ConfigsPath
-		);
-
-	GConfig->Flush(false, GEngineIni);
+	GConfig->Flush(false, GetIniName());
 
 	UE_LOG(LogTemp, Warning, TEXT("Platform selected: Android, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey));
-	//UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *ConfigsPath);
+	UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
 
-	GameAnalyticsProjectSettings->ReloadConfig();
+	GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
 
 	SavedLayoutBuilder->ForceRefreshDetails();
-}*/
+}
 
 TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosIos() const
 {
@@ -593,7 +461,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosIos(
 	return StudioMenuBuilder.MakeWidget();
 }
 
-/*TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosAndroid() const
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosAndroid() const
 {
 	FMenuBuilder StudioMenuBuilder(true, NULL);
 	{
@@ -608,7 +476,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosIos(
 	}
 
 	return StudioMenuBuilder.MakeWidget();
-}*/
+}
 
 void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
 {
@@ -622,7 +490,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedIos(FGame
 	SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-/*void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
 {
 	FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid = StudioItem;
 
@@ -632,7 +500,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedIos(FGame
 	UE_LOG(LogTemp, Warning, TEXT("Android Studio selected: %s"), *StudioItem.Name);
 
 	SavedLayoutBuilder->ForceRefreshDetails();
-}*/
+}
 
 void FGameAnalyticsTargetSettingsCustomization::FillStudiosString(TArray<STUDIO> StudioList)
 {
@@ -655,6 +523,15 @@ void FGameAnalyticsTargetSettingsCustomization::UsernameEntered(const FText& New
 		if (NewName != Username)
 		{
 			Username = NewName;
+            
+            UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
+            FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
+            
+            GConfig->SetString(*GameAnalyticsSection, TEXT("Username"), *(Username.ToString()), GetIniName());
+            
+            GConfig->Flush(false, GetIniName());
+            
+            GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
 		}
 	}
 }
@@ -708,10 +585,14 @@ void HttpCaller::LoginHttp(FName Email, FName Password)
 	*/
 	//virtual TSharedRef CreateRequest();
 	//~~~~~~~~~~~~~~~
+    
+    FString content = "{\"email\":\"" + Email.ToString() + "\", \"password\":\"" + Password.ToString() + "\"}";
+    
+    UE_LOG(LogTemp, Display, TEXT("%s"), *content);
 
 	Request->SetVerb("POST");
 	Request->SetURL("https://userapi.gameanalytics.com/ext/v1/token");
-	Request->SetContentAsString("{\"email\":\"" + Email.ToString() + "\", \"password\":\"" + Password.ToString() + "\"}");
+	Request->SetContentAsString(content);
 	Request->SetHeader("User-Agent", "GameAnalyticsLinkClient/1.0");
 	Request->SetHeader("Content-Type", "application/x-www-form-urlencoded");
 	Request->SetHeader("X-Caller", "UnrealEditor");
