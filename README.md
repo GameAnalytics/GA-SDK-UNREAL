@@ -6,9 +6,11 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 > :information_source:<br>
 > 
 > Requirements:<br/>
-> **Unreal Engine:** 4.10+  
-> **iOS:** iOS 7+
-> **Android:** Android API Level 14
+> **Unreal Engine:** 4.10+<br/>  
+> **iOS:** iOS 7+<br/>
+> **Android:** Android API Level 14<br/>
+> **Windows:** Minimum specs for UE4<br/>
+> **Mac:** Minimum specs for UE4
 
 Changelog
 ---------
