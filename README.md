@@ -12,6 +12,9 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.1.0**
+* Windows and Mac support added (windows and mac)
+
 **2.0.0**
 * various Blueprint event bug fixes
 * Android support added (android)

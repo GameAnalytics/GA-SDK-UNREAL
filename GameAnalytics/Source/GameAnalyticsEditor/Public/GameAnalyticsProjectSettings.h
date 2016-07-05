@@ -11,28 +11,52 @@ class UGameAnalyticsProjectSettings : public UObject
 public:
     
     // Game Key
-    UPROPERTY(Config, EditAnywhere, Category=IosSetup, Meta=(ToolTip="Your GameAnalytics Game Key - copy/paste from the GA website or log in to autofill it."))
+    UPROPERTY(Config, EditAnywhere, Category=IosSetup, Meta=(ToolTip="Your GameAnalytics iOS Game Key - copy/paste from the GA website or log in to autofill it."))
     FString IosGameKey;
     
     // Secret Key
-    UPROPERTY(Config, EditAnywhere, Category=IosSetup, Meta=(ToolTip="Your GameAnalytics Secret Key - copy/paste from the GA website or log in to autofill it."))
+    UPROPERTY(Config, EditAnywhere, Category=IosSetup, Meta=(ToolTip="Your GameAnalytics iOS Secret Key - copy/paste from the GA website or log in to autofill it."))
 	FString IosSecretKey;
 
 	// Build
-	UPROPERTY(Config, EditAnywhere, Category = IosSetup, Meta=(ToolTip="The current version of the game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
+	UPROPERTY(Config, EditAnywhere, Category = IosSetup, Meta=(ToolTip="The current version of the iOS game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
 	FString IosBuild = "0.1";
     
     // Game Key
-    UPROPERTY(Config, EditAnywhere, Category=AndroidSetup, Meta=(ToolTip="Your GameAnalytics Game Key - copy/paste from the GA website or log in to autofill it."))
+    UPROPERTY(Config, EditAnywhere, Category=AndroidSetup, Meta=(ToolTip="Your GameAnalytics Android Game Key - copy/paste from the GA website or log in to autofill it."))
     FString AndroidGameKey;
     
     // Secret Key
-    UPROPERTY(Config, EditAnywhere, Category=AndroidSetup, Meta=(ToolTip="Your GameAnalytics Secret Key - copy/paste from the GA website or log in to autofill it."))
+    UPROPERTY(Config, EditAnywhere, Category=AndroidSetup, Meta=(ToolTip="Your GameAnalytics Android Secret Key - copy/paste from the GA website or log in to autofill it."))
     FString AndroidSecretKey;
 	
 	// Build
 	UPROPERTY(Config, EditAnywhere, Category = AndroidSetup, Meta=(ToolTip="The current version of the game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
 	FString AndroidBuild = "0.1";
+    
+    // Game Key
+    UPROPERTY(Config, EditAnywhere, Category=MacSetup, Meta=(ToolTip="Your GameAnalytics Mac Game Key - copy/paste from the GA website or log in to autofill it."))
+    FString MacGameKey;
+    
+    // Secret Key
+    UPROPERTY(Config, EditAnywhere, Category=MacSetup, Meta=(ToolTip="Your GameAnalytics Mac Secret Key - copy/paste from the GA website or log in to autofill it."))
+    FString MacSecretKey;
+    
+    // Build
+    UPROPERTY(Config, EditAnywhere, Category = MacSetup, Meta=(ToolTip="The current version of the Mac game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
+    FString MacBuild = "0.1";
+	
+	// Game Key
+    UPROPERTY(Config, EditAnywhere, Category=WindowsSetup, Meta=(ToolTip="Your GameAnalytics Windows Game Key - copy/paste from the GA website or log in to autofill it."))
+    FString WindowsGameKey;
+    
+    // Secret Key
+    UPROPERTY(Config, EditAnywhere, Category=WindowsSetup, Meta=(ToolTip="Your GameAnalytics Windows Secret Key - copy/paste from the GA website or log in to autofill it."))
+    FString WindowsSecretKey;
+    
+    // Build
+    UPROPERTY(Config, EditAnywhere, Category = WindowsSetup, Meta=(ToolTip="The current version of the Windows game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
+    FString WindowsBuild = "0.1";
 
     // Custom Dimensions 01
     UPROPERTY(Config, EditAnywhere, Category=CustomDimensions, Meta=(ToolTip="List of custom dimensions 01."))

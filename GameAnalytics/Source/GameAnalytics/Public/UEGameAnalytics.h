@@ -50,6 +50,12 @@ public:
 		FString AndroidGameKey;
 		FString AndroidSecretKey;
 		FString AndroidBuild;
+        FString MacGameKey;
+        FString MacSecretKey;
+        FString MacBuild;
+		FString WindowsGameKey;
+		FString WindowsSecretKey;
+        FString WindowsBuild;
 		TArray<FString> CustomDimensions01;
 		TArray<FString> CustomDimensions02;
 		TArray<FString> CustomDimensions03;

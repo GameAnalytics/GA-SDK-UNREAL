@@ -57,6 +57,10 @@ public:
 	void OnGameMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
 	void OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
 	void OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+    void OnStudioMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
+    void OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+	void OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
+    void OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
 
 public:
 	static FGameAnalyticsTargetSettingsCustomization& getInstance()
@@ -71,6 +75,10 @@ public:
 	GAME SelectedGameIos;
 	STUDIO SelectedStudioAndroid;
 	GAME SelectedGameAndroid;
+    STUDIO SelectedStudioMac;
+    GAME SelectedGameMac;
+	STUDIO SelectedStudioWindows;
+    GAME SelectedGameWindows;
 
 private:
 	FGameAnalyticsTargetSettingsCustomization() {};
@@ -84,6 +92,10 @@ private:
 	TSharedRef<SWidget> UpdateGamesIos() const;
 	TSharedRef<SWidget> UpdateStudiosAndroid() const;
 	TSharedRef<SWidget> UpdateGamesAndroid() const;
+    TSharedRef<SWidget> UpdateStudiosMac() const;
+    TSharedRef<SWidget> UpdateGamesMac() const;
+	TSharedRef<SWidget> UpdateStudiosWindows() const;
+    TSharedRef<SWidget> UpdateGamesWindows() const;
     
     FORCEINLINE FString GetIniName() const { return FString::Printf(TEXT("%sDefaultEngine.ini"), *FPaths::SourceConfigDir()); }
 

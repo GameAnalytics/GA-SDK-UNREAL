@@ -15,16 +15,53 @@ namespace UnrealBuildTool.Rules
             switch (Target.Platform)
             {
                 case UnrealTargetPlatform.Win64:
-                    //PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_atomic-vc140-mt-1_60.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_chrono-vc140-mt-1_60.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_date_time-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_filesystem-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_log-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_log_setup-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_regex-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_system-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_thread-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "cppnetlib-client-connections.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "cppnetlib-uri.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "ssleay32MT.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libeay32MT.lib"));
                     break;
                 case UnrealTargetPlatform.Win32:
-                    //PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_atomic-vc140-mt-1_60.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_chrono-vc140-mt-1_60.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_date_time-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_filesystem-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_log-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_log_setup-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_regex-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_system-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_thread-vc140-mt-1_60.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "cppnetlib-client-connections.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "cppnetlib-uri.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "ssleay32MT.lib"));
+					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libeay32MT.lib"));
                     break;
                 case UnrealTargetPlatform.Android:
                     PrivateDependencyModuleNames.Add("Launch");
                     break;
                 case UnrealTargetPlatform.Mac:
-                    //PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_chrono-mt.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_filesystem-mt.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_log-mt.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_log_setup-mt.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_regex-mt.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_system-mt.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_thread-mt.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libcppnetlib-client-connections.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libcppnetlib-uri.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libcrypto.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libssl.a"));
                     break;
                 case UnrealTargetPlatform.IOS:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "ios", "libGameAnalytics.a"));

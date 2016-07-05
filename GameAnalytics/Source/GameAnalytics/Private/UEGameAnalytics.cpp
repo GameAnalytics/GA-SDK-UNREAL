@@ -1,10 +1,13 @@
 #include "GameAnalyticsPrivatePCH.h"
 #include "GameAnalytics.h"
+#if PLATFORM_MAC || PLATFORM_WINDOWS
+#include "../GA-SDK-CPP/GameAnalytics.h"
+#endif
 
 #include "EngineVersion.h"
 
 #define GA_VERSION_MAJOR 2
-#define GA_VERSION_MINOR 0
+#define GA_VERSION_MINOR 1
 #define GA_VERSION_PATCH 0
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
@@ -43,6 +46,14 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
 	GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("IosGameKey"), Settings.IosGameKey, GetIniName());
 	GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("IosSecretKey"), Settings.IosSecretKey, GetIniName());
 	GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("IosBuild"), Settings.IosBuild, GetIniName());
+    
+    GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("MacGameKey"), Settings.MacGameKey, GetIniName());
+    GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("MacSecretKey"), Settings.MacSecretKey, GetIniName());
+    GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("MacBuild"), Settings.MacBuild, GetIniName());
+	
+	GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("WindowsGameKey"), Settings.WindowsGameKey, GetIniName());
+    GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("WindowsSecretKey"), Settings.WindowsSecretKey, GetIniName());
+    GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("WindowsBuild"), Settings.WindowsBuild, GetIniName());
 
     GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("UseCustomId"), Settings.UseCustomId, GetIniName());
 	GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("InfoLogBuild"), Settings.InfoLogBuild, GetIniName());
@@ -104,22 +115,30 @@ FAnalyticsProviderGameAnalytics::~FAnalyticsProviderGameAnalytics()
 bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventAttribute>& Attributes)
 {
 	ProjectSettings = FAnalyticsGameAnalytics::LoadProjectSettings();
+    
+#if PLATFORM_MAC || PLATFORM_WINDOWS
+    gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_ANSI(*FPaths::GameSavedDir()));
+#endif
 	
     ////// Enable log
-    gameanalytics::GameAnalytics::setEnabledInfoLog(ProjectSettings.InfoLogBuild);
-    gameanalytics::GameAnalytics::setEnabledVerboseLog(ProjectSettings.VerboseLogBuild);
+    gameanalytics::unreal::GameAnalytics::setEnabledInfoLog(ProjectSettings.InfoLogBuild);
+    gameanalytics::unreal::GameAnalytics::setEnabledVerboseLog(ProjectSettings.VerboseLogBuild);
 			
 	////// Configure engine version 
     FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
-	gameanalytics::GameAnalytics::configureGameEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
+	gameanalytics::unreal::GameAnalytics::configureGameEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
     FString SdkVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), GA_VERSION_MAJOR, GA_VERSION_MINOR, GA_VERSION_PATCH);
-	gameanalytics::GameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_ANSI(*SdkVersionString));
+	gameanalytics::unreal::GameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_ANSI(*SdkVersionString));
     
     //// Configure build version
 #if PLATFORM_IOS
-    gameanalytics::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.IosBuild));
+    gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.IosBuild));
 #elif PLATFORM_ANDROID
-    gameanalytics::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.AndroidBuild));
+    gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.AndroidBuild));
+#elif PLATFORM_MAC
+    gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.MacBuild));
+#elif PLATFORM_WINDOWS
+    gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.WindowsBuild));
 #endif
 
 	////// Configure available virtual currencies and item types
@@ -130,7 +149,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 		{
 			currencies.push_back(TCHAR_TO_ANSI(*currency));
 		}
-		gameanalytics::GameAnalytics::configureAvailableResourceCurrencies(currencies);
+		gameanalytics::unreal::GameAnalytics::configureAvailableResourceCurrencies(currencies);
 	}
 
 	if (ProjectSettings.ResourceItemTypes.Num() > 0)
@@ -140,7 +159,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 		{
 			resourceItem.push_back(TCHAR_TO_ANSI(*item));
 		}
-		gameanalytics::GameAnalytics::configureAvailableResourceItemTypes(resourceItem);
+		gameanalytics::unreal::GameAnalytics::configureAvailableResourceItemTypes(resourceItem);
 	}
 
 	// Configure available custom dimensions
@@ -151,7 +170,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 		{
 			customDimension01.push_back(TCHAR_TO_ANSI(*dimension01));
 		}
-		gameanalytics::GameAnalytics::configureAvailableCustomDimensions01(customDimension01);
+		gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions01(customDimension01);
 	}
 
 	if (ProjectSettings.CustomDimensions02.Num() > 0)
@@ -161,7 +180,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 		{
 			customDimension02.push_back(TCHAR_TO_ANSI(*dimension02));
 		}
-		gameanalytics::GameAnalytics::configureAvailableCustomDimensions02(customDimension02);
+		gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions02(customDimension02);
 	}
 
 	if (ProjectSettings.CustomDimensions03.Num() > 0)
@@ -171,16 +190,20 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 		{
 			customDimension03.push_back(TCHAR_TO_ANSI(*dimension03));
 		}
-		gameanalytics::GameAnalytics::configureAvailableCustomDimensions03(customDimension03);
+		gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions03(customDimension03);
 	}
 
     if(!ProjectSettings.UseCustomId)
     {
 	////// Initialize
 #if PLATFORM_IOS
-        gameanalytics::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.IosGameKey), TCHAR_TO_ANSI(*ProjectSettings.IosSecretKey));
+        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.IosGameKey), TCHAR_TO_ANSI(*ProjectSettings.IosSecretKey));
 #elif PLATFORM_ANDROID
-        gameanalytics::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.AndroidGameKey), TCHAR_TO_ANSI(*ProjectSettings.AndroidSecretKey));
+        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.AndroidGameKey), TCHAR_TO_ANSI(*ProjectSettings.AndroidSecretKey));
+#elif PLATFORM_MAC
+        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
+#elif PLATFORM_WINDOWS
+        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.WindowsGameKey), TCHAR_TO_ANSI(*ProjectSettings.WindowsSecretKey));
 #endif
     }
     else
@@ -195,7 +218,11 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 
 void FAnalyticsProviderGameAnalytics::EndSession()
 {
-	UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
+#if PLATFORM_MAC || PLATFORM_WINDOWS
+    gameanalytics::GameAnalytics::onStop();
+#else
+    UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
+#endif
 }
 
 void FAnalyticsProviderGameAnalytics::FlushEvents()
@@ -208,12 +235,16 @@ void FAnalyticsProviderGameAnalytics::SetUserID(const FString& InUserID)
     if(ProjectSettings.UseCustomId)
     {
         UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("GameAnalytics::SetCustomId('%s')"), *InUserID);
-        gameanalytics::GameAnalytics::configureUserId(TCHAR_TO_ANSI(*InUserID));
+        gameanalytics::unreal::GameAnalytics::configureUserId(TCHAR_TO_ANSI(*InUserID));
         UserId = InUserID;
 #if PLATFORM_IOS
-        gameanalytics::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.IosGameKey), TCHAR_TO_ANSI(*ProjectSettings.IosSecretKey));
+        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.IosGameKey), TCHAR_TO_ANSI(*ProjectSettings.IosSecretKey));
 #elif PLATFORM_ANDROID
-        gameanalytics::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.AndroidGameKey), TCHAR_TO_ANSI(*ProjectSettings.AndroidSecretKey));
+        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.AndroidGameKey), TCHAR_TO_ANSI(*ProjectSettings.AndroidSecretKey));
+#elif PLATFORM_MAC
+        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
+#elif PLATFORM_WINDOWS
+        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
 #endif
     }
     else
@@ -249,50 +280,50 @@ void FAnalyticsProviderGameAnalytics::RecordEvent(const FString& EventName, cons
         {
             if (Attr.AttrName == TEXT("custom1"))
             {
-                gameanalytics::GameAnalytics::setCustomDimension01(TCHAR_TO_ANSI(*Attr.AttrValue));
+                gameanalytics::unreal::GameAnalytics::setCustomDimension01(TCHAR_TO_ANSI(*Attr.AttrValue));
             }
             else if (Attr.AttrName == TEXT("custom2"))
             {
-                gameanalytics::GameAnalytics::setCustomDimension02(TCHAR_TO_ANSI(*Attr.AttrValue));
+                gameanalytics::unreal::GameAnalytics::setCustomDimension02(TCHAR_TO_ANSI(*Attr.AttrValue));
             }
             else if (Attr.AttrName == TEXT("custom3"))
             {
-                gameanalytics::GameAnalytics::setCustomDimension03(TCHAR_TO_ANSI(*Attr.AttrValue));
+                gameanalytics::unreal::GameAnalytics::setCustomDimension03(TCHAR_TO_ANSI(*Attr.AttrValue));
             }
             else if (Attr.AttrName == TEXT("facebook"))
             {
-                gameanalytics::GameAnalytics::setFacebookId(TCHAR_TO_ANSI(*Attr.AttrValue));
+                gameanalytics::unreal::GameAnalytics::setFacebookId(TCHAR_TO_ANSI(*Attr.AttrValue));
             }
             else
             {
                 float AttrValue = FCString::Atof(*Attr.AttrValue);
-                gameanalytics::GameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*Attr.AttrName), AttrValue);
+                gameanalytics::unreal::GameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*Attr.AttrName), AttrValue);
             }
         }
     }
     else if (EventName.Len() > 0)
     {
         // Send an event without value
-        gameanalytics::GameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*EventName));
+        gameanalytics::unreal::GameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*EventName));
     }
 }
 
 void FAnalyticsProviderGameAnalytics::SetAge(int InAge)
 {
-	gameanalytics::GameAnalytics::setBirthYear(InAge);
+	gameanalytics::unreal::GameAnalytics::setBirthYear(InAge);
 }
 
 void FAnalyticsProviderGameAnalytics::SetGender(const FString& InGender)
 {
-    gameanalytics::EGAGender gender = GetEnumValueFromString<gameanalytics::EGAGender>("EGAGender", InGender.ToLower());
+    gameanalytics::unreal::EGAGender gender = GetEnumValueFromString<gameanalytics::unreal::EGAGender>("EGAGender", InGender.ToLower());
     
-    if (gender == gameanalytics::EGAGender(0))
+    if (gender == gameanalytics::unreal::EGAGender(0))
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("SetGender: Error value must be either male or female."));
         return;
     }
     
-	gameanalytics::GameAnalytics::setGender(gender);
+	gameanalytics::unreal::GameAnalytics::setGender(gender);
 }
 
 void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error)
@@ -302,9 +333,9 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error)
 
 void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TArray<FAnalyticsEventAttribute>& Attributes)
 {	
-	gameanalytics::EGAErrorSeverity ErrorSeverity = GetEnumValueFromString<gameanalytics::EGAErrorSeverity>("EGAErrorSeverity", Error.ToLower());
+	gameanalytics::unreal::EGAErrorSeverity ErrorSeverity = GetEnumValueFromString<gameanalytics::unreal::EGAErrorSeverity>("EGAErrorSeverity", Error.ToLower());
 
-	if (ErrorSeverity == gameanalytics::EGAErrorSeverity(0))
+	if (ErrorSeverity == gameanalytics::unreal::EGAErrorSeverity(0))
 	{
 		UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordError: Error value must be either debug, info, warning, error, critical. Error=%s"), *Error);
 		return;
@@ -317,7 +348,7 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TA
 		{
 			if (Attr.AttrName == TEXT("message"))
 			{
-				gameanalytics::GameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_ANSI(*Attr.AttrValue));
+				gameanalytics::unreal::GameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_ANSI(*Attr.AttrValue));
 			}
 		}
 	}
@@ -329,9 +360,9 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TA
 
 void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType, const TArray<FString>& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes)
 {
-    gameanalytics::EGAProgressionStatus ProgressionStatus = GetEnumValueFromString<gameanalytics::EGAProgressionStatus>("EGAProgressionStatus", ProgressType.ToLower());
+    gameanalytics::unreal::EGAProgressionStatus ProgressionStatus = GetEnumValueFromString<gameanalytics::unreal::EGAProgressionStatus>("EGAProgressionStatus", ProgressType.ToLower());
     
-    if (ProgressionStatus == gameanalytics::EGAProgressionStatus(0))
+    if (ProgressionStatus == gameanalytics::unreal::EGAProgressionStatus(0))
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: ProgressType value must be either start, complete or fail. ProgressType=%s"), *ProgressType);
         return;
@@ -357,33 +388,33 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
         {
             if(useValue)
             {
-                gameanalytics::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), TCHAR_TO_ANSI(*ProgressHierarchy[2]), value);
+                gameanalytics::unreal::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), TCHAR_TO_ANSI(*ProgressHierarchy[2]), value);
             }
             else
             {
-                gameanalytics::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), TCHAR_TO_ANSI(*ProgressHierarchy[2]));
+                gameanalytics::unreal::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), TCHAR_TO_ANSI(*ProgressHierarchy[2]));
             }
         }
         else if (ProgressHierarchyCount > 1)
         {
             if(useValue)
             {
-                gameanalytics::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), value);
+                gameanalytics::unreal::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), value);
             }
             else
             {
-                gameanalytics::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]));
+                gameanalytics::unreal::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]));
             }
         }
         else
         {
             if(useValue)
             {
-                gameanalytics::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), value);
+                gameanalytics::unreal::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), value);
             }
             else
             {
-                gameanalytics::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]));
+                gameanalytics::unreal::GameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]));
             }
         }
     }
@@ -400,7 +431,7 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
 
 void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, int ItemQuantity, const TArray<FAnalyticsEventAttribute>& Attributes)
 {
-    gameanalytics::EGAResourceFlowType FlowType = gameanalytics::EGAResourceFlowType::source;
+    gameanalytics::unreal::EGAResourceFlowType FlowType = gameanalytics::unreal::EGAResourceFlowType::source;
 	FString Currency;
 	FString ItemType;	
 
@@ -411,9 +442,9 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
 		{
 			if (Attr.AttrName == TEXT("flowType"))
 			{
-                FlowType = GetEnumValueFromString<gameanalytics::EGAResourceFlowType>("EGAResourceFlowType", Attr.AttrValue.ToLower());
+                FlowType = GetEnumValueFromString<gameanalytics::unreal::EGAResourceFlowType>("EGAResourceFlowType", Attr.AttrValue.ToLower());
 				
-                if (FlowType == gameanalytics::EGAResourceFlowType(0))
+                if (FlowType == gameanalytics::unreal::EGAResourceFlowType(0))
 				{
 					UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.AttrValue);
 					return;
@@ -431,7 +462,7 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
 
 		if (!Currency.IsEmpty() && !ItemType.IsEmpty())
 		{
-			gameanalytics::GameAnalytics::addResourceEvent(FlowType, TCHAR_TO_ANSI(*Currency), ItemQuantity, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId));
+			gameanalytics::unreal::GameAnalytics::addResourceEvent(FlowType, TCHAR_TO_ANSI(*Currency), ItemQuantity, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId));
 		}
         else
         {
@@ -504,28 +535,30 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
 #if PLATFORM_ANDROID
 			if (!Receipt.IsEmpty() && !Signature.IsEmpty())
 			{
-				gameanalytics::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType), TCHAR_TO_ANSI(*Receipt), TCHAR_TO_ANSI(*Signature));
+				gameanalytics::unreal::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType), TCHAR_TO_ANSI(*Receipt), TCHAR_TO_ANSI(*Signature));
 			}
 			else
 			{
-				gameanalytics::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
+				gameanalytics::unreal::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
 			}
 #elif PLATFORM_IOS
 			if (!Receipt.IsEmpty())
 			{				
-                gameanalytics::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType), TCHAR_TO_ANSI(*Receipt));
+                gameanalytics::unreal::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType), TCHAR_TO_ANSI(*Receipt));
 			}
 			else
 			{
                 if(AutoFetchReceipt)
                 {
-                    gameanalytics::GameAnalytics::addBusinessEventAndAutoFetchReceipt(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
+                    gameanalytics::unreal::GameAnalytics::addBusinessEventAndAutoFetchReceipt(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
                 }
                 else
                 {
-                    gameanalytics::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
+                    gameanalytics::unreal::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
                 }
 			}
+#elif PLATFORM_MAC || PLATFORM_WINDOWS
+            gameanalytics::unreal::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
 #endif
 		}
         else

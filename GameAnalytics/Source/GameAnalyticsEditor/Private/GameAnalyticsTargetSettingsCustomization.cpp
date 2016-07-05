@@ -71,11 +71,17 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 	IDetailCategoryBuilder& SetupCategory = DetailLayout.EditCategory(TEXT("Account"), FText::GetEmpty(), ECategoryPriority::Variable);
 	IDetailCategoryBuilder& IosCategory = DetailLayout.EditCategory(TEXT("IosSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
 	IDetailCategoryBuilder& AndroidCategory = DetailLayout.EditCategory(TEXT("AndroidSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
+    IDetailCategoryBuilder& MacCategory = DetailLayout.EditCategory(TEXT("MacSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
+	IDetailCategoryBuilder& WindowsCategory = DetailLayout.EditCategory(TEXT("WindowsSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
 
 	const FText StudioMenuStringIos = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name);
 	const FText GameMenuStringIos = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.Name);
 	const FText StudioMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name);
 	const FText GameMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.Name);
+    const FText StudioMenuStringMac = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac.Name);
+    const FText GameMenuStringMac = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.Name);
+	const FText StudioMenuStringWindows = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name);
+    const FText GameMenuStringWindows = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.Name);
 	const FText PlatformMenuString = LOCTEXT("PlatformMenu", "Select Platform");
 
 	SetupCategory.AddCustomRow(LOCTEXT("DocumentationInfo", "Documentation Info"), false)
@@ -345,6 +351,170 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 				]
 			];
 	}
+    
+    //if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
+    {
+        MacCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
+            .NameContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .Padding(FMargin(0, 1, 0, 1))
+                .FillWidth(1.0f)
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("StudiosLabel", "Select Studio"))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
+             ]
+        .ValueContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(1.0f)
+                [
+                    SNew(SComboButton)
+                    //.VAlign(VAlign_Center)
+                    .ToolTipText(LOCTEXT("SelectStudioTooltip", "Studio"))
+                    .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateStudiosMac)
+                    .ButtonContent()
+                    [
+                        SNew(STextBlock)
+                        .Text(StudioMenuStringMac)
+                        .Font(IDetailLayoutBuilder::GetDetailFont())
+                    ]
+                    .MenuContent()
+                        [
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("LoginToSelectStudioLabel", "Login To Select Studio."))
+                            .Font(DetailLayout.GetDetailFont())
+                        ]
+                ]
+             ];
+    }
+    
+    if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac.Name.IsEmpty())
+    {
+        MacCategory.AddCustomRow(LOCTEXT("GamesRow", "Games"), false)
+            .NameContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .Padding(FMargin(0, 1, 0, 1))
+                .FillWidth(1.0f)
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("GamesLabel", "Select Game"))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
+            ]
+        .ValueContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(1.0f)
+                [
+                    SNew(SComboButton)
+                    .VAlign(VAlign_Center)
+                    .ToolTipText(LOCTEXT("SelectGameTooltip", "Game"))
+                    .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateGamesMac)
+                    .ButtonContent()
+                    [
+                        SNew(STextBlock)
+                        .Text(GameMenuStringMac)
+                        .Font(IDetailLayoutBuilder::GetDetailFont())
+                    ]
+                    .MenuContent()
+                    [
+                        SNew(STextBlock)
+                        .Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Studio."))
+                        .Font(DetailLayout.GetDetailFont())
+                    ]
+                ]
+            ];
+    }
+	
+	//if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
+    {
+        WindowsCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
+            .NameContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .Padding(FMargin(0, 1, 0, 1))
+                .FillWidth(1.0f)
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("StudiosLabel", "Select Studio"))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
+             ]
+        .ValueContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(1.0f)
+                [
+                    SNew(SComboButton)
+                    //.VAlign(VAlign_Center)
+                    .ToolTipText(LOCTEXT("SelectStudioTooltip", "Studio"))
+                    .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateStudiosWindows)
+                    .ButtonContent()
+                    [
+                        SNew(STextBlock)
+                        .Text(StudioMenuStringWindows)
+                        .Font(IDetailLayoutBuilder::GetDetailFont())
+                    ]
+                    .MenuContent()
+                        [
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("LoginToSelectStudioLabel", "Login To Select Studio."))
+                            .Font(DetailLayout.GetDetailFont())
+                        ]
+                ]
+             ];
+    }
+    
+    if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name.IsEmpty())
+    {
+        WindowsCategory.AddCustomRow(LOCTEXT("GamesRow", "Games"), false)
+            .NameContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .Padding(FMargin(0, 1, 0, 1))
+                .FillWidth(1.0f)
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("GamesLabel", "Select Game"))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
+            ]
+        .ValueContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(1.0f)
+                [
+                    SNew(SComboButton)
+                    .VAlign(VAlign_Center)
+                    .ToolTipText(LOCTEXT("SelectGameTooltip", "Game"))
+                    .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateGamesWindows)
+                    .ButtonContent()
+                    [
+                        SNew(STextBlock)
+                        .Text(GameMenuStringWindows)
+                        .Font(IDetailLayoutBuilder::GetDetailFont())
+                    ]
+                    .MenuContent()
+                    [
+                        SNew(STextBlock)
+                        .Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Studio."))
+                        .Font(DetailLayout.GetDetailFont())
+                    ]
+                ]
+            ];
+    }
 }
 
 TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesIos() const
@@ -381,6 +551,40 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesAndroi
 	return GameMenuBuilder.MakeWidget();
 }
 
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesMac() const
+{
+    FMenuBuilder GameMenuBuilder(true, NULL);
+    {
+        GameMenuBuilder.BeginSection("Games");
+        {
+            for (auto& g : FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac.Games)
+            {
+                GameMenuBuilder.AddMenuEntry(FText::FromString(g.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedMac, g)), NAME_None);
+            }
+        }
+        GameMenuBuilder.EndSection();
+    }
+    
+    return GameMenuBuilder.MakeWidget();
+}
+
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesWindows() const
+{
+    FMenuBuilder GameMenuBuilder(true, NULL);
+    {
+        GameMenuBuilder.BeginSection("Games");
+        {
+            for (auto& g : FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Games)
+            {
+                GameMenuBuilder.AddMenuEntry(FText::FromString(g.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedWindows, g)), NAME_None);
+            }
+        }
+        GameMenuBuilder.EndSection();
+    }
+    
+    return GameMenuBuilder.MakeWidget();
+}
+
 void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
 {
 	FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos = GameItem;
@@ -391,7 +595,9 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAn
 
 	UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
 
-	if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->AndroidGameKey)
+	if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->AndroidGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->MacGameKey ||
+		FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->WindowsGameKey)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
 		return;
@@ -422,7 +628,9 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGa
 
 	UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
 
-	if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->IosGameKey)
+	if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->IosGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->MacGameKey ||
+		FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->WindowsGameKey)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
 		return;
@@ -442,6 +650,74 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGa
 	GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
 
 	SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac = GameItem;
+    
+    UE_LOG(LogTemp, Warning, TEXT("Game selected: %s"), *GameItem.Name);
+    
+    if (!GConfig) return;
+    
+    UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
+    
+    if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey == GameAnalyticsProjectSettings->IosGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey == GameAnalyticsProjectSettings->AndroidGameKey ||
+		FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey == GameAnalyticsProjectSettings->WindowsGameKey)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
+        return;
+    }
+    
+    FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
+    
+    GConfig->SetString(*GameAnalyticsSection, TEXT("MacGameKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey), GetIniName());
+    
+    GConfig->SetString(*GameAnalyticsSection, TEXT("MacSecretKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.SecretKey), GetIniName());
+    
+    GConfig->Flush(false, GetIniName());
+    
+    UE_LOG(LogTemp, Warning, TEXT("Platform selected: Mac, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey));
+    UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
+    
+    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+    
+    SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows = GameItem;
+    
+    UE_LOG(LogTemp, Warning, TEXT("Game selected: %s"), *GameItem.Name);
+    
+    if (!GConfig) return;
+    
+    UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
+    
+    if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey == GameAnalyticsProjectSettings->IosGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey == GameAnalyticsProjectSettings->AndroidGameKey ||
+		FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey == GameAnalyticsProjectSettings->MacGameKey)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
+        return;
+    }
+    
+    FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
+    
+    GConfig->SetString(*GameAnalyticsSection, TEXT("WindowsGameKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey), GetIniName());
+    
+    GConfig->SetString(*GameAnalyticsSection, TEXT("WindowsSecretKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.SecretKey), GetIniName());
+    
+    GConfig->Flush(false, GetIniName());
+    
+    UE_LOG(LogTemp, Warning, TEXT("Platform selected: Windows, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey));
+    UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
+    
+    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+    
+    SavedLayoutBuilder->ForceRefreshDetails();
 }
 
 TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosIos() const
@@ -478,6 +754,40 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosAndr
 	return StudioMenuBuilder.MakeWidget();
 }
 
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosMac() const
+{
+    FMenuBuilder StudioMenuBuilder(true, NULL);
+    {
+        StudioMenuBuilder.BeginSection("Studios");
+        {
+            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames)
+            {
+                StudioMenuBuilder.AddMenuEntry(FText::FromString(s.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedMac, s)), NAME_None);
+            }
+        }
+        StudioMenuBuilder.EndSection();
+    }
+    
+    return StudioMenuBuilder.MakeWidget();
+}
+
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosWindows() const
+{
+    FMenuBuilder StudioMenuBuilder(true, NULL);
+    {
+        StudioMenuBuilder.BeginSection("Studios");
+        {
+            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames)
+            {
+                StudioMenuBuilder.AddMenuEntry(FText::FromString(s.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedWindows, s)), NAME_None);
+            }
+        }
+        StudioMenuBuilder.EndSection();
+    }
+    
+    return StudioMenuBuilder.MakeWidget();
+}
+
 void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
 {
 	FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos = StudioItem;
@@ -500,6 +810,30 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedAndroid(F
 	UE_LOG(LogTemp, Warning, TEXT("Android Studio selected: %s"), *StudioItem.Name);
 
 	SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac = StudioItem;
+    
+    FGameAnalyticsTargetSettingsCustomization::GAME Game;
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac = Game;
+    
+    UE_LOG(LogTemp, Warning, TEXT("Mac Studio selected: %s"), *StudioItem.Name);
+    
+    SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows = StudioItem;
+    
+    FGameAnalyticsTargetSettingsCustomization::GAME Game;
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows = Game;
+    
+    UE_LOG(LogTemp, Warning, TEXT("Windows Studio selected: %s"), *StudioItem.Name);
+    
+    SavedLayoutBuilder->ForceRefreshDetails();
 }
 
 void FGameAnalyticsTargetSettingsCustomization::FillStudiosString(TArray<STUDIO> StudioList)
