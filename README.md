@@ -4,6 +4,8 @@ GameAnalytics SDK for the Unreal Engine.
 Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNREAL/wiki).  
 
 > :information_source:<br>
+>
+> The Unreal SDK include support for **iOS**, **Android**, **Windows** and **Mac** platforms
 > 
 > Requirements:<br/>
 > **Unreal Engine:** 4.10+<br/>  
