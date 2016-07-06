@@ -1,4 +1,4 @@
-#ifdef ANDROID
+#if PLATFORM_ANDROID
 
 #include "GameAnalyticsPrivatePCH.h"
 #include "../GA-SDK-ANDROID/GameAnalyticsJNI.h"

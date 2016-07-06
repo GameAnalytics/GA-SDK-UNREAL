@@ -1,4 +1,4 @@
-#ifdef IOS
+#if PLATFORM_IOS
 
 #import "../GA-SDK-IOS/GameAnalytics.h"
 #import "../GA-SDK-IOS/GameAnalyticsCpp.h"

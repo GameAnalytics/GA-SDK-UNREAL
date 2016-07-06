@@ -16,6 +16,9 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.1.1**
+* bug fix for missing configureUsedId in native iOS lib (ios)
+
 **2.1.0**
 * Windows and Mac support added (windows and mac)
 
