@@ -16,6 +16,9 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.1.2**
+* fixed default GameAnalytics settings values
+
 **2.1.1**
 * bug fix for missing configureUsedId in native iOS lib (ios)
 
