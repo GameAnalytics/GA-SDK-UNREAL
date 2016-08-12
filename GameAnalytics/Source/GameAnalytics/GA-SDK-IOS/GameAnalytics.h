@@ -512,6 +512,51 @@ typedef enum GAErrorSeverity : NSInteger {
 
 /*!
  @method
+
+ @abstract Enable manual session handling.
+ This will disable the automatic session stop/start when the app goes to background/foreground and it is then needed to call endSession & startSession manually.
+ Remember to call endSession when the app is going to background.
+ The first session will always be started automatically when initialize is called.
+
+ @param flag
+ Enable or disable manual session handling.
+
+ @availability Available since 2.2.2
+
+ */
++ (void)setEnabledManualSessionHandling:(BOOL)flag;
+
+
+/*!
+ @method
+
+ @abstract Start a new session.
+ - if sdk is initialized
+ - if manual session handling is enabled
+ If a current session is currently active then it will end this session and start a new.
+
+
+ @availability Available since 2.2.2
+
+ */
++ (void)startSession;
+
+
+/*!
+ @method
+
+ @abstract End an active session.
+ - if sdk is initialized
+ - manual session handling is enabled
+ - a session is active
+
+ @availability Available since 2.2.2
+
+ */
++ (void)endSession;
+
+/*!
+ @method
  
  @abstract Set 1st custom dimension
  

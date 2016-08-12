@@ -645,6 +645,31 @@ namespace gameanalytics {
             }
 	    }
 
+        void jni_setEnabledManualSessionHandling(bool flag)
+        {
+            JNIEnv* env = FAndroidApplication::GetJavaEnv();
+            jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
+            const char* strMethod = "setEnabledManualSessionHandling";
+            
+            if(jClass)
+            {
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Z)V");
+                
+                if(jMethod)
+                {
+                    env->CallStaticVoidMethod(jClass, jMethod, flag);
+                }
+                else
+                {
+                    __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
+                }
+            }
+            else
+            {
+                __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
+            }
+        }
+
 	    void jni_setCustomDimension01(const char *customDimension)
 	    {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
@@ -802,6 +827,56 @@ namespace gameanalytics {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
 	    }
+
+        void jni_startSession()
+        {
+            JNIEnv* env = FAndroidApplication::GetJavaEnv();
+            jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
+            const char* strMethod = "startSession";
+            
+            if(jClass)
+            {
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "()V");
+                
+                if(jMethod)
+                {
+                    env->CallStaticVoidMethod(jClass, jMethod);
+                }
+                else
+                {
+                    __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
+                }
+            }
+            else
+            {
+                __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
+            }
+        }
+
+        void jni_endSession()
+        {
+            JNIEnv* env = FAndroidApplication::GetJavaEnv();
+            jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
+            const char* strMethod = "endSession";
+            
+            if(jClass)
+            {
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "()V");
+                
+                if(jMethod)
+                {
+                    env->CallStaticVoidMethod(jClass, jMethod);
+                }
+                else
+                {
+                    __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
+                }
+            }
+            else
+            {
+                __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
+            }
+        }
 	}
 }
 

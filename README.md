@@ -16,6 +16,9 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.2.0**
+* added manual session handling
+
 **2.1.2**
 * fixed default GameAnalytics settings values
 

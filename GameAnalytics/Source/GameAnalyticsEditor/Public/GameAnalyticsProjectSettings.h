@@ -78,9 +78,13 @@ public:
     UPROPERTY(Config, EditAnywhere, Category=ResourceTypes, Meta=(ToolTip="List of Resource Item Types."))
     TArray<FString> ResourceItemTypes;
     
-    // Info Log Build
+    // Use custom id
     UPROPERTY(Config, EditAnywhere, Category=Advanced, Meta=(ToolTip="Use custom id. Define your own custom defined user id to send with events. PLEASE NOTICE: When using custom id you need to remember GameAnalytics will first be fully initialized when you have set the custom id. No events can be sent before GameAnalytics is fully initialized."))
     bool UseCustomId = false;
+    
+    // Use custom id
+    UPROPERTY(Config, EditAnywhere, Category=Advanced, Meta=(ToolTip="Use manual session handling. Manually choose when to end and start a new session. Note initializing of the SDK will automatically start the first session."))
+    bool UseManualSessionHandling = false;
     
     // Submit Errors
     //UPROPERTY(Config, EditAnywhere, Category=Advanced)

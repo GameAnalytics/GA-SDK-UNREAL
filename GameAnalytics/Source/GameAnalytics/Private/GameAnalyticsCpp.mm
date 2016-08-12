@@ -174,6 +174,10 @@ void GameAnalyticsCpp::setEnabledVerboseLog(bool flag) {
     [GameAnalytics setEnabledVerboseLog:flag];
 }
 
+void GameAnalyticsCpp::setEnabledManualSessionHandling(bool flag) {
+    [GameAnalytics setEnabledManualSessionHandling:flag];
+}
+
 void GameAnalyticsCpp::setCustomDimension01(const char *customDimension) {
     NSString *customDimensionString = customDimension != NULL ? [NSString stringWithUTF8String:customDimension] : nil;
     [GameAnalytics setCustomDimension01:customDimensionString];
@@ -202,6 +206,14 @@ void GameAnalyticsCpp::setGender(const char *gender) {
 void GameAnalyticsCpp::setBirthYear(int birthYear) {
     NSInteger birthYearInteger = (NSInteger)birthYear;
     [GameAnalytics setBirthYear:birthYearInteger];
+}
+
+void GameAnalyticsCpp::startSession() {
+    [GameAnalytics startSession];
+}
+
+void GameAnalyticsCpp::endSession() {
+    [GameAnalytics endSession];
 }
 
 #endif

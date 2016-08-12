@@ -258,6 +258,17 @@ namespace gameanalytics
 #endif
         }
 
+        void GameAnalytics::setEnabledManualSessionHandling(bool flag)
+        {
+#if PLATFORM_IOS
+            GameAnalyticsCpp::setEnabledManualSessionHandling(flag);
+#elif PLATFORM_ANDROID
+            jni_setEnabledManualSessionHandling(flag);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS
+            gameanalytics::GameAnalytics::setEnabledManualSessionHandling(flag);
+#endif
+        }
+
         void GameAnalytics::setCustomDimension01(const char *customDimension)
         {
 #if PLATFORM_IOS
@@ -340,6 +351,28 @@ namespace gameanalytics
         	jni_setBirthYear(birthYear);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS
             gameanalytics::GameAnalytics::setBirthYear(birthYear);
+#endif
+        }
+
+        void GameAnalytics::startSession()
+        {
+#if PLATFORM_IOS
+            GameAnalyticsCpp::startSession();
+#elif PLATFORM_ANDROID
+            jni_startSession();
+#elif PLATFORM_MAC || PLATFORM_WINDOWS
+            gameanalytics::GameAnalytics::startSession();
+#endif
+        }
+
+        void GameAnalytics::endSession()
+        {
+#if PLATFORM_IOS
+            GameAnalyticsCpp::endSession();
+#elif PLATFORM_ANDROID
+            jni_endSession();
+#elif PLATFORM_MAC || PLATFORM_WINDOWS
+            gameanalytics::GameAnalytics::endSession();
 #endif
         }
     }

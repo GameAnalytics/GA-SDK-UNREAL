@@ -62,6 +62,7 @@ public:
 		TArray<FString> ResourceCurrencies;
 		TArray<FString> ResourceItemTypes;
         bool UseCustomId;
+        bool UseManualSessionHandling;
 		bool SubmitErrors;
 		bool SubmitAverageFPS;
 		bool SubmitCriticalFPS;

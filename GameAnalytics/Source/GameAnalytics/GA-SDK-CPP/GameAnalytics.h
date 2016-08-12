@@ -127,12 +127,16 @@ namespace gameanalytics
         // some calls only work after a configure is called (setCustomDimension)
         static void setEnabledInfoLog(bool flag);
         static void setEnabledVerboseLog(bool flag);
+        static void setEnabledManualSessionHandling(bool flag);
         static void setCustomDimension01(const std::string& dimension01);
         static void setCustomDimension02(const std::string& dimension02);
         static void setCustomDimension03(const std::string& dimension03);
         static void setFacebookId(const std::string& facebookId);
         static void setGender(EGAGender gender);
         static void setBirthYear(int birthYear);
+
+        static void startSession();
+        static void endSession();
 
         // game state changes
         // will affect how session is started / ended

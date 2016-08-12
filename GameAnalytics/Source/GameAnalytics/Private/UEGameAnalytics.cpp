@@ -7,8 +7,8 @@
 #include "EngineVersion.h"
 
 #define GA_VERSION_MAJOR 2
-#define GA_VERSION_MINOR 1
-#define GA_VERSION_PATCH 2
+#define GA_VERSION_MINOR 2
+#define GA_VERSION_PATCH 0
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -95,6 +95,10 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
     {
         Settings.UseCustomId = false;
     }
+    if(!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("UseManualSessionHandling"), Settings.UseManualSessionHandling, GetIniName()))
+    {
+        Settings.UseManualSessionHandling = false;
+    }
 	if(!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("InfoLogBuild"), Settings.InfoLogBuild, GetIniName()))
     {
         Settings.InfoLogBuild = true;
@@ -159,115 +163,134 @@ FAnalyticsProviderGameAnalytics::~FAnalyticsProviderGameAnalytics()
 
 bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventAttribute>& Attributes)
 {
-	ProjectSettings = FAnalyticsGameAnalytics::LoadProjectSettings();
+    if(!bHasSessionStarted)
+    {
+        ProjectSettings = FAnalyticsGameAnalytics::LoadProjectSettings();
     
 #if PLATFORM_MAC || PLATFORM_WINDOWS
-    gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_ANSI(*FPaths::GameSavedDir()));
+        gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_ANSI(*FPaths::GameSavedDir()));
 #endif
 	
-    ////// Enable log
-    gameanalytics::unreal::GameAnalytics::setEnabledInfoLog(ProjectSettings.InfoLogBuild);
-    gameanalytics::unreal::GameAnalytics::setEnabledVerboseLog(ProjectSettings.VerboseLogBuild);
+        ////// Enable log
+        gameanalytics::unreal::GameAnalytics::setEnabledInfoLog(ProjectSettings.InfoLogBuild);
+        gameanalytics::unreal::GameAnalytics::setEnabledVerboseLog(ProjectSettings.VerboseLogBuild);
 			
-	////// Configure engine version 
-    FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
-	gameanalytics::unreal::GameAnalytics::configureGameEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
-    FString SdkVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), GA_VERSION_MAJOR, GA_VERSION_MINOR, GA_VERSION_PATCH);
-	gameanalytics::unreal::GameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_ANSI(*SdkVersionString));
+        ////// Configure engine version
+        FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
+        gameanalytics::unreal::GameAnalytics::configureGameEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
+        FString SdkVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), GA_VERSION_MAJOR, GA_VERSION_MINOR, GA_VERSION_PATCH);
+        gameanalytics::unreal::GameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_ANSI(*SdkVersionString));
     
-    //// Configure build version
+        //// Configure build version
 #if PLATFORM_IOS
-    gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.IosBuild));
+        gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.IosBuild));
 #elif PLATFORM_ANDROID
-    gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.AndroidBuild));
+        gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.AndroidBuild));
 #elif PLATFORM_MAC
-    gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.MacBuild));
+        gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.MacBuild));
 #elif PLATFORM_WINDOWS
-    gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.WindowsBuild));
+        gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.WindowsBuild));
 #endif
 
-	////// Configure available virtual currencies and item types
-	if (ProjectSettings.ResourceCurrencies.Num() > 0)
-	{
-		std::vector<std::string> currencies;
-		for (const FString& currency : ProjectSettings.ResourceCurrencies)
-		{
-			currencies.push_back(TCHAR_TO_ANSI(*currency));
-		}
-		gameanalytics::unreal::GameAnalytics::configureAvailableResourceCurrencies(currencies);
-	}
+        ////// Configure available virtual currencies and item types
+        if (ProjectSettings.ResourceCurrencies.Num() > 0)
+        {
+            std::vector<std::string> currencies;
+            for (const FString& currency : ProjectSettings.ResourceCurrencies)
+            {
+                currencies.push_back(TCHAR_TO_ANSI(*currency));
+            }
+            gameanalytics::unreal::GameAnalytics::configureAvailableResourceCurrencies(currencies);
+        }
 
-	if (ProjectSettings.ResourceItemTypes.Num() > 0)
-	{
-		std::vector<std::string> resourceItem;
-		for (const FString& item : ProjectSettings.ResourceItemTypes)
-		{
-			resourceItem.push_back(TCHAR_TO_ANSI(*item));
-		}
-		gameanalytics::unreal::GameAnalytics::configureAvailableResourceItemTypes(resourceItem);
-	}
+        if (ProjectSettings.ResourceItemTypes.Num() > 0)
+        {
+            std::vector<std::string> resourceItem;
+            for (const FString& item : ProjectSettings.ResourceItemTypes)
+            {
+                resourceItem.push_back(TCHAR_TO_ANSI(*item));
+            }
+            gameanalytics::unreal::GameAnalytics::configureAvailableResourceItemTypes(resourceItem);
+        }
 
-	// Configure available custom dimensions
-	if (ProjectSettings.CustomDimensions01.Num() > 0)
-	{
-		std::vector<std::string> customDimension01;
-		for (const FString& dimension01 : ProjectSettings.CustomDimensions01)
-		{
-			customDimension01.push_back(TCHAR_TO_ANSI(*dimension01));
-		}
-		gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions01(customDimension01);
-	}
+        // Configure available custom dimensions
+        if (ProjectSettings.CustomDimensions01.Num() > 0)
+        {
+            std::vector<std::string> customDimension01;
+            for (const FString& dimension01 : ProjectSettings.CustomDimensions01)
+            {
+                customDimension01.push_back(TCHAR_TO_ANSI(*dimension01));
+            }
+            gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions01(customDimension01);
+        }
 
-	if (ProjectSettings.CustomDimensions02.Num() > 0)
-	{
-		std::vector<std::string> customDimension02;
-		for (const FString& dimension02 : ProjectSettings.CustomDimensions02)
-		{
-			customDimension02.push_back(TCHAR_TO_ANSI(*dimension02));
-		}
-		gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions02(customDimension02);
-	}
+        if (ProjectSettings.CustomDimensions02.Num() > 0)
+        {
+            std::vector<std::string> customDimension02;
+            for (const FString& dimension02 : ProjectSettings.CustomDimensions02)
+            {
+                customDimension02.push_back(TCHAR_TO_ANSI(*dimension02));
+            }
+            gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions02(customDimension02);
+        }
 
-	if (ProjectSettings.CustomDimensions03.Num() > 0)
-	{
-		std::vector<std::string> customDimension03;
-		for (const FString& dimension03 : ProjectSettings.CustomDimensions03)
-		{
-			customDimension03.push_back(TCHAR_TO_ANSI(*dimension03));
-		}
-		gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions03(customDimension03);
-	}
+        if (ProjectSettings.CustomDimensions03.Num() > 0)
+        {
+            std::vector<std::string> customDimension03;
+            for (const FString& dimension03 : ProjectSettings.CustomDimensions03)
+            {
+                customDimension03.push_back(TCHAR_TO_ANSI(*dimension03));
+            }
+            gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions03(customDimension03);
+        }
+    
+        if(ProjectSettings.UseManualSessionHandling)
+        {
+            gameanalytics::unreal::GameAnalytics::setEnabledManualSessionHandling(ProjectSettings.UseManualSessionHandling);
+        }
 
-    if(!ProjectSettings.UseCustomId)
-    {
-	////// Initialize
+        if(!ProjectSettings.UseCustomId)
+        {
+            ////// Initialize
 #if PLATFORM_IOS
-        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.IosGameKey), TCHAR_TO_ANSI(*ProjectSettings.IosSecretKey));
+            gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.IosGameKey), TCHAR_TO_ANSI(*ProjectSettings.IosSecretKey));
 #elif PLATFORM_ANDROID
-        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.AndroidGameKey), TCHAR_TO_ANSI(*ProjectSettings.AndroidSecretKey));
+            gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.AndroidGameKey), TCHAR_TO_ANSI(*ProjectSettings.AndroidSecretKey));
 #elif PLATFORM_MAC
-        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
+            gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
 #elif PLATFORM_WINDOWS
-        gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.WindowsGameKey), TCHAR_TO_ANSI(*ProjectSettings.WindowsSecretKey));
+            gameanalytics::unreal::GameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.WindowsGameKey), TCHAR_TO_ANSI(*ProjectSettings.WindowsSecretKey));
 #endif
-    }
-    else
-    {
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::StartSession Custom id is enabled. Initialize is delayed until custom id has been set."));
-    }
+        }
+        else
+        {
+            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::StartSession Custom id is enabled. Initialize is delayed until custom id has been set."));
+        }
 
-	bHasSessionStarted = true;
+        bHasSessionStarted = true;
+    }
+    else if(ProjectSettings.UseManualSessionHandling)
+    {
+        gameanalytics::unreal::GameAnalytics::startSession();
+    }
     
     return bHasSessionStarted;
 }
 
 void FAnalyticsProviderGameAnalytics::EndSession()
 {
+    if(ProjectSettings.UseManualSessionHandling)
+    {
+        gameanalytics::unreal::GameAnalytics::endSession();
+    }
+    else
+    {
 #if PLATFORM_MAC || PLATFORM_WINDOWS
-    gameanalytics::GameAnalytics::onStop();
+        gameanalytics::GameAnalytics::onStop();
 #else
-    UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
 #endif
+    }
 }
 
 void FAnalyticsProviderGameAnalytics::FlushEvents()
