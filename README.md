@@ -16,6 +16,10 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.2.1**
+* wrong platform in events bug fix (windows, mac)
+* crash bug fix (windows, mac)
+
 **2.2.0**
 * added manual session handling
 
