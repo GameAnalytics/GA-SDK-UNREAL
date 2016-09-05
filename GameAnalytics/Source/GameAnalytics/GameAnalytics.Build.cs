@@ -82,8 +82,6 @@ namespace UnrealBuildTool.Rules
 
                 case UnrealTargetPlatform.XboxOne:
                 case UnrealTargetPlatform.PS4:
-                case UnrealTargetPlatform.WinRT:
-                case UnrealTargetPlatform.WinRT_ARM:
                 case UnrealTargetPlatform.HTML5:
                 case UnrealTargetPlatform.Linux:
                 default:

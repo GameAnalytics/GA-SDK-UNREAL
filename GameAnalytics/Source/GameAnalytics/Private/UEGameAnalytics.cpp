@@ -8,7 +8,7 @@
 
 #define GA_VERSION_MAJOR 2
 #define GA_VERSION_MINOR 2
-#define GA_VERSION_PATCH 1
+#define GA_VERSION_PATCH 2
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -28,7 +28,7 @@ void FAnalyticsGameAnalytics::ShutdownModule()
 	}
 }
 
-TSharedPtr<IAnalyticsProvider> FAnalyticsGameAnalytics::CreateAnalyticsProvider(const FAnalytics::FProviderConfigurationDelegate& GetConfigValue) const
+TSharedPtr<IAnalyticsProvider> FAnalyticsGameAnalytics::CreateAnalyticsProvider(const FAnalyticsProviderConfigurationDelegate& GetConfigValue) const
 {	
 	return GameAnalyticsProvider;
 }

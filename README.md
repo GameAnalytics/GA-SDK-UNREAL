@@ -6,7 +6,7 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 > :information_source:<br>
 >
 > The Unreal SDK include support for **iOS**, **Android**, **Windows** and **Mac** platforms
-> 
+>
 > Requirements:<br/>
 > **Unreal Engine:** 4.10+<br/>  
 > **iOS:** iOS 7+<br/>
@@ -16,6 +16,10 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.2.2**
+* Updated to be compatible with Unreal 4.13
+* Updated Google Play Services libraries to use latest version (android)
+
 **2.2.1**
 * wrong platform in events bug fix (windows, mac)
 * crash bug fix (windows, mac)
