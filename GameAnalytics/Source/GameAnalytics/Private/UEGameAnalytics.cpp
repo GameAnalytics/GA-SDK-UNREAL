@@ -8,7 +8,7 @@
 
 #define GA_VERSION_MAJOR 2
 #define GA_VERSION_MINOR 2
-#define GA_VERSION_PATCH 2
+#define GA_VERSION_PATCH 3
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -29,7 +29,7 @@ void FAnalyticsGameAnalytics::ShutdownModule()
 }
 
 TSharedPtr<IAnalyticsProvider> FAnalyticsGameAnalytics::CreateAnalyticsProvider(const FAnalyticsProviderConfigurationDelegate& GetConfigValue) const
-{	
+{
 	return GameAnalyticsProvider;
 }
 
@@ -64,7 +64,7 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
     {
         Settings.IosBuild = "0.1";
     }
-    
+
     if(!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("MacGameKey"), Settings.MacGameKey, GetIniName()))
     {
         Settings.MacGameKey = "";
@@ -77,7 +77,7 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
     {
         Settings.MacBuild = "0.1";
     }
-	
+
 	if(!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("WindowsGameKey"), Settings.WindowsGameKey, GetIniName()))
     {
         Settings.WindowsGameKey = "";
@@ -166,21 +166,21 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
     if(!bHasSessionStarted)
     {
         ProjectSettings = FAnalyticsGameAnalytics::LoadProjectSettings();
-    
+
 #if PLATFORM_MAC || PLATFORM_WINDOWS
         gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_ANSI(*FPaths::GameSavedDir()));
 #endif
-	
+
         ////// Enable log
         gameanalytics::unreal::GameAnalytics::setEnabledInfoLog(ProjectSettings.InfoLogBuild);
         gameanalytics::unreal::GameAnalytics::setEnabledVerboseLog(ProjectSettings.VerboseLogBuild);
-			
+
         ////// Configure engine version
         FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
         gameanalytics::unreal::GameAnalytics::configureGameEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
         FString SdkVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), GA_VERSION_MAJOR, GA_VERSION_MINOR, GA_VERSION_PATCH);
         gameanalytics::unreal::GameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_ANSI(*SdkVersionString));
-    
+
         //// Configure build version
 #if PLATFORM_IOS
         gameanalytics::unreal::GameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.IosBuild));
@@ -243,7 +243,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
             }
             gameanalytics::unreal::GameAnalytics::configureAvailableCustomDimensions03(customDimension03);
         }
-    
+
         if(ProjectSettings.UseManualSessionHandling)
         {
             gameanalytics::unreal::GameAnalytics::setEnabledManualSessionHandling(ProjectSettings.UseManualSessionHandling);
@@ -273,7 +273,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
     {
         gameanalytics::unreal::GameAnalytics::startSession();
     }
-    
+
     return bHasSessionStarted;
 }
 
@@ -384,13 +384,13 @@ void FAnalyticsProviderGameAnalytics::SetAge(int InAge)
 void FAnalyticsProviderGameAnalytics::SetGender(const FString& InGender)
 {
     gameanalytics::unreal::EGAGender gender = GetEnumValueFromString<gameanalytics::unreal::EGAGender>("EGAGender", InGender.ToLower());
-    
+
     if (gender == gameanalytics::unreal::EGAGender(0))
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("SetGender: Error value must be either male or female."));
         return;
     }
-    
+
 	gameanalytics::unreal::GameAnalytics::setGender(gender);
 }
 
@@ -400,7 +400,7 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error)
 }
 
 void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TArray<FAnalyticsEventAttribute>& Attributes)
-{	
+{
 	gameanalytics::unreal::EGAErrorSeverity ErrorSeverity = GetEnumValueFromString<gameanalytics::unreal::EGAErrorSeverity>("EGAErrorSeverity", Error.ToLower());
 
 	if (ErrorSeverity == gameanalytics::unreal::EGAErrorSeverity(0))
@@ -429,19 +429,19 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TA
 void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType, const TArray<FString>& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes)
 {
     gameanalytics::unreal::EGAProgressionStatus ProgressionStatus = GetEnumValueFromString<gameanalytics::unreal::EGAProgressionStatus>("EGAProgressionStatus", ProgressType.ToLower());
-    
+
     if (ProgressionStatus == gameanalytics::unreal::EGAProgressionStatus(0))
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: ProgressType value must be either start, complete or fail. ProgressType=%s"), *ProgressType);
         return;
     }
-    
+
     const int32 ProgressHierarchyCount = ProgressHierarchy.Num();
     if(ProgressHierarchyCount > 0)
     {
         int32 value;
         bool useValue = false;
-        
+
         for (auto Attr : Attributes)
         {
             if (Attr.AttrName == TEXT("value"))
@@ -451,7 +451,7 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
                 break;
             }
         }
-        
+
         if (ProgressHierarchyCount > 2)
         {
             if(useValue)
@@ -501,7 +501,7 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
 {
     gameanalytics::unreal::EGAResourceFlowType FlowType = gameanalytics::unreal::EGAResourceFlowType::source;
 	FString Currency;
-	FString ItemType;	
+	FString ItemType;
 
 	const int32 AttrCount = Attributes.Num();
 	if (AttrCount > 0)
@@ -511,7 +511,7 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
 			if (Attr.AttrName == TEXT("flowType"))
 			{
                 FlowType = GetEnumValueFromString<gameanalytics::unreal::EGAResourceFlowType>("EGAResourceFlowType", Attr.AttrValue.ToLower());
-				
+
                 if (FlowType == gameanalytics::unreal::EGAResourceFlowType(0))
 				{
 					UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.AttrValue);
@@ -593,7 +593,7 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
 				}
 			}
 			else if (Attr.AttrName == TEXT("signature"))
-			{ 
+			{
 				Signature = Attr.AttrValue;
 			}
 		}
@@ -611,7 +611,7 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
 			}
 #elif PLATFORM_IOS
 			if (!Receipt.IsEmpty())
-			{				
+			{
                 gameanalytics::unreal::GameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType), TCHAR_TO_ANSI(*Receipt));
 			}
 			else

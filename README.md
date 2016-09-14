@@ -16,6 +16,9 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.2.3**
+* fix for empty user id in events (mac, windows)
+
 **2.2.2**
 * Updated to be compatible with Unreal 4.13
 * Updated Google Play Services libraries to use latest version (android)
