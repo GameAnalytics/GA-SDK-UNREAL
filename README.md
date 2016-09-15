@@ -16,6 +16,10 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.2.4**
+* fixed user_id tracking for iOS 10 (ios)
+* small fix related to manual session handling (android)
+
 **2.2.3**
 * fix for empty user id in events (mac, windows)
 
