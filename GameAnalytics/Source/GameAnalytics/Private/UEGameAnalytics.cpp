@@ -8,7 +8,7 @@
 
 #define GA_VERSION_MAJOR 2
 #define GA_VERSION_MINOR 2
-#define GA_VERSION_PATCH 4
+#define GA_VERSION_PATCH 5
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -279,18 +279,21 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 
 void FAnalyticsProviderGameAnalytics::EndSession()
 {
-    if(ProjectSettings.UseManualSessionHandling)
-    {
-        gameanalytics::unreal::GameAnalytics::endSession();
-    }
-    else
-    {
+	if (bHasSessionStarted)
+	{
+		if(ProjectSettings.UseManualSessionHandling)
+		{
+			gameanalytics::unreal::GameAnalytics::endSession();
+		}
+		else
+		{
 #if PLATFORM_MAC || PLATFORM_WINDOWS
-        gameanalytics::GameAnalytics::onStop();
+			gameanalytics::GameAnalytics::onStop();
 #else
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
+			UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
 #endif
-    }
+		}
+	}
 }
 
 void FAnalyticsProviderGameAnalytics::FlushEvents()
