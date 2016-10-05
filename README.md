@@ -9,7 +9,7 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 >
 > Requirements:<br/>
 > **Unreal Engine:** 4.13<br/>  
-> For **Unreal Engine** 4.12 please download the 2.2.2 version of the SDK or older from our [releases](https://github.com/GameAnalytics/GA-SDK-UNREAL/releases)
+> For **Unreal Engine** 4.12 please download the 2.2.2 version of the SDK or older from our [releases](https://github.com/GameAnalytics/GA-SDK-UNREAL/releases)<br/><br/>
 > **iOS:** iOS 7+<br/>
 > **Android:** Android API Level 14<br/>
 > **Windows:** Minimum specs for UE4<br/>
