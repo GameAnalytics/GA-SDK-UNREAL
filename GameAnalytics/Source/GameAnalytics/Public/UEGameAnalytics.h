@@ -4,6 +4,7 @@
 
 #include "IAnalyticsProviderModule.h"
 #include "Core.h"
+#include "Runtime/Launch/Resources/Version.h"
 
 class IAnalyticsProvider;
 
@@ -40,7 +41,12 @@ public:
 	 * Creates the analytics provider given a configuration delegate.
 	 * The keys required exactly match the field names in the Config object. 
 	 */
-	virtual TSharedPtr<IAnalyticsProvider> CreateAnalyticsProvider(const FAnalyticsProviderConfigurationDelegate& GetConfigValue) const override;
+    
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 13
+    virtual TSharedPtr<IAnalyticsProvider> CreateAnalyticsProvider(const FAnalyticsProviderConfigurationDelegate& GetConfigValue) const override;
+#else
+    virtual TSharedPtr<IAnalyticsProvider> CreateAnalyticsProvider(const FAnalytics::FProviderConfigurationDelegate& GetConfigValue) const override;
+#endif
 	
 	struct FGameAnalyticsProjectSettings
 	{

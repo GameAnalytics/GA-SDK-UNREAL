@@ -5,10 +5,10 @@ using System;
 
 namespace UnrealBuildTool.Rules
 {
-	public class GameAnalytics : ModuleRules
-	{
+    public class GameAnalytics : ModuleRules
+    {
         public GameAnalytics(TargetInfo Target)
-		{
+        {
             var GameAnalyticsPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../ThirdParty/" ));
             var libPath = Path.Combine(GameAnalyticsPath, "lib");
 
@@ -16,53 +16,35 @@ namespace UnrealBuildTool.Rules
             {
                 case UnrealTargetPlatform.Win64:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_atomic-vc140-mt-1_60.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_chrono-vc140-mt-1_60.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_date_time-vc140-mt-1_60.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_filesystem-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_log-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_log_setup-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_regex-vc140-mt-1_60.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_system-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_thread-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "cppnetlib-client-connections.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "cppnetlib-uri.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "ssleay32MT.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libeay32MT.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libeay32MT.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "ssleay32MT.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libcurl.lib"));
                     break;
+
                 case UnrealTargetPlatform.Win32:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_atomic-vc140-mt-1_60.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_chrono-vc140-mt-1_60.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_date_time-vc140-mt-1_60.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_filesystem-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_log-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_log_setup-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_regex-vc140-mt-1_60.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_system-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_thread-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "cppnetlib-client-connections.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "cppnetlib-uri.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "ssleay32MT.lib"));
-					PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libeay32MT.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libeay32MT.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "ssleay32MT.lib"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libcurl.lib"));
                     break;
+
                 case UnrealTargetPlatform.Android:
                     PrivateDependencyModuleNames.Add("Launch");
                     break;
+
                 case UnrealTargetPlatform.Mac:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_chrono-mt.a"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_filesystem-mt.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_log-mt.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_log_setup-mt.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_regex-mt.a"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_system-mt.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_thread-mt.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libcppnetlib-client-connections.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libcppnetlib-uri.a"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libcrypto.a"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libssl.a"));
+                    PublicAdditionalLibraries.Add("curl");
                     break;
+
                 case UnrealTargetPlatform.IOS:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "ios", "libGameAnalytics.a"));
                     PublicFrameworks.AddRange(
@@ -90,20 +72,20 @@ namespace UnrealBuildTool.Rules
 
             PublicDependencyModuleNames.AddRange(
                 new string[]
-				{
-					"Core",
-					"CoreUObject",
+                {
+                    "Core",
+                    "CoreUObject",
                     "Engine",
-					// ... add other public dependencies that you statically link with here ...
-				}
-                );
+                    // ... add other public dependencies that you statically link with here ...
+                }
+            );
 
             /*PrivateDependencyModuleNames.AddRange(
                 new string[]
-				{
-					"Analytics",
-					// ... add private dependencies that you statically link with here ...
-				}
+                {
+                    "Analytics",
+                    // ... add private dependencies that you statically link with here ...
+                }
                 );*/
 
             PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "Private")));
@@ -113,11 +95,11 @@ namespace UnrealBuildTool.Rules
 
             PrivateDependencyModuleNames.AddRange(
                 new string[]
-				{
+                {
                     "Analytics",
                     "Engine"
-					// ... add private dependencies that you statically link with here ...
-				}
+                    // ... add private dependencies that you statically link with here ...
+                }
             );
 
             PublicIncludePathModuleNames.AddRange(
@@ -134,5 +116,5 @@ namespace UnrealBuildTool.Rules
                 AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "GameAnalytics_APL.xml")));
             }
         }
-	}
+    }
 }

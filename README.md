@@ -17,6 +17,9 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.2.6**
+* added support for both Unreal Engine 4.12 and 4.13
+
 **2.2.5**
 * bug fix to error when cooking and packaging build
 
