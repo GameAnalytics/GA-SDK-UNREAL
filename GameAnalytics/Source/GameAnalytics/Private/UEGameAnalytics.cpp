@@ -8,7 +8,7 @@
 
 #define GA_VERSION_MAJOR 2
 #define GA_VERSION_MINOR 2
-#define GA_VERSION_PATCH 6
+#define GA_VERSION_PATCH 7
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
