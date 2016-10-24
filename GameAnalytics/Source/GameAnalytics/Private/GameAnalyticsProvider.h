@@ -4,42 +4,6 @@
 
 #include "CoreUObject.h"
 
-UENUM()
-enum class EGAResourceFlowType : uint8
-{
-    undefined = 0,
-    source = 1,
-    sink = 2
-};
-
-UENUM()
-enum class EGAProgressionStatus : uint8
-{
-    undefined = 0,
-    start = 1,
-    complete = 2,
-    fail = 3
-};
-
-UENUM()
-enum class EGAErrorSeverity : uint8
-{
-    undefined = 0,
-    debug = 1,
-    info = 2,
-    warning = 3,
-    error = 4,
-    critical = 5
-};
-
-UENUM()
-enum class EGAGender : uint8
-{
-    undefined = 0,
-    male = 1,
-    female = 2
-};
-
 class FAnalyticsProviderGameAnalytics :
 	public IAnalyticsProvider
 {
