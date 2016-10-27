@@ -7,7 +7,7 @@
 
 #define GA_VERSION_MAJOR 2
 #define GA_VERSION_MINOR 2
-#define GA_VERSION_PATCH 8
+#define GA_VERSION_PATCH 9
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -449,48 +449,48 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
     const int32 ProgressHierarchyCount = ProgressHierarchy.Num();
     if(ProgressHierarchyCount > 0)
     {
-        int32 value;
         bool useValue = false;
 
         for (auto Attr : Attributes)
         {
             if (Attr.AttrName == TEXT("value"))
             {
-                value = FCString::Atod(*Attr.AttrValue);
+                int32 value = FCString::Atod(*Attr.AttrValue);
                 useValue = true;
+
+				if (ProgressHierarchyCount > 2)
+		        {
+		            UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), TCHAR_TO_ANSI(*ProgressHierarchy[2]), value);
+		        }
+		        else if (ProgressHierarchyCount > 1)
+		        {
+		            UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), value);
+		        }
+		        else
+		        {
+		            UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), value);
+		        }
                 break;
             }
         }
 
         if (ProgressHierarchyCount > 2)
         {
-            if(useValue)
-            {
-                UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), TCHAR_TO_ANSI(*ProgressHierarchy[2]), value);
-            }
-            else
+            if(!useValue)
             {
                 UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), TCHAR_TO_ANSI(*ProgressHierarchy[2]));
             }
         }
         else if (ProgressHierarchyCount > 1)
         {
-            if(useValue)
-            {
-                UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), value);
-            }
-            else
+            if(!useValue)
             {
                 UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]));
             }
         }
         else
         {
-            if(useValue)
-            {
-                UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), value);
-            }
-            else
+            if(!useValue)
             {
                 UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]));
             }
