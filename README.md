@@ -17,6 +17,9 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+**2.2.9**
+* fixed missing namespace for JNI function calls (android)
+
 **2.2.8**
 * fix for using plugin directly from C++ code in your project
 
