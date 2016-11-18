@@ -5,9 +5,7 @@
 
 #include "EngineVersion.h"
 
-#define GA_VERSION_MAJOR 2
-#define GA_VERSION_MINOR 2
-#define GA_VERSION_PATCH 9
+#define GA_VERSION TEXT("2.2.10")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -185,7 +183,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         ////// Configure engine version
         FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
         UGameAnalytics::configureGameEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
-        FString SdkVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), GA_VERSION_MAJOR, GA_VERSION_MINOR, GA_VERSION_PATCH);
+        FString SdkVersionString = FString::Printf(TEXT("unreal %s"), GA_VERSION);
         UGameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_ANSI(*SdkVersionString));
 
         //// Configure build version

@@ -17,6 +17,10 @@ Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNRE
 
 Changelog
 ---------
+<!--(CHANGELOG_TOP)-->
+**2.2.10**
+* possible to set custom dimensions and demographics before initialise
+
 **2.2.9**
 * fixed missing namespace for JNI function calls (android)
 
