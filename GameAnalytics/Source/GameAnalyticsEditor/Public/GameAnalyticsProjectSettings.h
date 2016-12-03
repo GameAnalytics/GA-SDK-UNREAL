@@ -58,6 +58,18 @@ public:
     UPROPERTY(Config, EditAnywhere, Category = WindowsSetup, Meta=(ToolTip="The current version of the Windows game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
     FString WindowsBuild = "0.1";
 
+    // Game Key
+    UPROPERTY(Config, EditAnywhere, Category = UWPSetup, Meta = (ToolTip = "Your GameAnalytics UWP Game Key - copy/paste from the GA website or log in to autofill it."))
+    FString UWPGameKey;
+
+    // Secret Key
+    UPROPERTY(Config, EditAnywhere, Category = UWPSetup, Meta = (ToolTip = "Your GameAnalytics UWP Secret Key - copy/paste from the GA website or log in to autofill it."))
+    FString UWPSecretKey;
+
+    // Build
+    UPROPERTY(Config, EditAnywhere, Category = UWPSetup, Meta = (ToolTip = "The current version of the UWP game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
+    FString UWPBuild = "0.1";
+
     // Custom Dimensions 01
     UPROPERTY(Config, EditAnywhere, Category=CustomDimensions, Meta=(ToolTip="List of custom dimensions 01."))
     TArray<FString> CustomDimensions01;

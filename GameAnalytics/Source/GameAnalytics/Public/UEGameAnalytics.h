@@ -62,6 +62,9 @@ public:
 		FString WindowsGameKey;
 		FString WindowsSecretKey;
         FString WindowsBuild;
+        FString UWPGameKey;
+        FString UWPSecretKey;
+        FString UWPBuild;
 		TArray<FString> CustomDimensions01;
 		TArray<FString> CustomDimensions02;
 		TArray<FString> CustomDimensions03;

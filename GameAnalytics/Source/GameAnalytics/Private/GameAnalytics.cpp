@@ -3,7 +3,7 @@
 #include "../GA-SDK-IOS/GameAnalyticsCpp.h"
 #elif PLATFORM_ANDROID
 #include "../GA-SDK-ANDROID/GameAnalyticsJNI.h"
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
 #include "../GA-SDK-CPP/GameAnalytics.h"
 #endif
 
@@ -17,7 +17,7 @@ void UGameAnalytics::configureAvailableCustomDimensions01(const std::vector<std:
     GameAnalyticsCpp::configureAvailableCustomDimensions01(list);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureAvailableCustomDimensions01(list);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions01(list);
 #endif
 }
@@ -28,7 +28,7 @@ void UGameAnalytics::configureAvailableCustomDimensions02(const std::vector<std:
     GameAnalyticsCpp::configureAvailableCustomDimensions02(list);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureAvailableCustomDimensions02(list);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions02(list);
 #endif
 }
@@ -39,7 +39,7 @@ void UGameAnalytics::configureAvailableCustomDimensions03(const std::vector<std:
     GameAnalyticsCpp::configureAvailableCustomDimensions03(list);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureAvailableCustomDimensions03(list);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions03(list);
 #endif
 }
@@ -50,7 +50,7 @@ void UGameAnalytics::configureAvailableResourceCurrencies(const std::vector<std:
     GameAnalyticsCpp::configureAvailableResourceCurrencies(list);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureAvailableResourceCurrencies(list);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::configureAvailableResourceCurrencies(list);
 #endif
 }
@@ -61,7 +61,7 @@ void UGameAnalytics::configureAvailableResourceItemTypes(const std::vector<std::
     GameAnalyticsCpp::configureAvailableResourceItemTypes(list);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureAvailableResourceItemTypes(list);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::configureAvailableResourceItemTypes(list);
 #endif
 }
@@ -72,7 +72,7 @@ void UGameAnalytics::configureBuild(const char *build)
     GameAnalyticsCpp::configureBuild(build);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureBuild(build);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::configureBuild(build);
 #endif
 }
@@ -83,7 +83,7 @@ void UGameAnalytics::configureUserId(const char *userId)
     GameAnalyticsCpp::configureUserId(userId);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureUserId(userId);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::configureUserId(userId);
 #endif
 }
@@ -94,7 +94,7 @@ void UGameAnalytics::configureSdkGameEngineVersion(const char *gameEngineSdkVers
     GameAnalyticsCpp::configureSdkGameEngineVersion(gameEngineSdkVersion);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureSdkGameEngineVersion(gameEngineSdkVersion);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::configureSdkGameEngineVersion(gameEngineSdkVersion);
 #endif
 }
@@ -105,7 +105,7 @@ void UGameAnalytics::configureGameEngineVersion(const char *gameEngineVersion)
     GameAnalyticsCpp::configureGameEngineVersion(gameEngineVersion);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureGameEngineVersion(gameEngineVersion);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::configureGameEngineVersion(gameEngineVersion);
 #endif
 }
@@ -116,7 +116,7 @@ void UGameAnalytics::initialize(const char *gameKey, const char *gameSecret)
     GameAnalyticsCpp::initialize(gameKey, gameSecret);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_initialize(gameKey, gameSecret);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::initialize(gameKey, gameSecret);
 #endif
 }
@@ -144,7 +144,7 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
     GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, NULL);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_addBusinessEvent(currency, amount, itemType, itemId, cartType);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::addBusinessEvent(currency, amount, itemType, itemId, cartType);
 #endif
 }
@@ -155,7 +155,7 @@ void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *
     GameAnalyticsCpp::addResourceEvent((int)flowType, currency, amount, itemType, itemId);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_addResourceEvent((int)flowType, currency, amount, itemType, itemId);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::addResourceEvent((gameanalytics::EGAResourceFlowType)((int)flowType), currency, amount, itemType, itemId);
 #endif
 }
@@ -186,7 +186,7 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
     GameAnalyticsCpp::addProgressionEvent((int)progressionStatus, progression01, progression02, progression03);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03);
 #endif
 }
@@ -197,7 +197,7 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
     GameAnalyticsCpp::addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03, score);
 #endif
 }
@@ -208,7 +208,7 @@ void UGameAnalytics::addDesignEvent(const char *eventId)
     GameAnalyticsCpp::addDesignEvent(eventId);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_addDesignEvent(eventId);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::addDesignEvent(eventId);
 #endif
 }
@@ -219,7 +219,7 @@ void UGameAnalytics::addDesignEvent(const char *eventId, float value)
     GameAnalyticsCpp::addDesignEventWithValue(eventId, value);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_addDesignEventWithValue(eventId, value);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::addDesignEvent(eventId, value);
 #endif
 }
@@ -230,7 +230,7 @@ void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *messag
     GameAnalyticsCpp::addErrorEvent((int)severity, message);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_addErrorEvent((int)severity, message);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::addErrorEvent((gameanalytics::EGAErrorSeverity)((int)severity), message);
 #endif
 }
@@ -241,7 +241,7 @@ void UGameAnalytics::setEnabledInfoLog(bool flag)
     GameAnalyticsCpp::setEnabledInfoLog(flag);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_setEnabledInfoLog(flag);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::setEnabledInfoLog(flag);
 #endif
 }
@@ -252,7 +252,7 @@ void UGameAnalytics::setEnabledVerboseLog(bool flag)
     GameAnalyticsCpp::setEnabledVerboseLog(flag);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_setEnabledVerboseLog(flag);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::setEnabledVerboseLog(flag);
 #endif
 }
@@ -263,7 +263,7 @@ void UGameAnalytics::setEnabledManualSessionHandling(bool flag)
     GameAnalyticsCpp::setEnabledManualSessionHandling(flag);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_setEnabledManualSessionHandling(flag);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::setEnabledManualSessionHandling(flag);
 #endif
 }
@@ -274,7 +274,7 @@ void UGameAnalytics::setCustomDimension01(const char *customDimension)
     GameAnalyticsCpp::setCustomDimension01(customDimension);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_setCustomDimension01(customDimension);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::setCustomDimension01(customDimension);
 #endif
 }
@@ -285,7 +285,7 @@ void UGameAnalytics::setCustomDimension02(const char *customDimension)
     GameAnalyticsCpp::setCustomDimension02(customDimension);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_setCustomDimension02(customDimension);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::setCustomDimension02(customDimension);
 #endif
 }
@@ -296,7 +296,7 @@ void UGameAnalytics::setCustomDimension03(const char *customDimension)
     GameAnalyticsCpp::setCustomDimension03(customDimension);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_setCustomDimension03(customDimension);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::setCustomDimension03(customDimension);
 #endif
 }
@@ -307,7 +307,7 @@ void UGameAnalytics::setFacebookId(const char *facebookId)
     GameAnalyticsCpp::setFacebookId(facebookId);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_setFacebookId(facebookId);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::setFacebookId(facebookId);
 #endif
 }
@@ -322,7 +322,7 @@ void UGameAnalytics::setGender(EGAGender gender)
         	GameAnalyticsCpp::setGender("male");
 #elif PLATFORM_ANDROID
         	gameanalytics::jni_setGender((int)gender);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
             gameanalytics::GameAnalytics::setGender((gameanalytics::EGAGender)((int)gender));
 #endif
         }
@@ -334,7 +334,7 @@ void UGameAnalytics::setGender(EGAGender gender)
         	GameAnalyticsCpp::setGender("female");
 #elif PLATFORM_ANDROID
         	gameanalytics::jni_setGender((int)gender);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
             gameanalytics::GameAnalytics::setGender((gameanalytics::EGAGender)((int)gender));
 #endif
         }
@@ -348,7 +348,7 @@ void UGameAnalytics::setBirthYear(int birthYear)
     GameAnalyticsCpp::setBirthYear(birthYear);
 #elif PLATFORM_ANDROID
     gameanalytics::jni_setBirthYear(birthYear);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::setBirthYear(birthYear);
 #endif
 }
@@ -359,7 +359,7 @@ void UGameAnalytics::startSession()
     GameAnalyticsCpp::startSession();
 #elif PLATFORM_ANDROID
     gameanalytics::jni_startSession();
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::startSession();
 #endif
 }
@@ -370,7 +370,7 @@ void UGameAnalytics::endSession()
     GameAnalyticsCpp::endSession();
 #elif PLATFORM_ANDROID
     gameanalytics::jni_endSession();
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
     gameanalytics::GameAnalytics::endSession();
 #endif
 }

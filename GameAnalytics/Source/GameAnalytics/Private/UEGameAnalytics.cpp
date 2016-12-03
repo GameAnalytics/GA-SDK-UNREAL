@@ -1,11 +1,11 @@
 #include "GameAnalyticsPrivatePCH.h"
-#if PLATFORM_MAC || PLATFORM_WINDOWS
+#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
 #include "../GA-SDK-CPP/GameAnalytics.h"
 #endif
 
 #include "EngineVersion.h"
 
-#define GA_VERSION TEXT("2.2.11")
+#define GA_VERSION TEXT("2.3.0")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -89,11 +89,24 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
     }
     if(!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("WindowsSecretKey"), Settings.WindowsSecretKey, GetIniName()))
     {
-        Settings.WindowsBuild = "";
+        Settings.WindowsSecretKey = "";
     }
     if(!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("WindowsBuild"), Settings.WindowsBuild, GetIniName()))
     {
         Settings.WindowsBuild = "0.1";
+    }
+
+    if (!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("UWPGameKey"), Settings.UWPGameKey, GetIniName()))
+    {
+        Settings.UWPGameKey = "";
+    }
+    if (!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("UWPSecretKey"), Settings.UWPSecretKey, GetIniName()))
+    {
+        Settings.UWPSecretKey = "";
+    }
+    if (!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("UWPBuild"), Settings.UWPBuild, GetIniName()))
+    {
+        Settings.UWPBuild = "0.1";
     }
 
     if(!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("UseCustomId"), Settings.UseCustomId, GetIniName()))
@@ -193,6 +206,8 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.AndroidBuild));
 #elif PLATFORM_MAC
         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.MacBuild));
+#elif PLATFORM_UWP
+        UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.UWPBuild));
 #elif PLATFORM_WINDOWS
         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.WindowsBuild));
 #endif
@@ -263,6 +278,10 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
             UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.AndroidGameKey), TCHAR_TO_ANSI(*ProjectSettings.AndroidSecretKey));
 #elif PLATFORM_MAC
             UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
+#elif PLATFORM_UWP
+            UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::initialize start"));
+            UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.UWPGameKey), TCHAR_TO_ANSI(*ProjectSettings.UWPSecretKey));
+            UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::initialize end"));
 #elif PLATFORM_WINDOWS
             UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.WindowsGameKey), TCHAR_TO_ANSI(*ProjectSettings.WindowsSecretKey));
 #endif
@@ -319,8 +338,10 @@ void FAnalyticsProviderGameAnalytics::SetUserID(const FString& InUserID)
         UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.AndroidGameKey), TCHAR_TO_ANSI(*ProjectSettings.AndroidSecretKey));
 #elif PLATFORM_MAC
         UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
+#elif PLATFORM_UWP
+        UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.UWPGameKey), TCHAR_TO_ANSI(*ProjectSettings.UWPSecretKey));
 #elif PLATFORM_WINDOWS
-        UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
+        UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.WindowsGameKey), TCHAR_TO_ANSI(*ProjectSettings.WindowsSecretKey));
 #endif
     }
     else
@@ -633,7 +654,7 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
                     UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
                 }
 			}
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_UWP
             UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
 #endif
 		}
@@ -642,7 +663,7 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
             UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase wrong usage, for correct usage see: https://github.com/GameAnalytics/GA-SDK-UNREAL/wiki/Business%20Event"));
         }
 	}
-    else
+
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase wrong usage, for correct usage see: https://github.com/GameAnalytics/GA-SDK-UNREAL/wiki/Business%20Event"));
     }

@@ -32,6 +32,14 @@ namespace UnrealBuildTool.Rules
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libcurl.lib"));
                     break;
 
+                case UnrealTargetPlatform.UWP32:
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "uwp32", "GameAnalytics.lib"));
+                    break;
+
+                case UnrealTargetPlatform.UWP64:
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "uwp64", "GameAnalytics.lib"));
+                    break;
+
                 case UnrealTargetPlatform.Android:
                     PrivateDependencyModuleNames.Add("Launch");
                     break;

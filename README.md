@@ -19,6 +19,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.3.0**
+* added UWP support
+
 **2.2.11**
 * proguard fix when making distribution build (android)
 

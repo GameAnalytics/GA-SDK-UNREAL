@@ -142,10 +142,5 @@ namespace gameanalytics
         // will affect how session is started / ended
         static void onResume();
         static void onStop();
-
-     private:
-        static bool isSdkReady(bool needsInitialized);
-        static bool isSdkReady(bool needsInitialized, bool warn);
-        static bool isSdkReady(bool needsInitialized, bool warn, std::string message);
     };
 } // namespace gameanalytics
