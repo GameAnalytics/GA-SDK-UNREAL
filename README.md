@@ -19,6 +19,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.3.1**
+* bug fix for progression event with score in Android builds (android)
+
 **2.3.0**
 * added UWP support
 

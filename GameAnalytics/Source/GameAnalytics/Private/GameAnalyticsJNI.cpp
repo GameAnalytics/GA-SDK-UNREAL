@@ -20,18 +20,18 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
 		    jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableCustomDimensions01";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "([Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring str;
                     jobjectArray j_array = 0;
                     jsize len = list.size();
                     j_array = env->NewObjectArray(len, env->FindClass("java/lang/String"), 0);
-                    
+
                     int i = 0;
                     for (std::string s : list)
                     {
@@ -39,7 +39,7 @@ namespace gameanalytics {
                         env->SetObjectArrayElement(j_array, i, str);
                         ++i;
                     }
-                    
+
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
                     env->DeleteLocalRef(j_array);
                 }
@@ -59,18 +59,18 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableCustomDimensions02";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "([Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring str;
                     jobjectArray j_array = 0;
                     jsize len = list.size();
                     j_array = env->NewObjectArray(len, env->FindClass("java/lang/String"), 0);
-                    
+
                     int i = 0;
                     for (std::string s : list)
                     {
@@ -78,7 +78,7 @@ namespace gameanalytics {
                         env->SetObjectArrayElement(j_array, i, str);
                         ++i;
                     }
-                    
+
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
                     env->DeleteLocalRef(j_array);
                 }
@@ -98,18 +98,18 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableCustomDimensions03";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "([Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring str;
                     jobjectArray j_array = 0;
                     jsize len = list.size();
                     j_array = env->NewObjectArray(len, env->FindClass("java/lang/String"), 0);
-                    
+
                     int i = 0;
                     for (std::string s : list)
                     {
@@ -117,7 +117,7 @@ namespace gameanalytics {
                         env->SetObjectArrayElement(j_array, i, str);
                         ++i;
                     }
-                    
+
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
                     env->DeleteLocalRef(j_array);
                 }
@@ -131,24 +131,24 @@ namespace gameanalytics {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
 	    }
-	    
+
 	    void jni_configureAvailableResourceCurrencies(const std::vector<std::string>& list)
 	    {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableResourceCurrencies";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "([Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring str;
                     jobjectArray j_array = 0;
                     jsize len = list.size();
                     j_array = env->NewObjectArray(len, env->FindClass("java/lang/String"), 0);
-                    
+
                     int i = 0;
                     for (std::string s : list)
                     {
@@ -156,7 +156,7 @@ namespace gameanalytics {
                         env->SetObjectArrayElement(j_array, i, str);
                         ++i;
                     }
-                    
+
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
                     env->DeleteLocalRef(j_array);
                 }
@@ -176,18 +176,18 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableResourceItemTypes";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "([Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring str;
                     jobjectArray j_array = 0;
                     jsize len = list.size();
                     j_array = env->NewObjectArray(len, env->FindClass("java/lang/String"), 0);
-                    
+
                     int i = 0;
                     for (std::string s : list)
                     {
@@ -195,7 +195,7 @@ namespace gameanalytics {
                         env->SetObjectArrayElement(j_array, i, str);
                         ++i;
                     }
-                    
+
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
                     env->DeleteLocalRef(j_array);
                 }
@@ -209,17 +209,17 @@ namespace gameanalytics {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
 	    }
-	    
+
 	    void jni_configureBuild(const char *build)
 	    {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureBuild";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_string = env->NewStringUTF(build);
@@ -242,11 +242,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureUserId";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_string = env->NewStringUTF(userId);
@@ -269,11 +269,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureSdkGameEngineVersion";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_string = env->NewStringUTF(gameEngineSdkVersion);
@@ -296,11 +296,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureGameEngineVersion";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_string = env->NewStringUTF(gameEngineSdkVersion);
@@ -323,11 +323,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "initializeWithGameKey";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jobject activity = FAndroidApplication::GetGameActivityThis();
@@ -347,17 +347,17 @@ namespace gameanalytics {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
 	    }
-	    
+
 	    void jni_addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType)
 	    {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addBusinessEventWithCurrency";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_currency = env->NewStringUTF(currency);
@@ -381,17 +381,17 @@ namespace gameanalytics {
             }
 	    }
 
-	    void jni_addBusinessEventWithReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, 
+	    void jni_addBusinessEventWithReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType,
 	    	const char *receipt, const char *store, const char *signature)
 	    {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addBusinessEventWithCurrency";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_currency = env->NewStringUTF(currency);
@@ -426,11 +426,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addResourceEventWithFlowType";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;FLjava/lang/String;Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_currency = env->NewStringUTF(currency);
@@ -457,11 +457,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addProgressionEventWithProgressionStatus";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_progression01 = env->NewStringUTF(progression01);
@@ -488,17 +488,17 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addProgressionEventWithProgressionStatus";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;D)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_progression01 = env->NewStringUTF(progression01);
                     jstring j_progression02 = env->NewStringUTF(progression02);
                     jstring j_progression03 = env->NewStringUTF(progression03);
-                    env->CallStaticVoidMethod(jClass, jMethod, progressionStatus, j_progression01, j_progression02, j_progression03);
+                    env->CallStaticVoidMethod(jClass, jMethod, progressionStatus, j_progression01, j_progression02, j_progression03, score);
                     env->DeleteLocalRef(j_progression01);
                     env->DeleteLocalRef(j_progression02);
                     env->DeleteLocalRef(j_progression03);
@@ -519,11 +519,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addDesignEventWithEventId";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_eventId = env->NewStringUTF(eventId);
@@ -546,11 +546,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addDesignEventWithEventId";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;D)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_eventId = env->NewStringUTF(eventId);
@@ -573,11 +573,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addErrorEventWithSeverity";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_message = env->NewStringUTF(message);
@@ -594,17 +594,17 @@ namespace gameanalytics {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
 	    }
-	    
+
 	    void jni_setEnabledInfoLog(bool flag)
 	    {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setEnabledInfoLog";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Z)V");
-                
+
                 if(jMethod)
                 {
                     env->CallStaticVoidMethod(jClass, jMethod, flag);
@@ -625,11 +625,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setEnabledVerboseLog";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Z)V");
-                
+
                 if(jMethod)
                 {
                     env->CallStaticVoidMethod(jClass, jMethod, flag);
@@ -650,11 +650,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setEnabledManualSessionHandling";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Z)V");
-                
+
                 if(jMethod)
                 {
                     env->CallStaticVoidMethod(jClass, jMethod, flag);
@@ -675,11 +675,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setCustomDimension01";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_customDimension = env->NewStringUTF(customDimension);
@@ -702,11 +702,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setCustomDimension02";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_customDimension = env->NewStringUTF(customDimension);
@@ -729,11 +729,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setCustomDimension03";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_customDimension = env->NewStringUTF(customDimension);
@@ -756,11 +756,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setFacebookId";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-                
+
                 if(jMethod)
                 {
                     jstring j_facebookId = env->NewStringUTF(facebookId);
@@ -783,11 +783,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setGender";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(I)V");
-                
+
                 if(jMethod)
                 {
                     env->CallStaticVoidMethod(jClass, jMethod, gender);
@@ -808,11 +808,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setBirthYear";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(I)V");
-                
+
                 if(jMethod)
                 {
                     env->CallStaticVoidMethod(jClass, jMethod, birthYear);
@@ -833,11 +833,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "startSession";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "()V");
-                
+
                 if(jMethod)
                 {
                     env->CallStaticVoidMethod(jClass, jMethod);
@@ -858,11 +858,11 @@ namespace gameanalytics {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "endSession";
-            
+
             if(jClass)
             {
                 jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "()V");
-                
+
                 if(jMethod)
                 {
                     env->CallStaticVoidMethod(jClass, jMethod);
