@@ -5,7 +5,7 @@
 
 #include "EngineVersion.h"
 
-#define GA_VERSION TEXT("2.2.11")
+#define GA_VERSION TEXT("2.2.12")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -89,7 +89,7 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
     }
     if(!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("WindowsSecretKey"), Settings.WindowsSecretKey, GetIniName()))
     {
-        Settings.WindowsBuild = "";
+        Settings.WindowsSecretKey = "";
     }
     if(!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("WindowsBuild"), Settings.WindowsBuild, GetIniName()))
     {
@@ -320,7 +320,7 @@ void FAnalyticsProviderGameAnalytics::SetUserID(const FString& InUserID)
 #elif PLATFORM_MAC
         UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
 #elif PLATFORM_WINDOWS
-        UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
+        UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.WindowsGameKey), TCHAR_TO_ANSI(*ProjectSettings.WindowsSecretKey));
 #endif
     }
     else
