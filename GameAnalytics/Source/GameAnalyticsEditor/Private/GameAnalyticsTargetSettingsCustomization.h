@@ -61,6 +61,8 @@ public:
     void OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
 	void OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
     void OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+    void OnStudioMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
+    void OnGameMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
 
 public:
 	static FGameAnalyticsTargetSettingsCustomization& getInstance()
@@ -79,6 +81,8 @@ public:
     GAME SelectedGameMac;
 	STUDIO SelectedStudioWindows;
     GAME SelectedGameWindows;
+    STUDIO SelectedStudioHtml5;
+    GAME SelectedGameHtml5;
 
 private:
 	FGameAnalyticsTargetSettingsCustomization() {};
@@ -96,6 +100,8 @@ private:
     TSharedRef<SWidget> UpdateGamesMac() const;
 	TSharedRef<SWidget> UpdateStudiosWindows() const;
     TSharedRef<SWidget> UpdateGamesWindows() const;
+    TSharedRef<SWidget> UpdateStudiosHtml5() const;
+    TSharedRef<SWidget> UpdateGamesHtml5() const;
     
     FORCEINLINE FString GetIniName() const { return FString::Printf(TEXT("%sDefaultEngine.ini"), *FPaths::SourceConfigDir()); }
 

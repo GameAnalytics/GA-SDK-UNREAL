@@ -16,8 +16,6 @@ namespace UnrealBuildTool.Rules
             {
                 case UnrealTargetPlatform.Win64:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_filesystem-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libboost_system-vc140-mt-1_60.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libeay32MT.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "ssleay32MT.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libcurl.lib"));
@@ -25,8 +23,6 @@ namespace UnrealBuildTool.Rules
 
                 case UnrealTargetPlatform.Win32:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_filesystem-vc140-mt-1_60.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libboost_system-vc140-mt-1_60.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libeay32MT.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "ssleay32MT.lib"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libcurl.lib"));
@@ -38,11 +34,14 @@ namespace UnrealBuildTool.Rules
 
                 case UnrealTargetPlatform.Mac:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_filesystem-mt.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libboost_system-mt.a"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libcrypto.a"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libssl.a"));
                     PublicAdditionalLibraries.Add("curl");
+                    PublicFrameworks.AddRange(
+                        new string[] {
+                            "CoreFoundation"
+                        }
+                    );
                     break;
 
                 case UnrealTargetPlatform.IOS:
@@ -62,9 +61,16 @@ namespace UnrealBuildTool.Rules
                     });
                     break;
 
+                case UnrealTargetPlatform.HTML5:
+                    if (Target.Architecture != "-win32")
+                    {
+                        PublicAdditionalLibraries.Add(Path.Combine(libPath, "html5", "GameAnalytics.jspre"));
+                        PublicAdditionalLibraries.Add(Path.Combine(libPath, "html5", "GameAnalyticsUnreal.js"));
+                    }
+                    break;
+
                 case UnrealTargetPlatform.XboxOne:
                 case UnrealTargetPlatform.PS4:
-                case UnrealTargetPlatform.HTML5:
                 case UnrealTargetPlatform.Linux:
                 default:
                     throw new NotImplementedException("This target platform is not configured for GameAnalytics SDK: " + Target.Platform.ToString());
@@ -80,14 +86,6 @@ namespace UnrealBuildTool.Rules
                 }
             );
 
-            /*PrivateDependencyModuleNames.AddRange(
-                new string[]
-                {
-                    "Analytics",
-                    // ... add private dependencies that you statically link with here ...
-                }
-                );*/
-
             PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "Private")));
             PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "Public")));
             PublicIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "Public")));
@@ -98,9 +96,25 @@ namespace UnrealBuildTool.Rules
                 {
                     "Analytics",
                     "Engine"
-                    // ... add private dependencies that you statically link with here ...
                 }
             );
+
+            if (Target.Platform == UnrealTargetPlatform.HTML5)
+            {
+                PrivateDependencyModuleNames.AddRange(
+                    new string[]
+                    {
+                        "Json"
+                    }
+                );
+
+                PublicIncludePathModuleNames.AddRange(
+                    new string[]
+                    {
+                        "Json"
+                    }
+                );
+            }
 
             PublicIncludePathModuleNames.AddRange(
                 new string[]

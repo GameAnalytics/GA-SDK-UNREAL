@@ -62,6 +62,9 @@ public:
 		FString WindowsGameKey;
 		FString WindowsSecretKey;
         FString WindowsBuild;
+        FString Html5GameKey;
+        FString Html5SecretKey;
+        FString Html5Build;
 		TArray<FString> CustomDimensions01;
 		TArray<FString> CustomDimensions02;
 		TArray<FString> CustomDimensions03;

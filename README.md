@@ -19,6 +19,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.4.0**
+* added support for html5
+
 **2.2.13**
 * corrected win32 library (win32)
 

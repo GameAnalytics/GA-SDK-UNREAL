@@ -1,11 +1,13 @@
 #include "GameAnalyticsPrivatePCH.h"
 #if PLATFORM_MAC || PLATFORM_WINDOWS
 #include "../GA-SDK-CPP/GameAnalytics.h"
+#elif PLATFORM_HTML5_BROWSER
+#include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
 
 #include "EngineVersion.h"
 
-#define GA_VERSION TEXT("2.2.13")
+#define GA_VERSION TEXT("2.4.0")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -94,6 +96,19 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
     if(!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("WindowsBuild"), Settings.WindowsBuild, GetIniName()))
     {
         Settings.WindowsBuild = "0.1";
+    }
+
+    if (!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("Html5GameKey"), Settings.Html5GameKey, GetIniName()))
+    {
+        Settings.Html5GameKey = "";
+    }
+    if (!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("Html5SecretKey"), Settings.Html5SecretKey, GetIniName()))
+    {
+        Settings.Html5SecretKey = "";
+    }
+    if (!GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("Html5Build"), Settings.Html5Build, GetIniName()))
+    {
+        Settings.Html5Build = "0.1";
     }
 
     if(!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("UseCustomId"), Settings.UseCustomId, GetIniName()))
@@ -195,6 +210,8 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.MacBuild));
 #elif PLATFORM_WINDOWS
         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.WindowsBuild));
+#elif PLATFORM_HTML5
+        UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.Html5Build));
 #endif
 
         ////// Configure available virtual currencies and item types
@@ -265,6 +282,8 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
             UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
 #elif PLATFORM_WINDOWS
             UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.WindowsGameKey), TCHAR_TO_ANSI(*ProjectSettings.WindowsSecretKey));
+#elif PLATFORM_HTML5
+            UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.Html5GameKey), TCHAR_TO_ANSI(*ProjectSettings.Html5SecretKey));
 #endif
         }
         else
@@ -294,6 +313,8 @@ void FAnalyticsProviderGameAnalytics::EndSession()
 		{
 #if PLATFORM_MAC || PLATFORM_WINDOWS
 			gameanalytics::GameAnalytics::onStop();
+#elif PLATFORM_HTML5_BROWSER
+            js_onStop();
 #else
 			UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
 #endif
@@ -321,6 +342,8 @@ void FAnalyticsProviderGameAnalytics::SetUserID(const FString& InUserID)
         UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.MacGameKey), TCHAR_TO_ANSI(*ProjectSettings.MacSecretKey));
 #elif PLATFORM_WINDOWS
         UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.WindowsGameKey), TCHAR_TO_ANSI(*ProjectSettings.WindowsSecretKey));
+#elif PLATFORM_HTML5
+        UGameAnalytics::initialize(TCHAR_TO_ANSI(*ProjectSettings.Html5GameKey), TCHAR_TO_ANSI(*ProjectSettings.Html5SecretKey));
 #endif
     }
     else
@@ -633,7 +656,7 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
                     UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
                 }
 			}
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_HTML5
             UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
 #endif
 		}

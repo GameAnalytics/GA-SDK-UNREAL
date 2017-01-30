@@ -58,6 +58,18 @@ public:
     UPROPERTY(Config, EditAnywhere, Category = WindowsSetup, Meta=(ToolTip="The current version of the Windows game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
     FString WindowsBuild = "0.1";
 
+    // Game Key
+    UPROPERTY(Config, EditAnywhere, Category = Html5Setup, Meta = (ToolTip = "Your GameAnalytics HTML5 Game Key - copy/paste from the GA website or log in to autofill it."))
+    FString Html5GameKey;
+
+    // Secret Key
+    UPROPERTY(Config, EditAnywhere, Category = Html5Setup, Meta = (ToolTip = "Your GameAnalytics HTML5 Secret Key - copy/paste from the GA website or log in to autofill it."))
+    FString Html5SecretKey;
+
+    // Build
+    UPROPERTY(Config, EditAnywhere, Category = Html5Setup, Meta = (ToolTip = "The current version of the HTML5 game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
+    FString Html5Build = "0.1";
+
     // Custom Dimensions 01
     UPROPERTY(Config, EditAnywhere, Category=CustomDimensions, Meta=(ToolTip="List of custom dimensions 01."))
     TArray<FString> CustomDimensions01;
