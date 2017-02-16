@@ -5,6 +5,9 @@
 #include "IAnalyticsProviderModule.h"
 #include "Core.h"
 #include "Runtime/Launch/Resources/Version.h"
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 15
+#include "Modules/ModuleManager.h"
+#endif
 
 class IAnalyticsProvider;
 
@@ -62,6 +65,9 @@ public:
 		FString WindowsGameKey;
 		FString WindowsSecretKey;
         FString WindowsBuild;
+        FString LinuxGameKey;
+        FString LinuxSecretKey;
+        FString LinuxBuild;
         FString Html5GameKey;
         FString Html5SecretKey;
         FString Html5Build;

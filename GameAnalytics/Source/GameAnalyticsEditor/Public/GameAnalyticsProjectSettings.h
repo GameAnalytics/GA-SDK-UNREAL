@@ -59,6 +59,18 @@ public:
     FString WindowsBuild = "0.1";
 
     // Game Key
+    UPROPERTY(Config, EditAnywhere, Category = LinuxSetup, Meta = (ToolTip = "Your GameAnalytics Linux Game Key - copy/paste from the GA website or log in to autofill it."))
+        FString LinuxGameKey;
+
+    // Secret Key
+    UPROPERTY(Config, EditAnywhere, Category = LinuxSetup, Meta = (ToolTip = "Your GameAnalytics Linux Secret Key - copy/paste from the GA website or log in to autofill it."))
+        FString LinuxSecretKey;
+
+    // Build
+    UPROPERTY(Config, EditAnywhere, Category = LinuxSetup, Meta = (ToolTip = "The current version of the Linux game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website."))
+        FString LinuxBuild = "0.1";
+
+    // Game Key
     UPROPERTY(Config, EditAnywhere, Category = Html5Setup, Meta = (ToolTip = "Your GameAnalytics HTML5 Game Key - copy/paste from the GA website or log in to autofill it."))
     FString Html5GameKey;
 

@@ -61,6 +61,8 @@ public:
     void OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
 	void OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
     void OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+    void OnStudioMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
+    void OnGameMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
     void OnStudioMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
     void OnGameMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
 
@@ -81,6 +83,8 @@ public:
     GAME SelectedGameMac;
 	STUDIO SelectedStudioWindows;
     GAME SelectedGameWindows;
+    STUDIO SelectedStudioLinux;
+    GAME SelectedGameLinux;
     STUDIO SelectedStudioHtml5;
     GAME SelectedGameHtml5;
 
@@ -100,6 +104,8 @@ private:
     TSharedRef<SWidget> UpdateGamesMac() const;
 	TSharedRef<SWidget> UpdateStudiosWindows() const;
     TSharedRef<SWidget> UpdateGamesWindows() const;
+    TSharedRef<SWidget> UpdateStudiosLinux() const;
+    TSharedRef<SWidget> UpdateGamesLinux() const;
     TSharedRef<SWidget> UpdateStudiosHtml5() const;
     TSharedRef<SWidget> UpdateGamesHtml5() const;
     

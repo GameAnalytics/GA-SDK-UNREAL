@@ -39,9 +39,18 @@ namespace UnrealBuildTool.Rules
                     PublicAdditionalLibraries.Add("curl");
                     PublicFrameworks.AddRange(
                         new string[] {
-                            "CoreFoundation"
+                            "CoreFoundation",
+                            "Foundation",
+                            "CoreServices"
                         }
                     );
+                    break;
+
+                case UnrealTargetPlatform.Linux:
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libGameAnalytics.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libcrypto.a"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libssl.a"));
+                    PublicAdditionalLibraries.Add("curl");
                     break;
 
                 case UnrealTargetPlatform.IOS:
@@ -71,7 +80,6 @@ namespace UnrealBuildTool.Rules
 
                 case UnrealTargetPlatform.XboxOne:
                 case UnrealTargetPlatform.PS4:
-                case UnrealTargetPlatform.Linux:
                 default:
                     throw new NotImplementedException("This target platform is not configured for GameAnalytics SDK: " + Target.Platform.ToString());
             }

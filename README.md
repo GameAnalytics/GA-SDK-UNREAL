@@ -18,6 +18,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.5.0**
+* added support for linux
+
 **2.4.0**
 * added support for html5
 

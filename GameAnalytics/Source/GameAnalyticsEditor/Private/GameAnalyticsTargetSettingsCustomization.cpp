@@ -73,6 +73,7 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 	IDetailCategoryBuilder& AndroidCategory = DetailLayout.EditCategory(TEXT("AndroidSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
     IDetailCategoryBuilder& MacCategory = DetailLayout.EditCategory(TEXT("MacSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
 	IDetailCategoryBuilder& WindowsCategory = DetailLayout.EditCategory(TEXT("WindowsSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
+    IDetailCategoryBuilder& LinuxCategory = DetailLayout.EditCategory(TEXT("LinuxSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
     IDetailCategoryBuilder& Html5Category = DetailLayout.EditCategory(TEXT("Html5Setup"), FText::GetEmpty(), ECategoryPriority::Variable);
 
 	const FText StudioMenuStringIos = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name);
@@ -83,6 +84,8 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
     const FText GameMenuStringMac = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.Name);
 	const FText StudioMenuStringWindows = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name);
     const FText GameMenuStringWindows = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.Name);
+    const FText StudioMenuStringLinux = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioLinux.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioLinux.Name);
+    const FText GameMenuStringLinux = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.Name);
     const FText StudioMenuStringHtml5 = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioHtml5.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioHtml5.Name);
     const FText GameMenuStringHtml5 = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.Name);
 	const FText PlatformMenuString = LOCTEXT("PlatformMenu", "Select Platform");
@@ -107,7 +110,7 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 				]
 			]
 		];
-    
+
     FString tempUserName = "";
     GConfig->GetString(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("Username"), tempUserName, GetIniName());
     Username = FName(*tempUserName);
@@ -354,7 +357,7 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 				]
 			];
 	}
-    
+
     //if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
     {
         MacCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
@@ -395,7 +398,7 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
                 ]
              ];
     }
-    
+
     if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac.Name.IsEmpty())
     {
         MacCategory.AddCustomRow(LOCTEXT("GamesRow", "Games"), false)
@@ -436,7 +439,7 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
                 ]
             ];
     }
-	
+
 	//if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
     {
         WindowsCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
@@ -477,7 +480,7 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
                 ]
              ];
     }
-    
+
     if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name.IsEmpty())
     {
         WindowsCategory.AddCustomRow(LOCTEXT("GamesRow", "Games"), false)
@@ -516,6 +519,88 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
                         .Font(DetailLayout.GetDetailFont())
                     ]
                 ]
+            ];
+    }
+
+    //if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
+    {
+        LinuxCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
+            .NameContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+            .Padding(FMargin(0, 1, 0, 1))
+            .FillWidth(1.0f)
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("StudiosLabel", "Select Studio"))
+            .Font(DetailLayout.GetDetailFont())
+            ]
+            ]
+        .ValueContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+            .FillWidth(1.0f)
+            [
+                SNew(SComboButton)
+                //.VAlign(VAlign_Center)
+            .ToolTipText(LOCTEXT("SelectStudioTooltip", "Studio"))
+            .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateStudiosLinux)
+            .ButtonContent()
+            [
+                SNew(STextBlock)
+                .Text(StudioMenuStringLinux)
+            .Font(IDetailLayoutBuilder::GetDetailFont())
+            ]
+        .MenuContent()
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("LoginToSelectStudioLabel", "Login To Select Studio."))
+            .Font(DetailLayout.GetDetailFont())
+            ]
+            ]
+            ];
+    }
+
+    if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioLinux.Name.IsEmpty())
+    {
+        LinuxCategory.AddCustomRow(LOCTEXT("GamesRow", "Games"), false)
+            .NameContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+            .Padding(FMargin(0, 1, 0, 1))
+            .FillWidth(1.0f)
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("GamesLabel", "Select Game"))
+            .Font(DetailLayout.GetDetailFont())
+            ]
+            ]
+        .ValueContent()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+            .FillWidth(1.0f)
+            [
+                SNew(SComboButton)
+                .VAlign(VAlign_Center)
+            .ToolTipText(LOCTEXT("SelectGameTooltip", "Game"))
+            .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateGamesLinux)
+            .ButtonContent()
+            [
+                SNew(STextBlock)
+                .Text(GameMenuStringLinux)
+            .Font(IDetailLayoutBuilder::GetDetailFont())
+            ]
+        .MenuContent()
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Studio."))
+            .Font(DetailLayout.GetDetailFont())
+            ]
+            ]
             ];
     }
 
@@ -649,7 +734,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesMac() 
         }
         GameMenuBuilder.EndSection();
     }
-    
+
     return GameMenuBuilder.MakeWidget();
 }
 
@@ -666,7 +751,24 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesWindow
         }
         GameMenuBuilder.EndSection();
     }
-    
+
+    return GameMenuBuilder.MakeWidget();
+}
+
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesLinux() const
+{
+    FMenuBuilder GameMenuBuilder(true, NULL);
+    {
+        GameMenuBuilder.BeginSection("Games");
+        {
+            for (auto& g : FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioLinux.Games)
+            {
+                GameMenuBuilder.AddMenuEntry(FText::FromString(g.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedLinux, g)), NAME_None);
+            }
+        }
+        GameMenuBuilder.EndSection();
+    }
+
     return GameMenuBuilder.MakeWidget();
 }
 
@@ -701,6 +803,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAn
 	if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->AndroidGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->MacGameKey ||
 		FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->WindowsGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->LinuxGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey == GameAnalyticsProjectSettings->Html5GameKey)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
@@ -735,6 +838,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGa
 	if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->IosGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->MacGameKey ||
 		FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->WindowsGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->LinuxGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey == GameAnalyticsProjectSettings->Html5GameKey)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
@@ -760,70 +864,108 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGa
 void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac = GameItem;
-    
+
     UE_LOG(LogTemp, Warning, TEXT("Game selected: %s"), *GameItem.Name);
-    
+
     if (!GConfig) return;
-    
+
     UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
-    
+
     if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey == GameAnalyticsProjectSettings->IosGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey == GameAnalyticsProjectSettings->AndroidGameKey ||
 		FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey == GameAnalyticsProjectSettings->WindowsGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey == GameAnalyticsProjectSettings->LinuxGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey == GameAnalyticsProjectSettings->Html5GameKey)
     {
         UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
         return;
     }
-    
+
     FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
-    
+
     GConfig->SetString(*GameAnalyticsSection, TEXT("MacGameKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey), GetIniName());
-    
+
     GConfig->SetString(*GameAnalyticsSection, TEXT("MacSecretKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.SecretKey), GetIniName());
-    
+
     GConfig->Flush(false, GetIniName());
-    
+
     UE_LOG(LogTemp, Warning, TEXT("Platform selected: Mac, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey));
     UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
-    
+
     GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
-    
+
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
 void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows = GameItem;
-    
+
     UE_LOG(LogTemp, Warning, TEXT("Game selected: %s"), *GameItem.Name);
-    
+
     if (!GConfig) return;
-    
+
     UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
-    
+
     if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey == GameAnalyticsProjectSettings->IosGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey == GameAnalyticsProjectSettings->AndroidGameKey ||
 		FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey == GameAnalyticsProjectSettings->MacGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey == GameAnalyticsProjectSettings->LinuxGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey == GameAnalyticsProjectSettings->Html5GameKey)
     {
         UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
         return;
     }
-    
+
     FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
-    
+
     GConfig->SetString(*GameAnalyticsSection, TEXT("WindowsGameKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey), GetIniName());
-    
+
     GConfig->SetString(*GameAnalyticsSection, TEXT("WindowsSecretKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.SecretKey), GetIniName());
-    
+
     GConfig->Flush(false, GetIniName());
-    
+
     UE_LOG(LogTemp, Warning, TEXT("Platform selected: Windows, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey));
     UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
-    
+
     GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
-    
+
+    SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux = GameItem;
+
+    UE_LOG(LogTemp, Warning, TEXT("Game selected: %s"), *GameItem.Name);
+
+    if (!GConfig) return;
+
+    UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
+
+    if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.GameKey == GameAnalyticsProjectSettings->IosGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.GameKey == GameAnalyticsProjectSettings->AndroidGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.GameKey == GameAnalyticsProjectSettings->MacGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.GameKey == GameAnalyticsProjectSettings->WindowsGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.GameKey == GameAnalyticsProjectSettings->Html5GameKey)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
+        return;
+    }
+
+    FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
+
+    GConfig->SetString(*GameAnalyticsSection, TEXT("LinuxGameKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.GameKey), GetIniName());
+
+    GConfig->SetString(*GameAnalyticsSection, TEXT("LinuxSecretKey"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.SecretKey), GetIniName());
+
+    GConfig->Flush(false, GetIniName());
+
+    UE_LOG(LogTemp, Warning, TEXT("Platform selected: Linux, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.GameKey));
+    UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
+
+    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
@@ -840,6 +982,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedHtml5(FGame
     if (FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.GameKey == GameAnalyticsProjectSettings->IosGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.GameKey == GameAnalyticsProjectSettings->AndroidGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.GameKey == GameAnalyticsProjectSettings->MacGameKey ||
+        FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.GameKey == GameAnalyticsProjectSettings->LinuxGameKey ||
         FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.GameKey == GameAnalyticsProjectSettings->WindowsGameKey)
     {
         UE_LOG(LogTemp, Warning, TEXT("This game's keys are already in used. You cannot use the same keys for different platforms."));
@@ -909,7 +1052,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosMac(
         }
         StudioMenuBuilder.EndSection();
     }
-    
+
     return StudioMenuBuilder.MakeWidget();
 }
 
@@ -926,7 +1069,24 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosWind
         }
         StudioMenuBuilder.EndSection();
     }
-    
+
+    return StudioMenuBuilder.MakeWidget();
+}
+
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosLinux() const
+{
+    FMenuBuilder StudioMenuBuilder(true, NULL);
+    {
+        StudioMenuBuilder.BeginSection("Studios");
+        {
+            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames)
+            {
+                StudioMenuBuilder.AddMenuEntry(FText::FromString(s.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedLinux, s)), NAME_None);
+            }
+        }
+        StudioMenuBuilder.EndSection();
+    }
+
     return StudioMenuBuilder.MakeWidget();
 }
 
@@ -974,24 +1134,36 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedAndroid(F
 void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac = StudioItem;
-    
+
     FGameAnalyticsTargetSettingsCustomization::GAME Game;
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac = Game;
-    
+
     UE_LOG(LogTemp, Warning, TEXT("Mac Studio selected: %s"), *StudioItem.Name);
-    
+
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
 void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows = StudioItem;
-    
+
     FGameAnalyticsTargetSettingsCustomization::GAME Game;
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows = Game;
-    
+
     UE_LOG(LogTemp, Warning, TEXT("Windows Studio selected: %s"), *StudioItem.Name);
-    
+
+    SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioLinux = StudioItem;
+
+    FGameAnalyticsTargetSettingsCustomization::GAME Game;
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux = Game;
+
+    UE_LOG(LogTemp, Warning, TEXT("Linux Studio selected: %s"), *StudioItem.Name);
+
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
@@ -1028,14 +1200,14 @@ void FGameAnalyticsTargetSettingsCustomization::UsernameEntered(const FText& New
 		if (NewName != Username)
 		{
 			Username = NewName;
-            
+
             UGameAnalyticsProjectSettings* GameAnalyticsProjectSettings = GetMutableDefault< UGameAnalyticsProjectSettings >();
             FString GameAnalyticsSection = "/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings";
-            
+
             GConfig->SetString(*GameAnalyticsSection, TEXT("Username"), *(Username.ToString()), GetIniName());
-            
+
             GConfig->Flush(false, GetIniName());
-            
+
             GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
 		}
 	}
@@ -1090,9 +1262,9 @@ void HttpCaller::LoginHttp(FName Email, FName Password)
 	*/
 	//virtual TSharedRef CreateRequest();
 	//~~~~~~~~~~~~~~~
-    
+
     FString content = "{\"email\":\"" + Email.ToString() + "\", \"password\":\"" + Password.ToString() + "\"}";
-    
+
     UE_LOG(LogTemp, Display, TEXT("%s"), *content);
 
 	Request->SetVerb("POST");
@@ -1145,7 +1317,7 @@ void HttpCaller::OnLoginResponseReceived(FHttpRequestPtr Request, FHttpResponseP
 				FString Token = JsonResults->GetStringField(TEXT("token"));
 
 				GetUserDataHttp(Token);
-                
+
                 FMessageDialog::Open(EAppMsgType::Ok, FText::FromString(TEXT("Login successful.\nPlease select your studio below.")));
 			}
             else
@@ -1164,15 +1336,15 @@ void HttpCaller::OnLoginResponseReceived(FHttpRequestPtr Request, FHttpResponseP
 	else
 	{
 		MessageBody = Response->GetContentAsString();
-        
+
         TSharedPtr<FJsonObject> JsonObject;
         TSharedRef< TJsonReader<TCHAR> > JsonReader = TJsonReaderFactory<TCHAR>::Create(MessageBody);
-        
-        
+
+
         if (FJsonSerializer::Deserialize(JsonReader, JsonObject))
         {
             TArray<TSharedPtr<FJsonValue>> Errors = JsonObject->GetArrayField(TEXT("errors"));
-            
+
             FString errorMessage = "Login failed:\n";
             for(int i = 0; i < Errors.Num(); ++i)
             {
