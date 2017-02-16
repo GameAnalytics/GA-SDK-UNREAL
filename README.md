@@ -6,7 +6,7 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 
 > :information_source:<br>
 >
-> The Unreal SDK include support for **iOS**, **Android**, **HTML5**, **Windows** and **Mac** platforms
+> The Unreal SDK include support for **iOS**, **Android**, **HTML5**, **Windows**, **Linux** and **Mac** platforms
 >
 > Requirements:<br/>
 > **Unreal Engine:** 4.12+<br/>  
