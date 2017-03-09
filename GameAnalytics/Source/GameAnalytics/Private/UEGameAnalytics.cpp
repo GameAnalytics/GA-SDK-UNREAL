@@ -10,7 +10,7 @@
 
 #include "EngineVersion.h"
 
-#define GA_VERSION TEXT("2.5.0")
+#define GA_VERSION TEXT("2.5.1")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 

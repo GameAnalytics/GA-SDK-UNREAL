@@ -18,6 +18,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.5.1**
+* custom user id bug fix
+
 **2.5.0**
 * added support for linux
 
