@@ -18,6 +18,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.5.3**
+* bug fix for end session when using manual session handling
+
 **2.5.2**
 * session length precision improvement
 
