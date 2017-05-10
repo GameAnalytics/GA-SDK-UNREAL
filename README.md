@@ -18,6 +18,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.5.5**
+* fixed compile warnings
+
 **2.5.4**
 * fixed html5 wrapper to use correct namespace (html5)
 

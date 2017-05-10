@@ -1,7 +1,7 @@
 #if PLATFORM_IOS
 
-#import "../GA-SDK-IOS/GameAnalytics.h"
-#import "../GA-SDK-IOS/GameAnalyticsCpp.h"
+#import "../../GA-SDK-IOS/GameAnalytics.h"
+#import "../../GA-SDK-IOS/GameAnalyticsCpp.h"
 
 void GameAnalyticsCpp::configureAvailableCustomDimensions01(const std::vector<std::string>& list) {
     NSMutableArray * tmpary = [[NSMutableArray alloc] initWithCapacity: list.size()];
