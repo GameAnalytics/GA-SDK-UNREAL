@@ -13,7 +13,16 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 > * **iOS:** iOS 7+ &nbsp; 
 > * **Android:** Android API Level 14 &nbsp;
 > * **Windows:** Minimum specs for UE4 &nbsp; 
-> * **Mac:** Minimum specs for UE4 &nbsp; 
+> * **Mac:** Minimum specs for UE4 &nbsp;    
+>   
+> **Build size:**   
+> Note that download size differ from the actual build size.   
+>   
+> **Android:**   
+> The SDK build size in a native Android app is only around **49Kb** and the dependecies take up to **820Kb** depending if your app already uses some of the same dependencies.   
+>   
+> **iOS:**   
+> The SDK build size in a native iOS app is only around **242Kb** (armv7) / **259Kb** (armv8).
 
 Changelog
 ---------
