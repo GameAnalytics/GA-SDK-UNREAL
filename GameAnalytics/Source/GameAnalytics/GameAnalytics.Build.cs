@@ -7,7 +7,7 @@ namespace UnrealBuildTool.Rules
 {
     public class GameAnalytics : ModuleRules
     {
-        public GameAnalytics(TargetInfo Target)
+        public GameAnalytics(ReadOnlyTargetRules Target) : base(Target)
         {
             var GameAnalyticsPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../ThirdParty/" ));
             var libPath = Path.Combine(GameAnalyticsPath, "lib");

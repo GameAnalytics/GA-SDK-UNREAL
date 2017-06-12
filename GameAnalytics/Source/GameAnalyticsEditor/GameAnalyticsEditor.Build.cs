@@ -4,7 +4,7 @@ namespace UnrealBuildTool.Rules
 {
     public class GameAnalyticsEditor : ModuleRules
     {
-        public GameAnalyticsEditor(TargetInfo Target)
+        public GameAnalyticsEditor(ReadOnlyTargetRules Target) : base(Target)
         {
             PrivateDependencyModuleNames.AddRange(
                 new string[]

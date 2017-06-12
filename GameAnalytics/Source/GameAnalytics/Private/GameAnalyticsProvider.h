@@ -62,6 +62,10 @@ public:
         {
             return EnumType(0);
         }
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 16
+        return (EnumType)Enum->GetIndexByName(FName(*String), true);
+#else
         return (EnumType)Enum->FindEnumIndex(FName(*String));
+#endif
     }
 };
