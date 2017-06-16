@@ -23,6 +23,8 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 >   
 > **iOS:**   
 > The SDK build size in a native iOS app is only around **242Kb** (armv7) / **259Kb** (armv8).
+>   
+> **NOTE:** Are you getting compile errors using Unreal Engine v4.15.x? Look [here](Manual-Installation#compile-errors-on-unreal-engine-v415x) for how to fix these errors.
 
 Changelog
 ---------
