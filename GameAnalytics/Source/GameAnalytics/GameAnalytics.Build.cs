@@ -16,16 +16,12 @@ namespace UnrealBuildTool.Rules
             {
                 case UnrealTargetPlatform.Win64:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libeay32MT.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "ssleay32MT.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "libcurl.lib"));
+                    PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
                     break;
 
                 case UnrealTargetPlatform.Win32:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libeay32MT.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "ssleay32MT.lib"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "libcurl.lib"));
+                    PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
                     break;
 
                 case UnrealTargetPlatform.Android:
@@ -34,8 +30,6 @@ namespace UnrealBuildTool.Rules
 
                 case UnrealTargetPlatform.Mac:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libcrypto.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libssl.a"));
                     PublicAdditionalLibraries.Add("curl");
                     PublicFrameworks.AddRange(
                         new string[] {
@@ -44,13 +38,13 @@ namespace UnrealBuildTool.Rules
                             "CoreServices"
                         }
                     );
+                    PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL"});
                     break;
 
                 case UnrealTargetPlatform.Linux:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libGameAnalytics.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libcrypto.a"));
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libssl.a"));
                     PublicAdditionalLibraries.Add("curl");
+                    PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL"});
                     break;
 
                 case UnrealTargetPlatform.IOS:

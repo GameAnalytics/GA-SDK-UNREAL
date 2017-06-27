@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.2**
+* switched to use third party OpenSSL and libCurl libraries bundled with Unreal Engine
+
 **2.6.1**
 * editor UI bug fix when running game in editor viewport with GameAnalytics plugin enabled
 
