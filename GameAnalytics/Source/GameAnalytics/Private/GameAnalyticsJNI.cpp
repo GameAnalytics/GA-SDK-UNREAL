@@ -498,7 +498,7 @@ namespace gameanalytics {
                     jstring j_progression01 = env->NewStringUTF(progression01);
                     jstring j_progression02 = env->NewStringUTF(progression02);
                     jstring j_progression03 = env->NewStringUTF(progression03);
-                    env->CallStaticVoidMethod(jClass, jMethod, progressionStatus, j_progression01, j_progression02, j_progression03, score);
+                    env->CallStaticVoidMethod(jClass, jMethod, progressionStatus, j_progression01, j_progression02, j_progression03, (double)score);
                     env->DeleteLocalRef(j_progression01);
                     env->DeleteLocalRef(j_progression02);
                     env->DeleteLocalRef(j_progression03);

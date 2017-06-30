@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.3**
+* jni bug fix for progression events with scores (android)
+
 **2.6.2**
 * switched to use third party OpenSSL and libCurl libraries bundled with Unreal Engine
 
