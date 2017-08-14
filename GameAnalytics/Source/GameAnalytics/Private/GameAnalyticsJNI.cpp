@@ -41,12 +41,19 @@ namespace gameanalytics {
                     }
 
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
+                    for (i = 0; i < list.size(); ++i)
+                    {
+                        jobject localRef = env->GetObjectArrayElement(j_array, i);
+                        env->DeleteLocalRef(localRef);
+                    }
                     env->DeleteLocalRef(j_array);
                 }
                 else
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -80,12 +87,19 @@ namespace gameanalytics {
                     }
 
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
+                    for (i = 0; i < list.size(); ++i)
+                    {
+                        jobject localRef = env->GetObjectArrayElement(j_array, i);
+                        env->DeleteLocalRef(localRef);
+                    }
                     env->DeleteLocalRef(j_array);
                 }
                 else
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -119,12 +133,19 @@ namespace gameanalytics {
                     }
 
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
+                    for (i = 0; i < list.size(); ++i)
+                    {
+                        jobject localRef = env->GetObjectArrayElement(j_array, i);
+                        env->DeleteLocalRef(localRef);
+                    }
                     env->DeleteLocalRef(j_array);
                 }
                 else
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -158,12 +179,19 @@ namespace gameanalytics {
                     }
 
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
+                    for (i = 0; i < list.size(); ++i)
+                    {
+                        jobject localRef = env->GetObjectArrayElement(j_array, i);
+                        env->DeleteLocalRef(localRef);
+                    }
                     env->DeleteLocalRef(j_array);
                 }
                 else
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -197,12 +225,19 @@ namespace gameanalytics {
                     }
 
                     env->CallStaticVoidMethod(jClass, jMethod, j_array);
+                    for (i = 0; i < list.size(); ++i)
+                    {
+                        jobject localRef = env->GetObjectArrayElement(j_array, i);
+                        env->DeleteLocalRef(localRef);
+                    }
                     env->DeleteLocalRef(j_array);
                 }
                 else
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -230,6 +265,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -257,6 +294,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -284,6 +323,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -311,6 +352,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -341,6 +384,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -374,6 +419,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -414,6 +461,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -445,6 +494,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -476,6 +527,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -507,6 +560,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -534,6 +589,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -561,6 +618,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -588,6 +647,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -613,6 +674,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -638,6 +701,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -663,6 +728,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -690,6 +757,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -717,6 +786,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -744,6 +815,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -771,6 +844,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -796,6 +871,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -821,6 +898,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -846,6 +925,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
@@ -871,6 +952,8 @@ namespace gameanalytics {
                 {
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
                 }
+
+                env->DeleteLocalRef(jClass);
             }
             else
             {
