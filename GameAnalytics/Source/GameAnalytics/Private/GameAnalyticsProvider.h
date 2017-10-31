@@ -63,7 +63,11 @@ public:
             return EnumType(0);
         }
 #if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 16
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+        return (EnumType)Enum->GetIndexByName(FName(*String), EGetByNameFlags::CaseSensitive);
+#else
         return (EnumType)Enum->GetIndexByName(FName(*String), true);
+#endif
 #else
         return (EnumType)Enum->FindEnumIndex(FName(*String));
 #endif

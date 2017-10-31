@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.6**
+* updated to be compatible with Unreal Engine 4.18
+
 **2.6.5**
 * bug fix to android JNI memory leak (android)
 

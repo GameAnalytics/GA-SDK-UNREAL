@@ -10,7 +10,7 @@
 
 #include "EngineVersion.h"
 
-#define GA_VERSION TEXT("2.6.5")
+#define GA_VERSION TEXT("2.6.6")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -405,24 +405,45 @@ void FAnalyticsProviderGameAnalytics::RecordEvent(const FString& EventName, cons
         {
             if (Attr.AttrName == TEXT("custom1"))
             {
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+                UGameAnalytics::setCustomDimension01(TCHAR_TO_ANSI(*Attr.AttrValueString));
+#else
                 UGameAnalytics::setCustomDimension01(TCHAR_TO_ANSI(*Attr.AttrValue));
+#endif
             }
             else if (Attr.AttrName == TEXT("custom2"))
             {
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+                UGameAnalytics::setCustomDimension02(TCHAR_TO_ANSI(*Attr.AttrValueString));
+#else
                 UGameAnalytics::setCustomDimension02(TCHAR_TO_ANSI(*Attr.AttrValue));
+#endif
             }
             else if (Attr.AttrName == TEXT("custom3"))
             {
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+                UGameAnalytics::setCustomDimension03(TCHAR_TO_ANSI(*Attr.AttrValueString));
+#else
                 UGameAnalytics::setCustomDimension03(TCHAR_TO_ANSI(*Attr.AttrValue));
+#endif
             }
             else if (Attr.AttrName == TEXT("facebook"))
             {
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+                UGameAnalytics::setFacebookId(TCHAR_TO_ANSI(*Attr.AttrValueString));
+#else
                 UGameAnalytics::setFacebookId(TCHAR_TO_ANSI(*Attr.AttrValue));
+#endif
             }
             else
             {
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+                float AttrValue = Attr.AttrValueNumber;
+                UGameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*Attr.AttrName), AttrValue);
+#else
                 float AttrValue = FCString::Atof(*Attr.AttrValue);
                 UGameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*Attr.AttrName), AttrValue);
+#endif
             }
         }
     }
@@ -473,7 +494,11 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TA
 		{
 			if (Attr.AttrName == TEXT("message"))
 			{
-				UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_ANSI(*Attr.AttrValue));
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+				UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_ANSI(*Attr.AttrValueString));
+#else
+                UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_ANSI(*Attr.AttrValue));
+#endif
 			}
 		}
 	}
@@ -502,7 +527,12 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
         {
             if (Attr.AttrName == TEXT("value"))
             {
-                int32 value = FCString::Atod(*Attr.AttrValue);
+                int32 value;
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+                value = Attr.AttrValueNumber;
+#else
+                value = FCString::Atod(*Attr.AttrValue);
+#endif
                 useValue = true;
 
 				if (ProgressHierarchyCount > 2)
@@ -567,21 +597,37 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
 		{
 			if (Attr.AttrName == TEXT("flowType"))
 			{
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+                FlowType = GetEnumValueFromString<EGAResourceFlowType>("EGAResourceFlowType", Attr.AttrValueString.ToLower());
+#else
                 FlowType = GetEnumValueFromString<EGAResourceFlowType>("EGAResourceFlowType", Attr.AttrValue.ToLower());
+#endif
 
                 if (FlowType == EGAResourceFlowType(0))
 				{
-					UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.AttrValue);
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+					UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.AttrValueString);
+#else
+                    UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.AttrValue);
+#endif
 					return;
 				}
 			}
 			else if (Attr.AttrName == TEXT("currency"))
 			{
-				Currency = Attr.AttrValue;
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+				Currency = Attr.AttrValueString;
+#else
+                Currency = Attr.AttrValue;
+#endif
 			}
 			else if (Attr.AttrName == TEXT("itemType"))
 			{
-				ItemType = Attr.AttrValue;
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+				ItemType = Attr.AttrValueString;
+#else
+                ItemType = Attr.AttrValue;
+#endif
 			}
 		}
 
@@ -628,30 +674,57 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
 
 			if (Attr.AttrName == TEXT("itemType"))
 			{
-				ItemType = Attr.AttrValue;
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+				ItemType = Attr.AttrValueString;
+#else
+                ItemType = Attr.AttrValue;
+#endif
 			}
 			else if (Attr.AttrName == TEXT("itemId"))
 			{
-				ItemId = Attr.AttrValue;
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+				ItemId = Attr.AttrValueString;
+#else
+                ItemId = Attr.AttrValue;
+#endif
 			}
 			else if (Attr.AttrName == TEXT("cartType"))
 			{
-				CartType = Attr.AttrValue;
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+				CartType = Attr.AttrValueString;
+#else
+                CartType = Attr.AttrValue;
+#endif
 			}
 			else if (Attr.AttrName == TEXT("receipt"))
 			{
-				Receipt = Attr.AttrValue;
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+				Receipt = Attr.AttrValueString;
+#else
+                Receipt = Attr.AttrValue;
+#endif
 			}
 			else if (Attr.AttrName == TEXT("autoFetchReceipt"))
 			{
-				if (Attr.AttrValue.ToBool())
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+				if (Attr.AttrValueBool)
 				{
 					AutoFetchReceipt = true;
 				}
+#else
+                if (Attr.AttrValue.ToBool())
+                {
+                    AutoFetchReceipt = true;
+                }
+#endif
 			}
 			else if (Attr.AttrName == TEXT("signature"))
 			{
-				Signature = Attr.AttrValue;
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+				Signature = Attr.AttrValueString;
+#else
+                Signature = Attr.AttrValue;
+#endif
 			}
 		}
 
