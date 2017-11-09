@@ -1,6 +1,5 @@
 #if PLATFORM_ANDROID
 
-#include "GameAnalyticsPrivatePCH.h"
 #include "../GA-SDK-ANDROID/GameAnalyticsJNI.h"
 #include "Android/AndroidJNI.h"
 #include "Android/AndroidApplication.h"

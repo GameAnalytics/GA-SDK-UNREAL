@@ -1,4 +1,4 @@
-#include "GameAnalyticsPrivatePCH.h"
+#include "GameAnalytics.h"
 #if PLATFORM_IOS
 #include "../GA-SDK-IOS/GameAnalyticsCpp.h"
 #elif PLATFORM_ANDROID

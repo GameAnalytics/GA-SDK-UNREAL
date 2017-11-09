@@ -2,9 +2,11 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
 #include "EditorStyle.h"
 #include "PropertyEditorModule.h"
 #include "GameAnalyticsProjectSettings.h"
+#include "IDetailCustomization.h"
 
 #include "Http.h"
 

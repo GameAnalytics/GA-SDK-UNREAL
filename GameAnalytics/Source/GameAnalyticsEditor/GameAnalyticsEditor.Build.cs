@@ -4,8 +4,14 @@ namespace UnrealBuildTool.Rules
 {
     public class GameAnalyticsEditor : ModuleRules
     {
+#if WITH_FORWARDED_MODULE_RULES_CTOR
         public GameAnalyticsEditor(ReadOnlyTargetRules Target) : base(Target)
+#else
+        public GameAnalyticsEditor(TargetInfo Target)
+#endif
         {
+            PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
             PrivateDependencyModuleNames.AddRange(
                 new string[]
                 {

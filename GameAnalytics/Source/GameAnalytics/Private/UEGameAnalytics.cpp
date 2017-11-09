@@ -1,4 +1,7 @@
-#include "GameAnalyticsPrivatePCH.h"
+#include "UEGameAnalytics.h"
+#include "IAnalyticsProvider.h"
+#include "GameAnalyticsProvider.h"
+#include "GameAnalytics.h"
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
 #if PLATFORM_WINDOWS
 #include "AllowWindowsPlatformTypes.h"
@@ -10,7 +13,7 @@
 
 #include "EngineVersion.h"
 
-#define GA_VERSION TEXT("2.6.7")
+#define GA_VERSION TEXT("2.6.8")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -185,7 +188,11 @@ FAnalyticsProviderGameAnalytics::FAnalyticsProviderGameAnalytics() :
 	bHasWrittenFirstEvent(false),
 	Age(0)
 {
-	AnalyticsFilePath = FPaths::GameSavedDir() + TEXT("Analytics/");
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+	AnalyticsFilePath = FPaths::ProjectSavedDir() + TEXT("Analytics/");
+#else
+    AnalyticsFilePath = FPaths::GameSavedDir() + TEXT("Analytics/");
+#endif
 #if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 15
     UserId = FPlatformMisc::GetDeviceId();
 #else
@@ -208,7 +215,11 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         ProjectSettings = FAnalyticsGameAnalytics::LoadProjectSettings();
 
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+        gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_ANSI(*FPaths::ProjectSavedDir()));
+#else
         gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_ANSI(*FPaths::GameSavedDir()));
+#endif
 #endif
 
         ////// Enable log

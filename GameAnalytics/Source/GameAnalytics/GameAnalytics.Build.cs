@@ -7,8 +7,14 @@ namespace UnrealBuildTool.Rules
 {
     public class GameAnalytics : ModuleRules
     {
+#if WITH_FORWARDED_MODULE_RULES_CTOR
         public GameAnalytics(ReadOnlyTargetRules Target) : base(Target)
+#else
+        public GameAnalytics(TargetInfo Target)
+#endif
         {
+            PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
             var GameAnalyticsPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../ThirdParty/" ));
             var libPath = Path.Combine(GameAnalyticsPath, "lib");
 
@@ -128,7 +134,11 @@ namespace UnrealBuildTool.Rules
 
             if (Target.Platform == UnrealTargetPlatform.Android)
             {
+#if UE_4_18_OR_LATER
+                string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target.RelativeEnginePath);
+#else
                 string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, BuildConfiguration.RelativeEnginePath);
+#endif
                 AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "GameAnalytics_APL.xml")));
             }
         }
