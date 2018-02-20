@@ -252,22 +252,38 @@ void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01)
 {
+#if PLATFORM_IOS
     addProgressionEvent(progressionStatus, progression01, (const char *)NULL, (const char *)NULL);
+#else
+    addProgressionEvent(progressionStatus, progression01, "", "");
+#endif
 }
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, int score)
 {
+#if PLATFORM_IOS
     addProgressionEvent(progressionStatus, progression01, (const char *)NULL, (const char *)NULL, score);
+#else
+    addProgressionEvent(progressionStatus, progression01, "", "", score);
+#endif
 }
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02)
 {
+#if PLATFORM_IOS
     addProgressionEvent(progressionStatus, progression01, progression02, (const char *)NULL);
+#else
+    addProgressionEvent(progressionStatus, progression01, progression02, "");
+#endif
 }
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, int score)
 {
+#if PLATFORM_IOS
     addProgressionEvent(progressionStatus, progression01, progression02, (const char *)NULL, score);
+#else
+    addProgressionEvent(progressionStatus, progression01, progression02, "", score);
+#endif
 }
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03)

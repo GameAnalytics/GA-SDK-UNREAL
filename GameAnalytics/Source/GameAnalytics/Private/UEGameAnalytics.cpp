@@ -13,7 +13,7 @@
 
 #include "EngineVersion.h"
 
-#define GA_VERSION TEXT("2.6.9")
+#define GA_VERSION TEXT("2.6.10")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -416,45 +416,24 @@ void FAnalyticsProviderGameAnalytics::RecordEvent(const FString& EventName, cons
         {
             if (Attr.AttrName == TEXT("custom1"))
             {
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-                UGameAnalytics::setCustomDimension01(TCHAR_TO_ANSI(*Attr.AttrValueString));
-#else
-                UGameAnalytics::setCustomDimension01(TCHAR_TO_ANSI(*Attr.AttrValue));
-#endif
+                UGameAnalytics::setCustomDimension01(TCHAR_TO_ANSI(*Attr.ToString()));
             }
             else if (Attr.AttrName == TEXT("custom2"))
             {
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-                UGameAnalytics::setCustomDimension02(TCHAR_TO_ANSI(*Attr.AttrValueString));
-#else
-                UGameAnalytics::setCustomDimension02(TCHAR_TO_ANSI(*Attr.AttrValue));
-#endif
+                UGameAnalytics::setCustomDimension02(TCHAR_TO_ANSI(*Attr.ToString()));
             }
             else if (Attr.AttrName == TEXT("custom3"))
             {
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-                UGameAnalytics::setCustomDimension03(TCHAR_TO_ANSI(*Attr.AttrValueString));
-#else
-                UGameAnalytics::setCustomDimension03(TCHAR_TO_ANSI(*Attr.AttrValue));
-#endif
+                UGameAnalytics::setCustomDimension03(TCHAR_TO_ANSI(*Attr.ToString()));
             }
             else if (Attr.AttrName == TEXT("facebook"))
             {
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-                UGameAnalytics::setFacebookId(TCHAR_TO_ANSI(*Attr.AttrValueString));
-#else
-                UGameAnalytics::setFacebookId(TCHAR_TO_ANSI(*Attr.AttrValue));
-#endif
+                UGameAnalytics::setFacebookId(TCHAR_TO_ANSI(*Attr.ToString()));
             }
             else
             {
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-                float AttrValue = Attr.AttrValueNumber;
+                float AttrValue = FCString::Atof(*Attr.ToString());
                 UGameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*Attr.AttrName), AttrValue);
-#else
-                float AttrValue = FCString::Atof(*Attr.AttrValue);
-                UGameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*Attr.AttrName), AttrValue);
-#endif
             }
         }
     }
@@ -505,17 +484,56 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TA
 		{
 			if (Attr.AttrName == TEXT("message"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-				UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_ANSI(*Attr.AttrValueString));
-#else
-                UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_ANSI(*Attr.AttrValue));
-#endif
+                UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_ANSI(*Attr.ToString()));
 			}
 		}
 	}
     else
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordError wrong usage, for correct usage see: https://github.com/GameAnalytics/GA-SDK-UNREAL/wiki/Error%20Event"));
+    }
+}
+
+void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy)
+{
+    EGAProgressionStatus ProgressionStatus = GetEnumValueFromString<EGAProgressionStatus>("EGAProgressionStatus", ProgressType.ToLower());
+
+    if (ProgressionStatus == EGAProgressionStatus(0))
+    {
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: ProgressType value must be either start, complete or fail. ProgressType=%s"), *ProgressType);
+        return;
+    }
+
+    UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy));
+}
+
+void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes)
+{
+    EGAProgressionStatus ProgressionStatus = GetEnumValueFromString<EGAProgressionStatus>("EGAProgressionStatus", ProgressType.ToLower());
+
+    if (ProgressionStatus == EGAProgressionStatus(0))
+    {
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: ProgressType value must be either start, complete or fail. ProgressType=%s"), *ProgressType);
+        return;
+    }
+
+    bool useValue = false;
+
+    for (auto Attr : Attributes)
+    {
+        if (Attr.AttrName == TEXT("value"))
+        {
+            int32 value = FCString::Atoi(*Attr.ToString());
+            useValue = true;
+
+            UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy), value);
+            break;
+        }
+    }
+
+    if (!useValue)
+    {
+        UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy));
     }
 }
 
@@ -536,14 +554,10 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
 
         for (auto Attr : Attributes)
         {
+            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: Attributes. AttrName=%s"), *Attr.AttrName);
             if (Attr.AttrName == TEXT("value"))
             {
-                int32 value;
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-                value = Attr.AttrValueNumber;
-#else
-                value = FCString::Atod(*Attr.AttrValue);
-#endif
+                int32 value = FCString::Atoi(*Attr.ToString());
                 useValue = true;
 
 				if (ProgressHierarchyCount > 2)
@@ -608,37 +622,21 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
 		{
 			if (Attr.AttrName == TEXT("flowType"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-                FlowType = GetEnumValueFromString<EGAResourceFlowType>("EGAResourceFlowType", Attr.AttrValueString.ToLower());
-#else
-                FlowType = GetEnumValueFromString<EGAResourceFlowType>("EGAResourceFlowType", Attr.AttrValue.ToLower());
-#endif
+                FlowType = GetEnumValueFromString<EGAResourceFlowType>("EGAResourceFlowType", Attr.ToString().ToLower());
 
                 if (FlowType == EGAResourceFlowType(0))
 				{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-					UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.AttrValueString);
-#else
-                    UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.AttrValue);
-#endif
+                    UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.ToString());
 					return;
 				}
 			}
 			else if (Attr.AttrName == TEXT("currency"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-				Currency = Attr.AttrValueString;
-#else
-                Currency = Attr.AttrValue;
-#endif
+                Currency = Attr.ToString();
 			}
 			else if (Attr.AttrName == TEXT("itemType"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-				ItemType = Attr.AttrValueString;
-#else
-                ItemType = Attr.AttrValue;
-#endif
+                ItemType = Attr.ToString();
 			}
 		}
 
@@ -685,57 +683,30 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
 
 			if (Attr.AttrName == TEXT("itemType"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-				ItemType = Attr.AttrValueString;
-#else
-                ItemType = Attr.AttrValue;
-#endif
+                ItemType = Attr.ToString();
 			}
 			else if (Attr.AttrName == TEXT("itemId"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-				ItemId = Attr.AttrValueString;
-#else
-                ItemId = Attr.AttrValue;
-#endif
+                ItemId = Attr.ToString();
 			}
 			else if (Attr.AttrName == TEXT("cartType"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-				CartType = Attr.AttrValueString;
-#else
-                CartType = Attr.AttrValue;
-#endif
+                CartType = Attr.ToString();
 			}
 			else if (Attr.AttrName == TEXT("receipt"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-				Receipt = Attr.AttrValueString;
-#else
-                Receipt = Attr.AttrValue;
-#endif
+                Receipt = Attr.ToString();
 			}
 			else if (Attr.AttrName == TEXT("autoFetchReceipt"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-				if (Attr.AttrValueBool)
-				{
-					AutoFetchReceipt = true;
-				}
-#else
-                if (Attr.AttrValue.ToBool())
+                if (Attr.ToString().ToBool())
                 {
                     AutoFetchReceipt = true;
                 }
-#endif
 			}
 			else if (Attr.AttrName == TEXT("signature"))
 			{
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-				Signature = Attr.AttrValueString;
-#else
-                Signature = Attr.AttrValue;
-#endif
+                Signature = Attr.ToString();
 			}
 		}
 

@@ -52,6 +52,8 @@ public:
 	virtual void RecordCurrencyGiven(const FString& GameCurrencyType, int GameCurrencyAmount, const TArray<FAnalyticsEventAttribute>& Attributes);
     virtual void RecordError(const FString& Error);
 	virtual void RecordError(const FString& Error, const TArray<FAnalyticsEventAttribute>& Attributes);
+    virtual void RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy);
+    virtual void RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes);
     virtual void RecordProgress(const FString& ProgressType, const TArray<FString>& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes);
     
     template <typename EnumType>

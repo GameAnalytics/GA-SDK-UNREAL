@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.10**
+* bug fix to progression event crashes
+
 **2.6.9**
 * additional fixes to Unreal Engine 4.18 compatability
 
