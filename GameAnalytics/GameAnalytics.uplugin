@@ -3,10 +3,10 @@
 
     "FriendlyName" : "GameAnalytics",
     "Version" : 1,
-    "VersionName" : "2.6.11",
+    "VersionName" : "2.6.12",
     "CreatedBy" : "GameAnalytics",
     "CreatedByURL" : "http://gameanalytics.com",
-    "EngineVersion" : "4.18.0",
+    "EngineVersion" : "4.19.0",
     "MarketplaceURL" : "com.epicgames.launcher://ue/marketplace/content/d070c3fab7b74c08bab3a89c9cbf4490",
     "Description" : "GameAnalytics is a free analytics platform that helps game developers understand their players' behaviour by delivering relevant insights.",
     "Category" : "Analytics",

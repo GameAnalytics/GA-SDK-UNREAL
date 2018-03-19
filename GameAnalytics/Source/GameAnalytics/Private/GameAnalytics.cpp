@@ -5,7 +5,7 @@
 #include "../GA-SDK-ANDROID/GameAnalyticsJNI.h"
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
 #include "../GA-SDK-CPP/GameAnalytics.h"
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
 #include "Json.h"
 #include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
@@ -23,7 +23,7 @@ void UGameAnalytics::configureAvailableCustomDimensions01(const std::vector<std:
     gameanalytics::jni_configureAvailableCustomDimensions01(list);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions01(list);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
     {
@@ -46,7 +46,7 @@ void UGameAnalytics::configureAvailableCustomDimensions02(const std::vector<std:
     gameanalytics::jni_configureAvailableCustomDimensions02(list);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions02(list);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
     {
@@ -69,7 +69,7 @@ void UGameAnalytics::configureAvailableCustomDimensions03(const std::vector<std:
     gameanalytics::jni_configureAvailableCustomDimensions03(list);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions03(list);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
     {
@@ -92,7 +92,7 @@ void UGameAnalytics::configureAvailableResourceCurrencies(const std::vector<std:
     gameanalytics::jni_configureAvailableResourceCurrencies(list);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::configureAvailableResourceCurrencies(list);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
     {
@@ -115,7 +115,7 @@ void UGameAnalytics::configureAvailableResourceItemTypes(const std::vector<std::
     gameanalytics::jni_configureAvailableResourceItemTypes(list);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::configureAvailableResourceItemTypes(list);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
     {
@@ -138,7 +138,7 @@ void UGameAnalytics::configureBuild(const char *build)
     gameanalytics::jni_configureBuild(build);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::configureBuild(build);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_configureBuild(build);
 #endif
 }
@@ -152,7 +152,7 @@ void UGameAnalytics::configureUserId(const char *userId)
     gameanalytics::jni_configureUserId(userId);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::configureUserId(userId);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_configureUserId(userId);
 #endif
 }
@@ -166,7 +166,7 @@ void UGameAnalytics::configureSdkGameEngineVersion(const char *gameEngineSdkVers
     gameanalytics::jni_configureSdkGameEngineVersion(gameEngineSdkVersion);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::configureSdkGameEngineVersion(gameEngineSdkVersion);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_configureSdkGameEngineVersion(gameEngineSdkVersion);
 #endif
 }
@@ -180,7 +180,7 @@ void UGameAnalytics::configureGameEngineVersion(const char *gameEngineVersion)
     gameanalytics::jni_configureGameEngineVersion(gameEngineVersion);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::configureGameEngineVersion(gameEngineVersion);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_configureGameEngineVersion(gameEngineVersion);
 #endif
 }
@@ -194,7 +194,7 @@ void UGameAnalytics::initialize(const char *gameKey, const char *gameSecret)
     gameanalytics::jni_initialize(gameKey, gameSecret);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::initialize(gameKey, gameSecret);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_initialize(gameKey, gameSecret);
 #endif
 }
@@ -231,7 +231,7 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
     gameanalytics::jni_addBusinessEvent(currency, amount, itemType, itemId, cartType);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::addBusinessEvent(currency, amount, itemType, itemId, cartType);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_addBusinessEvent(currency, amount, itemType, itemId, cartType);
 #endif
 }
@@ -245,7 +245,7 @@ void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *
     gameanalytics::jni_addResourceEvent((int)flowType, currency, amount, itemType, itemId);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::addResourceEvent((gameanalytics::EGAResourceFlowType)((int)flowType), currency, amount, itemType, itemId);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_addResourceEvent((int)flowType, currency, amount, itemType, itemId);
 #endif
 }
@@ -295,7 +295,7 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
     gameanalytics::jni_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03);
 #endif
 }
@@ -309,7 +309,7 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
     gameanalytics::jni_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03, score);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score);
 #endif
 }
@@ -323,7 +323,7 @@ void UGameAnalytics::addDesignEvent(const char *eventId)
     gameanalytics::jni_addDesignEvent(eventId);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::addDesignEvent(eventId);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_addDesignEvent(eventId);
 #endif
 }
@@ -337,7 +337,7 @@ void UGameAnalytics::addDesignEvent(const char *eventId, float value)
     gameanalytics::jni_addDesignEventWithValue(eventId, value);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::addDesignEvent(eventId, value);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_addDesignEventWithValue(eventId, value);
 #endif
 }
@@ -351,7 +351,7 @@ void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *messag
     gameanalytics::jni_addErrorEvent((int)severity, message);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::addErrorEvent((gameanalytics::EGAErrorSeverity)((int)severity), message);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_addErrorEvent((int)severity, message);
 #endif
 }
@@ -365,7 +365,7 @@ void UGameAnalytics::setEnabledInfoLog(bool flag)
     gameanalytics::jni_setEnabledInfoLog(flag);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::setEnabledInfoLog(flag);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_setEnabledInfoLog(flag);
 #endif
 }
@@ -379,7 +379,7 @@ void UGameAnalytics::setEnabledVerboseLog(bool flag)
     gameanalytics::jni_setEnabledVerboseLog(flag);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::setEnabledVerboseLog(flag);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_setEnabledVerboseLog(flag);
 #endif
 }
@@ -393,7 +393,7 @@ void UGameAnalytics::setEnabledManualSessionHandling(bool flag)
     gameanalytics::jni_setEnabledManualSessionHandling(flag);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::setEnabledManualSessionHandling(flag);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_setManualSessionHandling(flag);
 #endif
 }
@@ -407,7 +407,7 @@ void UGameAnalytics::setCustomDimension01(const char *customDimension)
     gameanalytics::jni_setCustomDimension01(customDimension);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::setCustomDimension01(customDimension);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_setCustomDimension01(customDimension);
 #endif
 }
@@ -421,7 +421,7 @@ void UGameAnalytics::setCustomDimension02(const char *customDimension)
     gameanalytics::jni_setCustomDimension02(customDimension);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::setCustomDimension02(customDimension);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_setCustomDimension02(customDimension);
 #endif
 }
@@ -435,7 +435,7 @@ void UGameAnalytics::setCustomDimension03(const char *customDimension)
     gameanalytics::jni_setCustomDimension03(customDimension);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::setCustomDimension03(customDimension);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_setCustomDimension03(customDimension);
 #endif
 }
@@ -449,7 +449,7 @@ void UGameAnalytics::setFacebookId(const char *facebookId)
     gameanalytics::jni_setFacebookId(facebookId);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::setFacebookId(facebookId);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_setFacebookId(facebookId);
 #endif
 }
@@ -467,7 +467,7 @@ void UGameAnalytics::setGender(EGAGender gender)
         	gameanalytics::jni_setGender((int)gender);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
             gameanalytics::GameAnalytics::setGender((gameanalytics::EGAGender)((int)gender));
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
             js_setGender((int)gender);
 #endif
         }
@@ -482,7 +482,7 @@ void UGameAnalytics::setGender(EGAGender gender)
         	gameanalytics::jni_setGender((int)gender);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
             gameanalytics::GameAnalytics::setGender((gameanalytics::EGAGender)((int)gender));
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
             js_setGender((int)gender);
 #endif
         }
@@ -499,7 +499,7 @@ void UGameAnalytics::setBirthYear(int birthYear)
     gameanalytics::jni_setBirthYear(birthYear);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::setBirthYear(birthYear);
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_setBirthYear(birthYear);
 #endif
 }
@@ -513,7 +513,7 @@ void UGameAnalytics::startSession()
     gameanalytics::jni_startSession();
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::startSession();
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_startSession();
 #endif
 }
@@ -527,7 +527,7 @@ void UGameAnalytics::endSession()
     gameanalytics::jni_endSession();
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::endSession();
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
     js_endSession();
 #endif
 }

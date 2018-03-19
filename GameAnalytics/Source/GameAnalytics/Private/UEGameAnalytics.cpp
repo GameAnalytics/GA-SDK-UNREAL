@@ -7,13 +7,13 @@
 #include "AllowWindowsPlatformTypes.h"
 #endif
 #include "../GA-SDK-CPP/GameAnalytics.h"
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
 #include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
 
 #include "EngineVersion.h"
 
-#define GA_VERSION TEXT("2.6.11")
+#define GA_VERSION TEXT("2.6.12")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -348,7 +348,7 @@ void FAnalyticsProviderGameAnalytics::EndSession()
 		{
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
 			gameanalytics::GameAnalytics::onStop();
-#elif PLATFORM_HTML5_BROWSER
+#elif PLATFORM_HTML5
             js_onStop();
 #else
 			UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
