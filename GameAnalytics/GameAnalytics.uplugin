@@ -3,7 +3,7 @@
 
     "FriendlyName" : "GameAnalytics",
     "Version" : 1,
-    "VersionName" : "2.6.12",
+    "VersionName" : "2.6.13",
     "CreatedBy" : "GameAnalytics",
     "CreatedByURL" : "http://gameanalytics.com",
     "EngineVersion" : "4.19.0",
@@ -17,7 +17,7 @@
             "Name" : "GameAnalytics",
             "Type" : "Runtime",
             "LoadingPhase" : "PreDefault",
-            "WhitelistPlatforms" : [ "IOS", "Android", "Mac", "Win32", "Win64", "HTML5", "Linux" ]
+            "WhitelistPlatforms" : [ "Android", "Mac", "Win32", "Win64", "HTML5", "Linux" ]
         },
         {
             "Name" : "GameAnalyticsEditor",

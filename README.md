@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.13**
+* iOS support temporarily removed until Epic fixes some issues the iOS toolchain causes in Unreal Engine 4.19
+
 **2.6.12**
 * added compatability for Unreal Engine v4.19
 
