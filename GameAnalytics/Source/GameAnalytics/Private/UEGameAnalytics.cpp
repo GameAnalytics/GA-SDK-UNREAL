@@ -13,7 +13,7 @@
 
 #include "EngineVersion.h"
 
-#define GA_VERSION TEXT("2.6.13")
+#define GA_VERSION TEXT("2.6.14")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -204,7 +204,11 @@ FAnalyticsProviderGameAnalytics::~FAnalyticsProviderGameAnalytics()
 {
 	if (bHasSessionStarted)
 	{
-		EndSession();
+#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+        gameanalytics::GameAnalytics::onQuit();
+#else
+        EndSession();
+#endif
 	}
 }
 
@@ -347,7 +351,7 @@ void FAnalyticsProviderGameAnalytics::EndSession()
 		else
 		{
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-			gameanalytics::GameAnalytics::onStop();
+			gameanalytics::GameAnalytics::onSuspend();
 #elif PLATFORM_HTML5
             js_onStop();
 #else

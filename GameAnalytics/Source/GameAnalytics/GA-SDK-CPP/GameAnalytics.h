@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace gameanalytics 
+namespace gameanalytics
 {
 
     /*!
@@ -141,7 +141,8 @@ namespace gameanalytics
         // game state changes
         // will affect how session is started / ended
         static void onResume();
-        static void onStop();
+        static void onSuspend();
+        static void onQuit();
 
      private:
         static bool isSdkReady(bool needsInitialized);
