@@ -1,7 +1,7 @@
 # GA-SDK-UNREAL
 GameAnalytics SDK for the Unreal Engine.
 
-Documentation located in the [wiki](https://github.com/GameAnalytics/GA-SDK-UNREAL/wiki).  
+Documentation can be found [here](https://gameanalytics.com/docs/unreal4-sdk).  
 For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-SDK-UNREAL/tree/master_uwp) branch.
 
 > :information_source:
