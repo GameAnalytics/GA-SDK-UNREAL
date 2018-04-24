@@ -29,6 +29,10 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.15**
+* fixed session length bug
+* fixed not allowing to add events when session is not started
+
 **2.6.14**
 * fixed crash bug for closing down sdk for desktop platforms (windows, mac, linux)
 
