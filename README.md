@@ -29,6 +29,10 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.16**
+* added custom dimensions to design error events
+* added option to startsession with gamekey and secretkey instead of getting keys from settings object
+
 **2.6.15**
 * fixed session length bug
 * fixed not allowing to add events when session is not started
