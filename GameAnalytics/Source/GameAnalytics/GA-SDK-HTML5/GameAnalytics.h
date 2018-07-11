@@ -15,13 +15,13 @@ extern "C"
     void js_setCustomDimension01(const char *customDimension);
     void js_setCustomDimension02(const char *customDimension);
     void js_setCustomDimension03(const char *customDimension);
-    void js_addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType);
-    void js_addResourceEvent(int flowType, const char *currency, float amount, const char *itemType, const char *itemId);
-    void js_addProgressionEvent(int progressionStatus, const char *progression01, const char *progression02, const char *progression03);
-    void js_addProgressionEventWithScore(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score);
-    void js_addDesignEvent(const char *eventId);
-    void js_addDesignEventWithValue(const char *eventId, float value);
-    void js_addErrorEvent(int severity, const char *message);
+    void js_addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *fields);
+    void js_addResourceEvent(int flowType, const char *currency, float amount, const char *itemType, const char *itemId, const char *fields);
+    void js_addProgressionEvent(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, const char *fields);
+    void js_addProgressionEventWithScore(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const char *fields);
+    void js_addDesignEvent(const char *eventId, const char *fields);
+    void js_addDesignEventWithValue(const char *eventId, float value, const char *fields);
+    void js_addErrorEvent(int severity, const char *message, const char *fields);
     void js_setEnabledInfoLog(bool enabled);
     void js_setEnabledVerboseLog(bool enabled);
     void js_setManualSessionHandling(bool enabled);
@@ -31,4 +31,7 @@ extern "C"
     void js_setFacebookId(const char *facebookId);
     void js_setGender(int gender);
     void js_setBirthYear(int birthYear);
+    const char* js_getCommandCenterValueAsString(const char *key, const char *defaultValue);
+    bool js_isCommandCenterReady();
+    const char* js_getConfigurationsContentAsString();
 }

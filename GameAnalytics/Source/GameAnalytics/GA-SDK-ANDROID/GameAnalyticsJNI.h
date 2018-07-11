@@ -19,14 +19,14 @@ namespace gameanalytics {
 	    extern void jni_configureUserId(const char *userId);
 	    extern void jni_initialize(const char *gameKey, const char *gameSecret);
 	    
-	    extern void jni_addBusinessEventWithReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *store, const char *signature);
-	    extern void jni_addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType);
-	    extern void jni_addResourceEvent(int flowType, const char *currency, float amount, const char *itemType, const char *itemId);
-	    extern void jni_addProgressionEvent(int progressionStatus, const char *progression01, const char *progression02, const char *progression03);
-	    extern void jni_addProgressionEventWithScore(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score);
-	    extern void jni_addDesignEvent(const char *eventId);
-	    extern void jni_addDesignEventWithValue(const char *eventId, float value);
-	    extern void jni_addErrorEvent(int severity, const char *message);
+	    extern void jni_addBusinessEventWithReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *store, const char *signature, const char *fields);
+	    extern void jni_addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *fields);
+	    extern void jni_addResourceEvent(int flowType, const char *currency, float amount, const char *itemType, const char *itemId, const char *fields);
+	    extern void jni_addProgressionEvent(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, const char *fields);
+	    extern void jni_addProgressionEventWithScore(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const char *fields);
+	    extern void jni_addDesignEvent(const char *eventId, const char *fields);
+	    extern void jni_addDesignEventWithValue(const char *eventId, float value, const char *fields);
+	    extern void jni_addErrorEvent(int severity, const char *message, const char *fields);
 	    
 	    extern void jni_setEnabledInfoLog(bool flag);
 	    extern void jni_setEnabledVerboseLog(bool flag);

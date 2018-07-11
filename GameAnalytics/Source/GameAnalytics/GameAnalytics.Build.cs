@@ -44,13 +44,12 @@ namespace UnrealBuildTool.Rules
                             "CoreServices"
                         }
                     );
-                    PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL"});
+                    PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL" });
                     break;
 
                 case UnrealTargetPlatform.Linux:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libGameAnalytics.a"));
-                    PublicAdditionalLibraries.Add("curl");
-                    PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL"});
+                    PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl" });
                     break;
 
                 case UnrealTargetPlatform.IOS:

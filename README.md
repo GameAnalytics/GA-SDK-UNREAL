@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.17**
+* fixes building for linux (linux)
+
 **2.6.16**
 * added custom dimensions to design error events
 * added option to startsession with gamekey and secretkey instead of getting keys from settings object

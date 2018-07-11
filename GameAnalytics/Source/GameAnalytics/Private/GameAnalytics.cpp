@@ -4,6 +4,9 @@
 #elif PLATFORM_ANDROID
 #include "../GA-SDK-ANDROID/GameAnalyticsJNI.h"
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+#if PLATFORM_LINUX
+#include "Json.h"
+#endif
 #include "../GA-SDK-CPP/GameAnalytics.h"
 #elif PLATFORM_HTML5
 #include "Json.h"
