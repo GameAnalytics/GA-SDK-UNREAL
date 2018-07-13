@@ -99,7 +99,7 @@ void GameAnalyticsCpp::addBusinessEvent(const char *currency, int amount, const 
                                          itemId:itemIdString
                                        cartType:cartTypeString
                                         receipt:receiptString
-                                         fields:fields_dict];
+                                         /*fields:fields_dict*/];
 }
 
 void GameAnalyticsCpp::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *fields) {
