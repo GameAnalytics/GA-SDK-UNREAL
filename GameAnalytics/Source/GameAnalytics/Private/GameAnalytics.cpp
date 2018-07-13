@@ -261,21 +261,21 @@ void UGameAnalytics::initialize(const char *gameKey, const char *gameSecret)
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt)
 {
 #if !WTIH_EDITOR
-    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt);
+    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, "");
 #endif
 }
 
 void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType)
 {
 #if !WITH_EDITOR
-    GameAnalyticsCpp::addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType);
+    GameAnalyticsCpp::addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType, "");
 #endif
 }
 #elif PLATFORM_ANDROID
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature)
 {
 #if !WITH_EDITOR
-    gameanalytics::jni_addBusinessEventWithReceipt(currency, amount, itemType, itemId, cartType, receipt, "google_play", signature);
+    gameanalytics::jni_addBusinessEventWithReceipt(currency, amount, itemType, itemId, cartType, receipt, "google_play", signature, "");
 #endif
 }
 #endif
@@ -284,13 +284,13 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, NULL);
+    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, NULL, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addBusinessEvent(currency, amount, itemType, itemId, cartType);
+    gameanalytics::jni_addBusinessEvent(currency, amount, itemType, itemId, cartType, "");
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addBusinessEvent(currency, amount, itemType, itemId, cartType);
+    gameanalytics::GameAnalytics::addBusinessEvent(currency, amount, itemType, itemId, cartType/*, ""*/);
 #elif PLATFORM_HTML5
-    js_addBusinessEvent(currency, amount, itemType, itemId, cartType);
+    js_addBusinessEvent(currency, amount, itemType, itemId, cartType, "");
 #endif
 }
 
@@ -298,13 +298,13 @@ void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addResourceEvent((int)flowType, currency, amount, itemType, itemId);
+    GameAnalyticsCpp::addResourceEvent((int)flowType, currency, amount, itemType, itemId, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addResourceEvent((int)flowType, currency, amount, itemType, itemId);
+    gameanalytics::jni_addResourceEvent((int)flowType, currency, amount, itemType, itemId, "");
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addResourceEvent((gameanalytics::EGAResourceFlowType)((int)flowType), currency, amount, itemType, itemId);
+    gameanalytics::GameAnalytics::addResourceEvent((gameanalytics::EGAResourceFlowType)((int)flowType), currency, amount, itemType, itemId/*, ""*/);
 #elif PLATFORM_HTML5
-    js_addResourceEvent((int)flowType, currency, amount, itemType, itemId);
+    js_addResourceEvent((int)flowType, currency, amount, itemType, itemId, "");
 #endif
 }
 
@@ -348,13 +348,13 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addProgressionEvent((int)progressionStatus, progression01, progression02, progression03);
+    GameAnalyticsCpp::addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03);
+    gameanalytics::jni_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, "");
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03);
+    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03/*, ""*/);
 #elif PLATFORM_HTML5
-    js_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03);
+    js_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, "");
 #endif
 }
 
@@ -362,13 +362,13 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score);
+    GameAnalyticsCpp::addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score);
+    gameanalytics::jni_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, "");
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03, score);
+    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03, score/*, ""*/);
 #elif PLATFORM_HTML5
-    js_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score);
+    js_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, "");
 #endif
 }
 
@@ -376,13 +376,13 @@ void UGameAnalytics::addDesignEvent(const char *eventId)
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addDesignEvent(eventId);
+    GameAnalyticsCpp::addDesignEvent(eventId, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addDesignEvent(eventId);
+    gameanalytics::jni_addDesignEvent(eventId, "");
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addDesignEvent(eventId);
+    gameanalytics::GameAnalytics::addDesignEvent(eventId/*, ""*/);
 #elif PLATFORM_HTML5
-    js_addDesignEvent(eventId);
+    js_addDesignEvent(eventId, "");
 #endif
 }
 
@@ -390,13 +390,13 @@ void UGameAnalytics::addDesignEvent(const char *eventId, float value)
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addDesignEventWithValue(eventId, value);
+    GameAnalyticsCpp::addDesignEventWithValue(eventId, value, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addDesignEventWithValue(eventId, value);
+    gameanalytics::jni_addDesignEventWithValue(eventId, value, "");
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addDesignEvent(eventId, value);
+    gameanalytics::GameAnalytics::addDesignEvent(eventId, value/*, ""*/);
 #elif PLATFORM_HTML5
-    js_addDesignEventWithValue(eventId, value);
+    js_addDesignEventWithValue(eventId, value, "");
 #endif
 }
 
@@ -404,13 +404,13 @@ void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *messag
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addErrorEvent((int)severity, message);
+    GameAnalyticsCpp::addErrorEvent((int)severity, message, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addErrorEvent((int)severity, message);
+    gameanalytics::jni_addErrorEvent((int)severity, message, "");
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addErrorEvent((gameanalytics::EGAErrorSeverity)((int)severity), message);
+    gameanalytics::GameAnalytics::addErrorEvent((gameanalytics::EGAErrorSeverity)((int)severity), message/*, ""*/);
 #elif PLATFORM_HTML5
-    js_addErrorEvent((int)severity, message);
+    js_addErrorEvent((int)severity, message, "");
 #endif
 }
 
