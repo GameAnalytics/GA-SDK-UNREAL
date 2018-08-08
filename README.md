@@ -29,6 +29,10 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.19**
+* compile fixes for android (android)
+* updated to be compatible with unreal engine v4.20
+
 **2.6.18**
 * various bug fixes
 

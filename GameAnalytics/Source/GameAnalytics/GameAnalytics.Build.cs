@@ -133,17 +133,7 @@ namespace UnrealBuildTool.Rules
 
             if (Target.Platform == UnrealTargetPlatform.Android)
             {
-#if UE_4_18_OR_LATER
-                string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target.RelativeEnginePath);
-#else
-                string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, BuildConfiguration.RelativeEnginePath);
-#endif
-
-#if UE_4_19_OR_LATER
-                RuntimeDependencies.Add(Path.Combine(PluginPath, "GameAnalytics_APL.xml"));
-#else
-                AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "GameAnalytics_APL.xml")));
-#endif
+                AdditionalPropertiesForReceipt.Add("AndroidPlugin", Path.Combine(ModuleDirectory, "GameAnalytics_APL.xml"));
             }
         }
     }
