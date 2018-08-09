@@ -4,7 +4,7 @@
 
 #include "ModuleInterface.h"
 #include "ISettingsModule.h"
-#include "ModuleManager.h"
+#include "Modules/ModuleManager.h"
 
 #include "GameAnalyticsProjectSettings.h"
 
@@ -18,9 +18,9 @@ void FGameAnalyticsEditor::StartupModule()
                                              UGameAnalyticsProjectSettings::StaticClass()->GetFName(),
                                              FOnGetDetailCustomizationInstance::CreateStatic(&FGameAnalyticsTargetSettingsCustomization::MakeInstance)
                                              );
-    
+
     PropertyModule.NotifyCustomizationModuleChanged();
-    
+
     ISettingsModule* SettingsModule = FModuleManager::GetModulePtr<ISettingsModule>("Settings");
     if( SettingsModule != nullptr )
     {

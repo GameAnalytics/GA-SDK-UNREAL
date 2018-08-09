@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ModuleManager.h"
+#include "Modules/ModuleManager.h"
 
 /**
 * The public interface to this module
@@ -10,15 +10,14 @@
 class FGameAnalyticsEditor : public IModuleInterface
 {
 /*public:
-    
+
     static inline FGameAnalyticsEditor& Get()
     {
         return FModuleManager::LoadModuleChecked< FGameAnalyticsEditor >("GameAnalyticsEditor");
     }*/
-    
+
 public:
     /** IModuleInterface implementation */
     void StartupModule();
     void ShutdownModule();
 };
-

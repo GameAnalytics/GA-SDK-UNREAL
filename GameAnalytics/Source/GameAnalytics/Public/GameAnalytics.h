@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include "Object.h"
+#include "UObject/Object.h"
 #include "GameAnalytics.generated.h"
 
 UENUM()
