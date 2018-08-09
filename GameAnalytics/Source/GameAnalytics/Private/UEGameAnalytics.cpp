@@ -1,19 +1,19 @@
 #include "UEGameAnalytics.h"
-#include "IAnalyticsProvider.h"
+#include "Interfaces/IAnalyticsProvider.h"
 #include "GameAnalyticsProvider.h"
 #include "GameAnalytics.h"
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
 #if PLATFORM_WINDOWS
-#include "AllowWindowsPlatformTypes.h"
+#include "Windows/AllowWindowsPlatformTypes.h"
 #endif
 #include "../GA-SDK-CPP/GameAnalytics.h"
 #elif PLATFORM_HTML5
 #include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
 
-#include "EngineVersion.h"
+#include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("2.6.21")
+#define GA_VERSION TEXT("2.6.22")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 

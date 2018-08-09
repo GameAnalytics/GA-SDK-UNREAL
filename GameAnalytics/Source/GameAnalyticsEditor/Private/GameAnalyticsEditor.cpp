@@ -2,7 +2,7 @@
 
 #include "GameAnalyticsTargetSettingsCustomization.h"
 
-#include "ModuleInterface.h"
+#include "Modules/ModuleInterface.h"
 #include "ISettingsModule.h"
 #include "Modules/ModuleManager.h"
 
