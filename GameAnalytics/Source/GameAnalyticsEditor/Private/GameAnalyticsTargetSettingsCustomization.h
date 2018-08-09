@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EditorStyle.h"
+#include "Widgets/Input/SComboBox.h"
 #include "PropertyEditorModule.h"
 #include "GameAnalyticsProjectSettings.h"
 #include "IDetailCustomization.h"
@@ -110,7 +110,7 @@ private:
     TSharedRef<SWidget> UpdateGamesLinux() const;
     TSharedRef<SWidget> UpdateStudiosHtml5() const;
     TSharedRef<SWidget> UpdateGamesHtml5() const;
-    
+
     FORCEINLINE FString GetIniName() const { return FString::Printf(TEXT("%sDefaultEngine.ini"), *FPaths::SourceConfigDir()); }
 
 private:

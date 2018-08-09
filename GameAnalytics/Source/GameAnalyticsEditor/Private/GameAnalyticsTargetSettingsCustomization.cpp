@@ -1,6 +1,11 @@
 // Copyright 1998-2015 Epic Games, Inc. All Rights Reserved.
 
 #include "GameAnalyticsTargetSettingsCustomization.h"
+#include "Framework/Text/SlateHyperlinkRun.h"
+#include "Framework/MultiBox/MultiBoxBuilder.h"
+#include "Widgets/Input/SButton.h"
+#include "Widgets/Text/SRichTextBlock.h"
+#include "Widgets/Input/SEditableTextBox.h"
 #include "DetailLayoutBuilder.h"
 #include "DetailCategoryBuilder.h"
 #include "PropertyEditing.h"
