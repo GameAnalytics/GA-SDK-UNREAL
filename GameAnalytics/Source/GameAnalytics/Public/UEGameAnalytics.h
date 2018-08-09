@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "IAnalyticsProviderModule.h"
+#include "Interfaces/IAnalyticsProviderModule.h"
 #include "CoreMinimal.h"
-#include "Paths.h"
+#include "Misc/Paths.h"
 #include "Runtime/Launch/Resources/Version.h"
 #if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 15
 #include "Modules/ModuleManager.h"
