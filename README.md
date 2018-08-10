@@ -10,9 +10,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 >
 > Requirements:
 > * **Unreal Engine:** 4.15+  &nbsp;
-> * **iOS:** iOS 7+ &nbsp; 
+> * **iOS:** iOS 7+ &nbsp;
 > * **Android:** Android API Level 14 &nbsp;
-> * **Windows:** Minimum specs for UE4 &nbsp; 
+> * **Windows:** Minimum specs for UE4 &nbsp;
 > * **Mac:** Minimum specs for UE4 &nbsp;    
 >   
 > **Build size:**   
@@ -29,22 +29,7 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
-**2.6.25**
-* fixed more compile errors
-
-**2.6.24**
-* fixed more compile errors
-
-**2.6.23**
-* fixed more compile errors
-
-**2.6.22**
-* fixed more compile errors
-
-**2.6.21**
-* fixed more compile errors
-
-**2.6.20**
+**2.6.26**
 * fixed compile errors
 
 **2.6.19**

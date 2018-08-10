@@ -260,7 +260,7 @@ void UGameAnalytics::initialize(const char *gameKey, const char *gameSecret)
 #if PLATFORM_IOS
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt)
 {
-#if !WTIH_EDITOR
+#if !WITH_EDITOR
     GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, "");
 #endif
 }

@@ -2,7 +2,8 @@
 
 #pragma once
 
-#include "CoreUObject.h"
+#include "CoreMinimal.h"
+#include "Interfaces/IAnalyticsProviderModule.h"
 
 class FAnalyticsProviderGameAnalytics :
 	public IAnalyticsProvider
@@ -19,7 +20,7 @@ class FAnalyticsProviderGameAnalytics :
 	FString SessionId;
 	/** Holds the Age if set */
 	int32 Age;
-	
+
 
 	/** Settings for GameAnalytics, loaded from project configuration files */
 	FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings ProjectSettings;
@@ -55,7 +56,7 @@ public:
     virtual void RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy);
     virtual void RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes);
     virtual void RecordProgress(const FString& ProgressType, const TArray<FString>& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes);
-    
+
     template <typename EnumType>
     static FORCEINLINE EnumType GetEnumValueFromString(const FString& EnumName, const FString& String)
     {
