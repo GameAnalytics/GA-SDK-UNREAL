@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**2.6.24**
+* fixed more compile errors
+
 **2.6.23**
 * fixed more compile errors
 
