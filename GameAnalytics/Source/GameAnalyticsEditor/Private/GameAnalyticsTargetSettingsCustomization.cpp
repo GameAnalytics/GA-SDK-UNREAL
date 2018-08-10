@@ -12,7 +12,7 @@
 
 #include "ObjectEditorUtils.h"
 #include "IDocumentation.h"
-#include "OutputDevice.h"
+#include "Misc/OutputDevice.h"
 
 #include "Json.h"
 
