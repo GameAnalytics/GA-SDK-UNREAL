@@ -1,5 +1,3 @@
-#if PLATFORM_ANDROID
-
 #include "../GA-SDK-ANDROID/GameAnalyticsJNI.h"
 #include "Android/AndroidJNI.h"
 #include "Android/AndroidApplication.h"
@@ -400,7 +398,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
                 if(jMethod)
                 {
@@ -438,7 +436,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
                 if(jMethod)
                 {
@@ -481,7 +479,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;FLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;FLjava/lang/String;Ljava/lang/String;)V");
 
                 if(jMethod)
                 {
@@ -516,7 +514,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
                 if(jMethod)
                 {
@@ -551,7 +549,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;DLjava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;D)V");
 
                 if(jMethod)
                 {
@@ -586,7 +584,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
 
                 if(jMethod)
                 {
@@ -617,7 +615,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;DLjava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;D)V");
 
                 if(jMethod)
                 {
@@ -648,7 +646,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;)V");
 
                 if(jMethod)
                 {
@@ -977,5 +975,3 @@ namespace gameanalytics {
         }
 	}
 }
-
-#endif

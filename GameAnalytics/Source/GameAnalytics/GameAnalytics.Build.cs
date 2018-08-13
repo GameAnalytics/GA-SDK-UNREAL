@@ -32,6 +32,7 @@ namespace UnrealBuildTool.Rules
 
                 case UnrealTargetPlatform.Android:
                     PrivateDependencyModuleNames.Add("Launch");
+                    PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/Android"));
                     break;
 
                 case UnrealTargetPlatform.Mac:
@@ -54,6 +55,7 @@ namespace UnrealBuildTool.Rules
 
                 case UnrealTargetPlatform.IOS:
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "ios", "libGameAnalytics.a"));
+                    PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/IOS"));
                     PublicFrameworks.AddRange(
                         new string[] {
                             "AdSupport",
