@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/UObjectGlobals.h"
+#include "UObject/Package.h"
 #include "Interfaces/IAnalyticsProviderModule.h"
 
 class FAnalyticsProviderGameAnalytics :
