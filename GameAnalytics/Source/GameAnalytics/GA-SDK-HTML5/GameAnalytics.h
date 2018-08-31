@@ -31,7 +31,8 @@ extern "C"
     void js_setFacebookId(const char *facebookId);
     void js_setGender(int gender);
     void js_setBirthYear(int birthYear);
-    const char* js_getCommandCenterValueAsString(const char *key, const char *defaultValue);
+    const char* js_getCommandCenterValueAsString(const char *key);
+    const char* js_getCommandCenterValueAsStringWithDefaultValue(const char *key, const char *defaultValue);
     bool js_isCommandCenterReady();
     const char* js_getConfigurationsContentAsString();
 }

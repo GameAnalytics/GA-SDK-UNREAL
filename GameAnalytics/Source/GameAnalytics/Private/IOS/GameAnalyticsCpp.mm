@@ -258,3 +258,28 @@ void GameAnalyticsCpp::startSession() {
 void GameAnalyticsCpp::endSession() {
     [GameAnalytics endSession];
 }
+
+const char* GameAnalyticsCpp::getCommandCenterValueAsString(const char *key) {
+    NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
+    NSString *result = [GameAnalytics getCommandCenterValueAsString:keyString];
+
+    return result != nil ? [result UTF8String] : NULL;
+}
+
+const char* GameAnalyticsCpp::getCommandCenterValueAsString(const char *key, const char *defaultValue) {
+    NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
+    NSString *defaultValueString = key != NULL ? [NSString stringWithUTF8String:defaultValue] : nil;
+    NSString *result = [GameAnalytics getCommandCenterValueAsString:keyString defaultValue:defaultValueString];
+
+    return result != nil ? [result UTF8String] : NULL;
+}
+
+bool GameAnalyticsCpp::isCommandCenterReady() {
+    return [GameAnalytics isCommandCenterReady] ? true : false;
+}
+
+const char* GameAnalyticsCpp::getConfigurationsContentAsString() {
+    NSString *result = [GameAnalytics getCommandCenterConfigurations];
+
+    return result != nil ? [result UTF8String] : NULL;
+}

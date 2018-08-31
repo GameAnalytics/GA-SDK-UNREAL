@@ -10,8 +10,10 @@
 
 #if PLATFORM_LINUX
 using STRING = const char*;
+using RETURN_STRING = const char*;
 #else
 using STRING = const std::string&;
+using RETURN_STRING = std::string;
 #endif
 
 namespace gameanalytics
@@ -133,6 +135,11 @@ namespace gameanalytics
 
         static void startSession();
         static void endSession();
+
+        static RETURN_STRING getCommandCenterValueAsString(STRING key);
+        static RETURN_STRING getCommandCenterValueAsString(STRING key, STRING defaultValue);
+        static bool isCommandCenterReady();
+        static RETURN_STRING getConfigurationsContentAsString();
 
         // game state changes
         // will affect how session is started / ended

@@ -40,5 +40,10 @@ namespace gameanalytics {
 
 	    extern void jni_startSession();
 	    extern void jni_endSession();
+
+        extern const char* jni_getCommandCenterValueAsString(const char *key);
+        extern const char* jni_getCommandCenterValueAsStringWithDefaultValue(const char *key, const char *defaultValue);
+        extern bool jni_isCommandCenterReady();
+        extern const char* jni_getConfigurationsContentAsString();
 	}
 }

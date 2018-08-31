@@ -14,7 +14,7 @@
 
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("2.6.28")
+#define GA_VERSION TEXT("3.0.0")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 

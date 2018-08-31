@@ -115,11 +115,20 @@ var GameAnalyticsUnreal = {
     {
         gameanalytics.GameAnalytics.setBirthYear(birthYear);
     },
-    js_getCommandCenterValueAsString: function(key, defaultValue)
+    js_getCommandCenterValueAsString: function(key)
+    {
+        var returnStr = gameanalytics.GameAnalytics.getCommandCenterValueAsString(Pointer_stringify(key));
+        var bufferSize = lengthBytesUTF8(returnStr) + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
+        return buffer;
+    },
+    js_getCommandCenterValueAsStringWithDefaultValue: function(key, defaultValue)
     {
         var returnStr = gameanalytics.GameAnalytics.getCommandCenterValueAsString(Pointer_stringify(key), Pointer_stringify(defaultValue));
-        var buffer = _malloc(lengthBytesUTF8(returnStr) + 1);
-        writeStringToMemory(returnStr, buffer);
+        var bufferSize = lengthBytesUTF8(returnStr) + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
         return buffer;
     },
     js_isCommandCenterReady: function()
@@ -129,8 +138,9 @@ var GameAnalyticsUnreal = {
     js_getConfigurationsContentAsString: function()
     {
         var returnStr = gameanalytics.GameAnalytics.getConfigurationsContentAsString();
-        var buffer = _malloc(lengthBytesUTF8(returnStr) + 1);
-        writeStringToMemory(returnStr, buffer);
+        var bufferSize = lengthBytesUTF8(returnStr) + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
         return buffer;
     }
 };

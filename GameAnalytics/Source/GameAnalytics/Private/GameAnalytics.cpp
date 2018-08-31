@@ -589,3 +589,197 @@ void UGameAnalytics::endSession()
     js_endSession();
 #endif
 }
+
+const char* UGameAnalytics::getCommandCenterValueAsString(const char *key)
+{
+#if WITH_EDITOR
+    return "";
+#elif PLATFORM_IOS
+    return GameAnalyticsCpp::getCommandCenterValueAsString(key);
+#elif PLATFORM_ANDROID
+    return gameanalytics::jni_getCommandCenterValueAsString(key);
+#elif PLATFORM_LINUX
+    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS
+    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key).c_str();
+#elif PLATFORM_HTML5
+    return js_getCommandCenterValueAsString(key);
+#endif
+}
+
+const char* UGameAnalytics::getCommandCenterValueAsString(const char *key, const char *defaultValue)
+{
+#if WITH_EDITOR
+    return "";
+#elif PLATFORM_IOS
+    return GameAnalyticsCpp::getCommandCenterValueAsString(key, defaultValue);
+#elif PLATFORM_ANDROID
+    return gameanalytics::jni_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue);
+#elif PLATFORM_LINUX
+    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key, defaultValue);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS
+    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key, defaultValue).c_str();
+#elif PLATFORM_HTML5
+    return js_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue);
+#endif
+}
+
+bool UGameAnalytics::isCommandCenterReady()
+{
+#if WITH_EDITOR
+    return false;
+#elif PLATFORM_IOS
+    return GameAnalyticsCpp::isCommandCenterReady();
+#elif PLATFORM_ANDROID
+    return gameanalytics::jni_isCommandCenterReady();
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    return gameanalytics::GameAnalytics::isCommandCenterReady();
+#elif PLATFORM_HTML5
+    return js_isCommandCenterReady();
+#endif
+}
+
+const char* UGameAnalytics::getConfigurationsContentAsString()
+{
+#if WITH_EDITOR
+    return false;
+#elif PLATFORM_IOS
+    return GameAnalyticsCpp::getConfigurationsContentAsString();
+#elif PLATFORM_ANDROID
+    return gameanalytics::jni_getConfigurationsContentAsString();
+#elif PLATFORM_LINUX
+    return gameanalytics::GameAnalytics::getConfigurationsContentAsString();
+#elif PLATFORM_MAC || PLATFORM_WINDOWS
+    return gameanalytics::GameAnalytics::getConfigurationsContentAsString().c_str();
+#elif PLATFORM_HTML5
+    return js_getConfigurationsContentAsString();
+#endif
+}
+
+// Blueprint functions
+
+void UGameAnalytics::AddBusinessEventIOS(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt/*, const char *fields*/)
+{
+#if PLATFORM_IOS
+    addBusinessEvent(TCHAR_TO_ANSI(*Currency), Amount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType), TCHAR_TO_ANSI(*Receipt));
+#endif
+}
+
+void UGameAnalytics::AddBusinessEventAndAutoFetchReceipt(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType/*, const char *fields*/)
+{
+#if PLATFORM_IOS
+    addBusinessEventAndAutoFetchReceipt(TCHAR_TO_ANSI(*Currency), Amount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
+#endif
+}
+
+void UGameAnalytics::AddBusinessEventAndroid(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature/*, const char *fields*/)
+{
+#if PLATFORM_ANDROID
+    addBusinessEvent(TCHAR_TO_ANSI(*Currency), Amount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType), TCHAR_TO_ANSI(*Receipt), TCHAR_TO_ANSI(*Signature));
+#endif
+}
+
+void UGameAnalytics::AddBusinessEvent(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType/*, const char *fields*/)
+{
+    addBusinessEvent(TCHAR_TO_ANSI(*Currency), Amount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
+}
+
+void UGameAnalytics::AddResourceEvent(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId/*, const char *fields*/)
+{
+    addResourceEvent(FlowType, TCHAR_TO_ANSI(*Currency), Amount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId));
+}
+
+void UGameAnalytics::AddProgressionEventWithOne(EGAProgressionStatus ProgressionStatus, const FString& Progression01/*, const char *fields*/)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*Progression01));
+}
+
+void UGameAnalytics::AddProgressionEventWithOneAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score/*, const char *fields*/)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*Progression01), Score);
+}
+
+void UGameAnalytics::AddProgressionEventWithOneAndTwo(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02/*, const char *fields*/)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*Progression01), TCHAR_TO_ANSI(*Progression02));
+}
+
+void UGameAnalytics::AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score/*, const char *fields*/)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*Progression01), TCHAR_TO_ANSI(*Progression02), Score);
+}
+
+void UGameAnalytics::AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03/*, const char *fields*/)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*Progression01), TCHAR_TO_ANSI(*Progression02), TCHAR_TO_ANSI(*Progression03));
+}
+
+void UGameAnalytics::AddProgressionEvenWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score/*, const char *fields*/)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*Progression01), TCHAR_TO_ANSI(*Progression02), TCHAR_TO_ANSI(*Progression03), Score);
+}
+
+void UGameAnalytics::AddDesignEvent(const FString& EventId/*, const char *fields*/)
+{
+    addDesignEvent(TCHAR_TO_ANSI(*EventId));
+}
+
+void UGameAnalytics::AddDesignEventWithValue(const FString& EventId, float Value/*, const char *fields*/)
+{
+    addDesignEvent(TCHAR_TO_ANSI(*EventId), Value);
+}
+
+void UGameAnalytics::AddErrorEvent(EGAErrorSeverity Severity, const FString& Message/*, const char *fields*/)
+{
+    addErrorEvent(Severity, TCHAR_TO_ANSI(*Message));
+}
+
+void UGameAnalytics::SetCustomDimension01(const FString& CustomDimension)
+{
+    setCustomDimension01(TCHAR_TO_ANSI(*CustomDimension));
+}
+
+void UGameAnalytics::SetCustomDimension02(const FString& CustomDimension)
+{
+    setCustomDimension02(TCHAR_TO_ANSI(*CustomDimension));
+}
+
+void UGameAnalytics::SetCustomDimension03(const FString& CustomDimension)
+{
+    setCustomDimension03(TCHAR_TO_ANSI(*CustomDimension));
+}
+
+void UGameAnalytics::SetFacebookId(const FString& FacebookId)
+{
+    setFacebookId(TCHAR_TO_ANSI(*FacebookId));
+}
+
+void UGameAnalytics::SetGender(EGAGender Gender)
+{
+    setGender(Gender);
+}
+
+void UGameAnalytics::SetBirthYear(int BirthYear)
+{
+    setBirthYear(BirthYear);
+}
+
+FString UGameAnalytics::GetCommandCenterValueAsString(const FString& Key)
+{
+	return FString(getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key)));
+}
+
+FString UGameAnalytics::GetCommandCenterValueAsStringWithDefaultValue(const FString& Key, const FString& DefaultValue)
+{
+	return FString(getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key), TCHAR_TO_ANSI(*DefaultValue)));
+}
+
+bool UGameAnalytics::IsCommandCenterReady()
+{
+	return isCommandCenterReady();
+}
+
+FString UGameAnalytics::GetConfigurationsContentAsString()
+{
+	return FString(getConfigurationsContentAsString());
+}
