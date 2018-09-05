@@ -642,7 +642,7 @@ bool UGameAnalytics::isCommandCenterReady()
 const char* UGameAnalytics::getConfigurationsContentAsString()
 {
 #if WITH_EDITOR
-    return false;
+    return "";
 #elif PLATFORM_IOS
     return GameAnalyticsCpp::getConfigurationsContentAsString();
 #elif PLATFORM_ANDROID
