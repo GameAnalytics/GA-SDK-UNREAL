@@ -14,7 +14,7 @@
 
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("3.0.1")
+#define GA_VERSION TEXT("3.0.2")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -30,6 +30,7 @@ void FAnalyticsGameAnalytics::ShutdownModule()
 {
     if (GameAnalyticsProvider.IsValid())
     {
+        UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("FAnalyticsGameAnalytics Destructor"));
         GameAnalyticsProvider->EndSession();
     }
 }
@@ -199,14 +200,15 @@ FAnalyticsProviderGameAnalytics::FAnalyticsProviderGameAnalytics() :
 
 FAnalyticsProviderGameAnalytics::~FAnalyticsProviderGameAnalytics()
 {
-    if (bHasSessionStarted)
-    {
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("FAnalyticsGameAnalytics ~FAnalyticsProviderGameAnalytics"));
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
         gameanalytics::GameAnalytics::onQuit();
 #else
-        EndSession();
+        if (bHasSessionStarted)
+        {
+            EndSession();
+        }
 #endif
-    }
 }
 
 bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventAttribute>& Attributes)

@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**3.0.2**
+* fixed thread hanging on shutdown for desktop platforms
+
 **3.0.1**
 * fixed compile errors
 
