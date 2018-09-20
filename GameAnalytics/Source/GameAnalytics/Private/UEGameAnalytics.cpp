@@ -14,7 +14,7 @@
 
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("3.0.2")
+#define GA_VERSION TEXT("3.0.3")
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -201,7 +201,8 @@ FAnalyticsProviderGameAnalytics::FAnalyticsProviderGameAnalytics() :
 FAnalyticsProviderGameAnalytics::~FAnalyticsProviderGameAnalytics()
 {
     UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("FAnalyticsGameAnalytics ~FAnalyticsProviderGameAnalytics"));
-#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+#if WITH_EDITOR
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
         gameanalytics::GameAnalytics::onQuit();
 #else
         if (bHasSessionStarted)
@@ -217,7 +218,8 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
     {
         ProjectSettings = FAnalyticsGameAnalytics::LoadProjectSettings();
 
-#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+#if WITH_EDITOR
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
 #if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
         gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_ANSI(*FPaths::ProjectSavedDir()));
 #else
@@ -414,7 +416,8 @@ void FAnalyticsProviderGameAnalytics::EndSession()
         }
         else
         {
-#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+#if WITH_EDITOR
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
             gameanalytics::GameAnalytics::onSuspend();
 #elif PLATFORM_HTML5
             js_onStop();
