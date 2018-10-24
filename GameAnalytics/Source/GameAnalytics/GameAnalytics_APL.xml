@@ -17,7 +17,7 @@
 
     <!-- optional files or directories to copy to Intermediate/Android/APK -->
     <resourceCopies>
-        <copyFile src="$S(PluginDir)/../../Build/Android/libs/gameanalytics.jar" dst="$S(BuildDir)/libs/gameanalytics.jar" />
+        <copyFile src="$S(PluginDir)/GA-SDK-ANDROID/lib/gameanalytics.jar" dst="$S(BuildDir)/libs/gameanalytics.jar" />
     </resourceCopies>
 
     <!-- optional updates applied to AndroidManifest.xml -->
