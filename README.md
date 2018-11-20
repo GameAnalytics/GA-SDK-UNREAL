@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**3.0.6**
+* fixed business event validation
+
 **3.0.5**
 * updated to support unreal engine 4.21
 
