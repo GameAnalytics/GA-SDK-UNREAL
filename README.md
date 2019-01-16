@@ -29,6 +29,9 @@ For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-S
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**3.1.0**
+* added enable/disable event submission function
+
 **3.0.6**
 * fixed business event validation
 

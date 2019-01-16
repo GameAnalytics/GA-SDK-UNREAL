@@ -25,6 +25,7 @@ extern "C"
     void js_setEnabledInfoLog(bool enabled);
     void js_setEnabledVerboseLog(bool enabled);
     void js_setManualSessionHandling(bool enabled);
+    void js_setEventSubmission(bool enabled);
     void js_startSession();
     void js_endSession();
     void js_onStop();

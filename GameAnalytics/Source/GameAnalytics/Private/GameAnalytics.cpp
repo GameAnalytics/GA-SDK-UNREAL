@@ -456,6 +456,20 @@ void UGameAnalytics::setEnabledManualSessionHandling(bool flag)
 #endif
 }
 
+void UGameAnalytics::setEnabledEventSubmission(bool flag)
+{
+#if WITH_EDITOR
+#elif PLATFORM_IOS
+    GameAnalyticsCpp::setEnabledEventSubmission(flag);
+#elif PLATFORM_ANDROID
+    gameanalytics::jni_setEnabledEventSubmission(flag);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    gameanalytics::GameAnalytics::setEnabledEventSubmission(flag);
+#elif PLATFORM_HTML5
+    js_setEventSubmission(flag);
+#endif
+}
+
 void UGameAnalytics::setCustomDimension01(const char *customDimension)
 {
 #if WITH_EDITOR
