@@ -4,6 +4,8 @@ GameAnalytics SDK for the Unreal Engine.
 Documentation can be found [here](https://gameanalytics.com/docs/unreal4-sdk).  
 For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-SDK-UNREAL/tree/master_uwp) branch.
 
+If you have any issues or feedback regarding the SDK, please contact our friendly support team [here](https://gameanalytics.com/contact).
+
 > :information_source:
 >
 > The Unreal SDK include support for **iOS**, **Android**, **HTML5**, **Windows**, **Linux** and **Mac** platforms
