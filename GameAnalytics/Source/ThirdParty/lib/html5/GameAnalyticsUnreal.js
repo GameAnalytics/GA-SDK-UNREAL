@@ -61,7 +61,7 @@ var GameAnalyticsUnreal = {
     },
     js_addProgressionEvent: function(progressionStatus, progression01, progression02, progression03, fields)
     {
-        gameanalytics.GameAnalytics.addProgressionEvent(progressionStatus, Pointer_stringify(progression01), Pointer_stringify(progression02), Pointer_stringify(progression03/*, JSON.parse(Pointer_stringify(fields))*/);
+        gameanalytics.GameAnalytics.addProgressionEvent(progressionStatus, Pointer_stringify(progression01), Pointer_stringify(progression02), Pointer_stringify(progression03)/*, JSON.parse(Pointer_stringify(fields))*/);
     },
     js_addProgressionEventWithScore: function(progressionStatus, progression01, progression02, progression03, score, fields)
     {
