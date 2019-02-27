@@ -32,7 +32,8 @@ Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
 **3.1.1**
-* html5 build fix:various other bug fixes
+* html5 build fix
+* various other bug fixes
 
 **3.1.0**
 * added enable/disable event submission function
