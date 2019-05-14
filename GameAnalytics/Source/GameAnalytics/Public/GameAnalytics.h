@@ -56,12 +56,12 @@ class GAMEANALYTICS_API UGameAnalytics : public UObject
 
 public:
 
-    static void configureAvailableCustomDimensions01(const std::vector<std::string>& list);
-    static void configureAvailableCustomDimensions02(const std::vector<std::string>& list);
-    static void configureAvailableCustomDimensions03(const std::vector<std::string>& list);
+    static void configureAvailableCustomDimensions01(const TArray<FString>& list);
+    static void configureAvailableCustomDimensions02(const TArray<FString>& list);
+    static void configureAvailableCustomDimensions03(const TArray<FString>& list);
 
-    static void configureAvailableResourceCurrencies(const std::vector<std::string>& list);
-    static void configureAvailableResourceItemTypes(const std::vector<std::string>& list);
+    static void configureAvailableResourceCurrencies(const TArray<FString>& list);
+    static void configureAvailableResourceItemTypes(const TArray<FString>& list);
 
     static void configureBuild(const char *build);
     static void configureUserId(const char *userId);

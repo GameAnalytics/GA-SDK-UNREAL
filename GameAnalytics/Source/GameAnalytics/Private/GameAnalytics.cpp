@@ -12,31 +12,38 @@
 #include "Json.h"
 #include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
+#include "Misc/EngineVersion.h"
+
+#define GA_VERSION TEXT("3.1.3")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 }
 
-void UGameAnalytics::configureAvailableCustomDimensions01(const std::vector<std::string>& list)
+void UGameAnalytics::configureAvailableCustomDimensions01(const TArray<FString>& list)
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::configureAvailableCustomDimensions01(list);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_configureAvailableCustomDimensions01(list);
-#elif PLATFORM_LINUX
-    TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
+    std::vector<std::string> v;
+    for (const FString& item : list)
     {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
-        array.Add(JsonValueString);
+        v.push_back(TCHAR_TO_ANSI(*item));
     }
-    FString arrayString;
-    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-    FJsonSerializer::Serialize(array, Writer);
-    gameanalytics::GameAnalytics::configureAvailableCustomDimensions01(TCHAR_TO_ANSI(*arrayString));
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
-    gameanalytics::GameAnalytics::configureAvailableCustomDimensions01(list);
+    GameAnalyticsCpp::configureAvailableCustomDimensions01(v);
+#elif PLATFORM_ANDROID
+    std::vector<std::string> v;
+    for (const FString& item : list)
+    {
+        v.push_back(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::jni_configureAvailableCustomDimensions01(v);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    gameanalytics::StringVector v;
+    for (const FString& item : list)
+    {
+        v.add(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::GameAnalytics::configureAvailableCustomDimensions01(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
@@ -51,26 +58,30 @@ void UGameAnalytics::configureAvailableCustomDimensions01(const std::vector<std:
 #endif
 }
 
-void UGameAnalytics::configureAvailableCustomDimensions02(const std::vector<std::string>& list)
+void UGameAnalytics::configureAvailableCustomDimensions02(const TArray<FString>& list)
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::configureAvailableCustomDimensions02(list);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_configureAvailableCustomDimensions02(list);
-#elif PLATFORM_LINUX
-    TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
+    std::vector<std::string> v;
+    for (const FString& item : list)
     {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
-        array.Add(JsonValueString);
+        v.push_back(TCHAR_TO_ANSI(*item));
     }
-    FString arrayString;
-    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-    FJsonSerializer::Serialize(array, Writer);
-    gameanalytics::GameAnalytics::configureAvailableCustomDimensions02(TCHAR_TO_ANSI(*arrayString));
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
-    gameanalytics::GameAnalytics::configureAvailableCustomDimensions02(list);
+    GameAnalyticsCpp::configureAvailableCustomDimensions02(v);
+#elif PLATFORM_ANDROID
+    std::vector<std::string> v;
+    for (const FString& item : list)
+    {
+        v.push_back(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::jni_configureAvailableCustomDimensions02(v);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    gameanalytics::StringVector v;
+    for (const FString& item : list)
+    {
+        v.add(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::GameAnalytics::configureAvailableCustomDimensions02(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
@@ -85,26 +96,30 @@ void UGameAnalytics::configureAvailableCustomDimensions02(const std::vector<std:
 #endif
 }
 
-void UGameAnalytics::configureAvailableCustomDimensions03(const std::vector<std::string>& list)
+void UGameAnalytics::configureAvailableCustomDimensions03(const TArray<FString>& list)
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::configureAvailableCustomDimensions03(list);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_configureAvailableCustomDimensions03(list);
-#elif PLATFORM_LINUX
-    TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
+    std::vector<std::string> v;
+    for (const FString& item : list)
     {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
-        array.Add(JsonValueString);
+        v.push_back(TCHAR_TO_ANSI(*item));
     }
-    FString arrayString;
-    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-    FJsonSerializer::Serialize(array, Writer);
-    gameanalytics::GameAnalytics::configureAvailableCustomDimensions03(TCHAR_TO_ANSI(*arrayString));
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
-    gameanalytics::GameAnalytics::configureAvailableCustomDimensions03(list);
+    GameAnalyticsCpp::configureAvailableCustomDimensions03(v);
+#elif PLATFORM_ANDROID
+    std::vector<std::string> v;
+    for (const FString& item : list)
+    {
+        v.push_back(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::jni_configureAvailableCustomDimensions03(v);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    gameanalytics::StringVector v;
+    for (const FString& item : list)
+    {
+        v.add(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::GameAnalytics::configureAvailableCustomDimensions03(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
@@ -119,26 +134,30 @@ void UGameAnalytics::configureAvailableCustomDimensions03(const std::vector<std:
 #endif
 }
 
-void UGameAnalytics::configureAvailableResourceCurrencies(const std::vector<std::string>& list)
+void UGameAnalytics::configureAvailableResourceCurrencies(const TArray<FString>& list)
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::configureAvailableResourceCurrencies(list);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_configureAvailableResourceCurrencies(list);
-#elif PLATFORM_LINUX
-    TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
+    std::vector<std::string> v;
+    for (const FString& item : list)
     {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
-        array.Add(JsonValueString);
+        v.push_back(TCHAR_TO_ANSI(*item));
     }
-    FString arrayString;
-    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-    FJsonSerializer::Serialize(array, Writer);
-    gameanalytics::GameAnalytics::configureAvailableResourceCurrencies(TCHAR_TO_ANSI(*arrayString));
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
-    gameanalytics::GameAnalytics::configureAvailableResourceCurrencies(list);
+    GameAnalyticsCpp::configureAvailableResourceCurrencies(v);
+#elif PLATFORM_ANDROID
+    std::vector<std::string> v;
+    for (const FString& item : list)
+    {
+        v.push_back(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::jni_configureAvailableResourceCurrencies(v);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    gameanalytics::StringVector v;
+    for (const FString& item : list)
+    {
+        v.add(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::GameAnalytics::configureAvailableResourceCurrencies(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
@@ -153,13 +172,23 @@ void UGameAnalytics::configureAvailableResourceCurrencies(const std::vector<std:
 #endif
 }
 
-void UGameAnalytics::configureAvailableResourceItemTypes(const std::vector<std::string>& list)
+void UGameAnalytics::configureAvailableResourceItemTypes(const TArray<FString>& list)
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::configureAvailableResourceItemTypes(list);
+    std::vector<std::string> v;
+    for (const FString& item : list)
+    {
+        v.push_back(TCHAR_TO_ANSI(*item));
+    }
+    GameAnalyticsCpp::configureAvailableResourceItemTypes(v);
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_configureAvailableResourceItemTypes(list);
+    std::vector<std::string> v;
+    for (const FString& item : list)
+    {
+        v.push_back(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::jni_configureAvailableResourceItemTypes(v);
 #elif PLATFORM_LINUX
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
@@ -171,8 +200,13 @@ void UGameAnalytics::configureAvailableResourceItemTypes(const std::vector<std::
     TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
     FJsonSerializer::Serialize(array, Writer);
     gameanalytics::GameAnalytics::configureAvailableResourceItemTypes(TCHAR_TO_ANSI(*arrayString));
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
-    gameanalytics::GameAnalytics::configureAvailableResourceItemTypes(list);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    gameanalytics::StringVector v;
+    for (const FString& item : list)
+    {
+        v.add(TCHAR_TO_ANSI(*item));
+    }
+    gameanalytics::GameAnalytics::configureAvailableResourceItemTypes(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
     for (std::string s : list)
@@ -245,6 +279,12 @@ void UGameAnalytics::configureGameEngineVersion(const char *gameEngineVersion)
 
 void UGameAnalytics::initialize(const char *gameKey, const char *gameSecret)
 {
+    ////// Configure engine version
+    FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
+    UGameAnalytics::configureGameEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
+    FString SdkVersionString = FString::Printf(TEXT("unreal %s"), GA_VERSION);
+    UGameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_ANSI(*SdkVersionString));
+
 #if WITH_EDITOR
 #elif PLATFORM_IOS
     GameAnalyticsCpp::initialize(gameKey, gameSecret);
@@ -534,9 +574,9 @@ void UGameAnalytics::setGender(EGAGender gender)
         {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-        	GameAnalyticsCpp::setGender("male");
+            GameAnalyticsCpp::setGender("male");
 #elif PLATFORM_ANDROID
-        	gameanalytics::jni_setGender((int)gender);
+            gameanalytics::jni_setGender((int)gender);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
             gameanalytics::GameAnalytics::setGender((gameanalytics::EGAGender)((int)gender));
 #elif PLATFORM_HTML5
@@ -549,9 +589,9 @@ void UGameAnalytics::setGender(EGAGender gender)
         {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-        	GameAnalyticsCpp::setGender("female");
+            GameAnalyticsCpp::setGender("female");
 #elif PLATFORM_ANDROID
-        	gameanalytics::jni_setGender((int)gender);
+            gameanalytics::jni_setGender((int)gender);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
             gameanalytics::GameAnalytics::setGender((gameanalytics::EGAGender)((int)gender));
 #elif PLATFORM_HTML5
@@ -612,10 +652,8 @@ const char* UGameAnalytics::getCommandCenterValueAsString(const char *key)
     return GameAnalyticsCpp::getCommandCenterValueAsString(key);
 #elif PLATFORM_ANDROID
     return gameanalytics::jni_getCommandCenterValueAsString(key);
-#elif PLATFORM_LINUX
-    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
-    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key).c_str();
+#elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
+    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key).data();
 #elif PLATFORM_HTML5
     return js_getCommandCenterValueAsString(key);
 #endif
@@ -629,10 +667,8 @@ const char* UGameAnalytics::getCommandCenterValueAsString(const char *key, const
     return GameAnalyticsCpp::getCommandCenterValueAsString(key, defaultValue);
 #elif PLATFORM_ANDROID
     return gameanalytics::jni_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue);
-#elif PLATFORM_LINUX
-    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key, defaultValue);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
-    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key, defaultValue).c_str();
+#elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
+    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key, defaultValue).data();
 #elif PLATFORM_HTML5
     return js_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue);
 #endif
@@ -661,10 +697,8 @@ const char* UGameAnalytics::getConfigurationsContentAsString()
     return GameAnalyticsCpp::getConfigurationsContentAsString();
 #elif PLATFORM_ANDROID
     return gameanalytics::jni_getConfigurationsContentAsString();
-#elif PLATFORM_LINUX
-    return gameanalytics::GameAnalytics::getConfigurationsContentAsString();
-#elif PLATFORM_MAC || PLATFORM_WINDOWS
-    return gameanalytics::GameAnalytics::getConfigurationsContentAsString().c_str();
+#elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
+    return gameanalytics::GameAnalytics::getConfigurationsContentAsString().data();
 #elif PLATFORM_HTML5
     return js_getConfigurationsContentAsString();
 #endif
@@ -780,20 +814,20 @@ void UGameAnalytics::SetBirthYear(int BirthYear)
 
 FString UGameAnalytics::GetCommandCenterValueAsString(const FString& Key)
 {
-	return FString(getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key)));
+    return FString(getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key)));
 }
 
 FString UGameAnalytics::GetCommandCenterValueAsStringWithDefaultValue(const FString& Key, const FString& DefaultValue)
 {
-	return FString(getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key), TCHAR_TO_ANSI(*DefaultValue)));
+    return FString(getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key), TCHAR_TO_ANSI(*DefaultValue)));
 }
 
 bool UGameAnalytics::IsCommandCenterReady()
 {
-	return isCommandCenterReady();
+    return isCommandCenterReady();
 }
 
 FString UGameAnalytics::GetConfigurationsContentAsString()
 {
-	return FString(getConfigurationsContentAsString());
+    return FString(getConfigurationsContentAsString());
 }

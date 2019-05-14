@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**3.1.3**
+* fixed initialize method to be able to be called from code
+
 **3.1.2**
 * added support for unreal engine v4.22
 

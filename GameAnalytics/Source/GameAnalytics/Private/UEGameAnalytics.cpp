@@ -12,10 +12,6 @@
 #include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
 
-#include "Misc/EngineVersion.h"
-
-#define GA_VERSION TEXT("3.1.2")
-
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
 IMPLEMENT_MODULE( FAnalyticsGameAnalytics, GameAnalytics )
@@ -231,12 +227,6 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         UGameAnalytics::setEnabledInfoLog(ProjectSettings.InfoLogBuild);
         UGameAnalytics::setEnabledVerboseLog(ProjectSettings.VerboseLogBuild);
 
-        ////// Configure engine version
-        FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
-        UGameAnalytics::configureGameEngineVersion(TCHAR_TO_ANSI(*EngineVersionString));
-        FString SdkVersionString = FString::Printf(TEXT("unreal %s"), GA_VERSION);
-        UGameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_ANSI(*SdkVersionString));
-
         //// Configure build version
 #if PLATFORM_IOS
         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.IosBuild));
@@ -255,53 +245,28 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         ////// Configure available virtual currencies and item types
         if (ProjectSettings.ResourceCurrencies.Num() > 0)
         {
-            std::vector<std::string> currencies;
-            for (const FString& currency : ProjectSettings.ResourceCurrencies)
-            {
-                currencies.push_back(TCHAR_TO_ANSI(*currency));
-            }
-            UGameAnalytics::configureAvailableResourceCurrencies(currencies);
+            UGameAnalytics::configureAvailableResourceCurrencies(ProjectSettings.ResourceCurrencies);
         }
 
         if (ProjectSettings.ResourceItemTypes.Num() > 0)
         {
-            std::vector<std::string> resourceItem;
-            for (const FString& item : ProjectSettings.ResourceItemTypes)
-            {
-                resourceItem.push_back(TCHAR_TO_ANSI(*item));
-            }
-            UGameAnalytics::configureAvailableResourceItemTypes(resourceItem);
+            UGameAnalytics::configureAvailableResourceItemTypes(ProjectSettings.ResourceItemTypes);
         }
 
         // Configure available custom dimensions
         if (ProjectSettings.CustomDimensions01.Num() > 0)
         {
-            std::vector<std::string> customDimension01;
-            for (const FString& dimension01 : ProjectSettings.CustomDimensions01)
-            {
-                customDimension01.push_back(TCHAR_TO_ANSI(*dimension01));
-            }
-            UGameAnalytics::configureAvailableCustomDimensions01(customDimension01);
+            UGameAnalytics::configureAvailableCustomDimensions01(ProjectSettings.CustomDimensions01);
         }
 
         if (ProjectSettings.CustomDimensions02.Num() > 0)
         {
-            std::vector<std::string> customDimension02;
-            for (const FString& dimension02 : ProjectSettings.CustomDimensions02)
-            {
-                customDimension02.push_back(TCHAR_TO_ANSI(*dimension02));
-            }
-            UGameAnalytics::configureAvailableCustomDimensions02(customDimension02);
+            UGameAnalytics::configureAvailableCustomDimensions02(ProjectSettings.CustomDimensions02);
         }
 
         if (ProjectSettings.CustomDimensions03.Num() > 0)
         {
-            std::vector<std::string> customDimension03;
-            for (const FString& dimension03 : ProjectSettings.CustomDimensions03)
-            {
-                customDimension03.push_back(TCHAR_TO_ANSI(*dimension03));
-            }
-            UGameAnalytics::configureAvailableCustomDimensions03(customDimension03);
+            UGameAnalytics::configureAvailableCustomDimensions03(ProjectSettings.CustomDimensions03);
         }
 
         if(ProjectSettings.UseManualSessionHandling)
