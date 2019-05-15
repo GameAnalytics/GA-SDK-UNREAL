@@ -10,12 +10,12 @@
 #define LOG_TAG "GameAnalytics"
 
 namespace gameanalytics {
-	extern "C"
-	{
-		void jni_configureAvailableCustomDimensions01(const std::vector<std::string>& list)
-		{
+    extern "C"
+    {
+        void jni_configureAvailableCustomDimensions01(const std::vector<std::string>& list)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
-		    jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
+            jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableCustomDimensions01";
 
             if(jClass)
@@ -56,10 +56,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-		}
+        }
 
-	    void jni_configureAvailableCustomDimensions02(const std::vector<std::string>& list)
-	    {
+        void jni_configureAvailableCustomDimensions02(const std::vector<std::string>& list)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableCustomDimensions02";
@@ -102,10 +102,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_configureAvailableCustomDimensions03(const std::vector<std::string>& list)
-	    {
+        void jni_configureAvailableCustomDimensions03(const std::vector<std::string>& list)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableCustomDimensions03";
@@ -148,10 +148,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_configureAvailableResourceCurrencies(const std::vector<std::string>& list)
-	    {
+        void jni_configureAvailableResourceCurrencies(const std::vector<std::string>& list)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableResourceCurrencies";
@@ -194,10 +194,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_configureAvailableResourceItemTypes(const std::vector<std::string>& list)
-	    {
+        void jni_configureAvailableResourceItemTypes(const std::vector<std::string>& list)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureAvailableResourceItemTypes";
@@ -240,10 +240,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_configureBuild(const char *build)
-	    {
+        void jni_configureBuild(const char *build)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureBuild";
@@ -269,10 +269,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_configureUserId(const char *userId)
-	    {
+        void jni_configureUserId(const char *userId)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureUserId";
@@ -298,10 +298,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_configureSdkGameEngineVersion(const char *gameEngineSdkVersion)
-	    {
+        void jni_configureSdkGameEngineVersion(const char *gameEngineSdkVersion)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureSdkGameEngineVersion";
@@ -327,10 +327,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_configureGameEngineVersion(const char *gameEngineSdkVersion)
-	    {
+        void jni_configureGameEngineVersion(const char *gameEngineSdkVersion)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "configureGameEngineVersion";
@@ -356,10 +356,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_initialize(const char *gameKey, const char *gameSecret)
-	    {
+        void jni_initialize(const char *gameKey, const char *gameSecret)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "initializeWithGameKey";
@@ -388,10 +388,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *fields)
-	    {
+        void jni_addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *fields)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addBusinessEventWithCurrency";
@@ -425,11 +425,11 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_addBusinessEventWithReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType,
-	    	const char *receipt, const char *store, const char *signature, const char *fields)
-	    {
+        void jni_addBusinessEventWithReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType,
+            const char *receipt, const char *store, const char *signature, const char *fields)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addBusinessEventWithCurrency";
@@ -469,10 +469,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_addResourceEvent(int flowType, const char *currency, float amount, const char *itemType, const char *itemId, const char *fields)
-	    {
+        void jni_addResourceEvent(int flowType, const char *currency, float amount, const char *itemType, const char *itemId, const char *fields)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addResourceEventWithFlowType";
@@ -504,10 +504,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_addProgressionEvent(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, const char *fields)
-	    {
+        void jni_addProgressionEvent(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, const char *fields)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addProgressionEventWithProgressionStatus";
@@ -539,10 +539,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_addProgressionEventWithScore(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const char *fields)
-	    {
+        void jni_addProgressionEventWithScore(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const char *fields)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addProgressionEventWithProgressionStatus";
@@ -574,10 +574,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_addDesignEvent(const char *eventId, const char *fields)
-	    {
+        void jni_addDesignEvent(const char *eventId, const char *fields)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addDesignEventWithEventId";
@@ -605,10 +605,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_addDesignEventWithValue(const char *eventId, float value, const char *fields)
-	    {
+        void jni_addDesignEventWithValue(const char *eventId, float value, const char *fields)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addDesignEventWithEventId";
@@ -636,10 +636,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_addErrorEvent(int severity, const char *message, const char *fields)
-	    {
+        void jni_addErrorEvent(int severity, const char *message, const char *fields)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "addErrorEventWithSeverity";
@@ -667,10 +667,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_setEnabledInfoLog(bool flag)
-	    {
+        void jni_setEnabledInfoLog(bool flag)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setEnabledInfoLog";
@@ -694,10 +694,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_setEnabledVerboseLog(bool flag)
-	    {
+        void jni_setEnabledVerboseLog(bool flag)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setEnabledVerboseLog";
@@ -721,7 +721,7 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
         void jni_setEnabledManualSessionHandling(bool flag)
         {
@@ -777,8 +777,8 @@ namespace gameanalytics {
             }
         }
 
-	    void jni_setCustomDimension01(const char *customDimension)
-	    {
+        void jni_setCustomDimension01(const char *customDimension)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setCustomDimension01";
@@ -804,10 +804,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_setCustomDimension02(const char *customDimension)
-	    {
+        void jni_setCustomDimension02(const char *customDimension)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setCustomDimension02";
@@ -833,10 +833,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_setCustomDimension03(const char *customDimension)
-	    {
+        void jni_setCustomDimension03(const char *customDimension)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setCustomDimension03";
@@ -862,10 +862,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_setFacebookId(const char *facebookId)
-	    {
+        void jni_setFacebookId(const char *facebookId)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setFacebookId";
@@ -891,10 +891,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_setGender(int gender)
-	    {
+        void jni_setGender(int gender)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setGender";
@@ -918,10 +918,10 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
-	    void jni_setBirthYear(int birthYear)
-	    {
+        void jni_setBirthYear(int birthYear)
+        {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
             const char* strMethod = "setBirthYear";
@@ -945,7 +945,7 @@ namespace gameanalytics {
             {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
-	    }
+        }
 
         void jni_startSession()
         {
@@ -1135,5 +1135,5 @@ namespace gameanalytics {
 
             return result.c_str();
         }
-	}
+    }
 }

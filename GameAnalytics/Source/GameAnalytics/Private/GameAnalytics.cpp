@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("3.1.3")
+#define GA_VERSION TEXT("3.1.4")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -46,9 +46,9 @@ void UGameAnalytics::configureAvailableCustomDimensions01(const TArray<FString>&
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions01(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
+    for (const FString& s : list)
     {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
+        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
         array.Add(JsonValueString);
     }
     FString arrayString;
@@ -84,9 +84,9 @@ void UGameAnalytics::configureAvailableCustomDimensions02(const TArray<FString>&
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions02(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
+    for (const FString& s : list)
     {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
+        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
         array.Add(JsonValueString);
     }
     FString arrayString;
@@ -122,9 +122,9 @@ void UGameAnalytics::configureAvailableCustomDimensions03(const TArray<FString>&
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions03(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
+    for (const FString& s : list)
     {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
+        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
         array.Add(JsonValueString);
     }
     FString arrayString;
@@ -160,9 +160,9 @@ void UGameAnalytics::configureAvailableResourceCurrencies(const TArray<FString>&
     gameanalytics::GameAnalytics::configureAvailableResourceCurrencies(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
+    for (const FString& s : list)
     {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
+        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
         array.Add(JsonValueString);
     }
     FString arrayString;
@@ -189,17 +189,6 @@ void UGameAnalytics::configureAvailableResourceItemTypes(const TArray<FString>& 
         v.push_back(TCHAR_TO_ANSI(*item));
     }
     gameanalytics::jni_configureAvailableResourceItemTypes(v);
-#elif PLATFORM_LINUX
-    TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
-    {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
-        array.Add(JsonValueString);
-    }
-    FString arrayString;
-    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-    FJsonSerializer::Serialize(array, Writer);
-    gameanalytics::GameAnalytics::configureAvailableResourceItemTypes(TCHAR_TO_ANSI(*arrayString));
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::StringVector v;
     for (const FString& item : list)
@@ -209,9 +198,9 @@ void UGameAnalytics::configureAvailableResourceItemTypes(const TArray<FString>& 
     gameanalytics::GameAnalytics::configureAvailableResourceItemTypes(v);
 #elif PLATFORM_HTML5
     TArray<TSharedPtr<FJsonValue>> array;
-    for (std::string s : list)
+    for (const FString& s : list)
     {
-        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(ANSI_TO_TCHAR(s.c_str())));
+        TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
         array.Add(JsonValueString);
     }
     FString arrayString;
