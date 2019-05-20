@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**3.1.5**
+* fixes to warnings and errors
+
 **3.1.4**
 * fixed build errors for html5
 

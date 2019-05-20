@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "UObject/Package.h"
 #include "Interfaces/IAnalyticsProviderModule.h"
-#include "Runtime/CoreUObject/Public/UObject/Class.h"
 
 class FAnalyticsProviderGameAnalytics :
     public IAnalyticsProvider
