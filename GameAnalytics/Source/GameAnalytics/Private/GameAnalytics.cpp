@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("3.1.5")
+#define GA_VERSION TEXT("3.1.6")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -633,6 +633,14 @@ void UGameAnalytics::endSession()
 #endif
 }
 
+void UGameAnalytics::onQuit()
+{
+#if WITH_EDITOR
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    gameanalytics::GameAnalytics::onQuit();
+#endif
+}
+
 const char* UGameAnalytics::getCommandCenterValueAsString(const char *key)
 {
 #if WITH_EDITOR
@@ -799,6 +807,11 @@ void UGameAnalytics::SetGender(EGAGender Gender)
 void UGameAnalytics::SetBirthYear(int BirthYear)
 {
     setBirthYear(BirthYear);
+}
+
+void UGameAnalytics::OnQuit()
+{
+    onQuit();
 }
 
 FString UGameAnalytics::GetCommandCenterValueAsString(const FString& Key)

@@ -27,7 +27,9 @@ void FAnalyticsGameAnalytics::ShutdownModule()
     if (GameAnalyticsProvider.IsValid())
     {
         UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("FAnalyticsGameAnalytics Destructor"));
-        GameAnalyticsProvider->EndSession();
+#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+        UGameAnalytics::onQuit();
+#endif
     }
 }
 
@@ -197,15 +199,6 @@ FAnalyticsProviderGameAnalytics::FAnalyticsProviderGameAnalytics() :
 FAnalyticsProviderGameAnalytics::~FAnalyticsProviderGameAnalytics()
 {
     UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("FAnalyticsGameAnalytics ~FAnalyticsProviderGameAnalytics"));
-#if WITH_EDITOR
-#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-        gameanalytics::GameAnalytics::onQuit();
-#else
-        if (bHasSessionStarted)
-        {
-            EndSession();
-        }
-#endif
 }
 
 bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventAttribute>& Attributes)

@@ -102,6 +102,8 @@ public:
     static void startSession();
     static void endSession();
 
+    static void onQuit();
+
     static const char* getCommandCenterValueAsString(const char *key);
     static const char* getCommandCenterValueAsString(const char *key, const char *defaultValue);
     static bool isCommandCenterReady();
@@ -183,4 +185,7 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static FString GetConfigurationsContentAsString();
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void OnQuit();
 };
