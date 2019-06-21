@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**3.1.7**
+* added check if log files and database can't be created (desktop platforms)
+
 **3.1.6**
 * fixed progression event for desktop platforms
 * fixed hanging background thread when closing application down for desktop platforms
