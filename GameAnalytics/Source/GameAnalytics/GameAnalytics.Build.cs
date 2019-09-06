@@ -18,71 +18,68 @@ namespace UnrealBuildTool.Rules
             var GameAnalyticsPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../ThirdParty/" ));
             var libPath = Path.Combine(GameAnalyticsPath, "lib");
 
-            switch (Target.Platform)
+            if(Target.Platform == UnrealTargetPlatform.Win64)
             {
-                case UnrealTargetPlatform.Win64:
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
-                    PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
-                    break;
-
-                case UnrealTargetPlatform.Win32:
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
-                    PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
-                    break;
-
-                case UnrealTargetPlatform.Android:
-                    PrivateDependencyModuleNames.Add("Launch");
-                    PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/Android"));
-                    break;
-
-                case UnrealTargetPlatform.Mac:
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
-                    PublicAdditionalLibraries.Add("curl");
-                    PublicFrameworks.AddRange(
-                        new string[] {
-                            "CoreFoundation",
-                            "Foundation",
-                            "CoreServices"
-                        }
-                    );
-                    PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL" });
-                    break;
-
-                case UnrealTargetPlatform.Linux:
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libGameAnalytics.a"));
-                    PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl" });
-                    break;
-
-                case UnrealTargetPlatform.IOS:
-                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "ios", "libGameAnalytics.a"));
-                    PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/IOS"));
-                    PublicFrameworks.AddRange(
-                        new string[] {
-                            "AdSupport",
-                            "SystemConfiguration"
-                        }
-                    );
-
-                    PublicAdditionalLibraries.AddRange(
-                        new string[] {
-                            "sqlite3",
-                            "z",
-                            "c++"
-                    });
-                    break;
-
-                case UnrealTargetPlatform.HTML5:
-                    if (Target.Architecture != "-win32")
-                    {
-                        PublicAdditionalLibraries.Add(Path.Combine(libPath, "html5", "GameAnalytics.jspre"));
-                        PublicAdditionalLibraries.Add(Path.Combine(libPath, "html5", "GameAnalyticsUnreal.js"));
+                PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
+                PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
+            }
+            else if(Target.Platform == UnrealTargetPlatform.Win32)
+            {
+                PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
+                PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
+            }
+            else if(Target.Platform == UnrealTargetPlatform.Android)
+            {
+                PrivateDependencyModuleNames.Add("Launch");
+                PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/Android"));
+            }
+            else if(Target.Platform == UnrealTargetPlatform.Mac)
+            {
+                PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
+                PublicAdditionalLibraries.Add("curl");
+                PublicFrameworks.AddRange(
+                    new string[] {
+                        "CoreFoundation",
+                        "Foundation",
+                        "CoreServices"
                     }
-                    break;
+                );
+                PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL" });
+            }
+            else if(Target.Platform == UnrealTargetPlatform.Linux)
+            {
+                PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libGameAnalytics.a"));
+                PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl" });
+            }
+            else if(Target.Platform == UnrealTargetPlatform.IOS)
+            {
+                PublicAdditionalLibraries.Add(Path.Combine(libPath, "ios", "libGameAnalytics.a"));
+                PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/IOS"));
+                PublicFrameworks.AddRange(
+                    new string[] {
+                        "AdSupport",
+                        "SystemConfiguration"
+                    }
+                );
 
-                case UnrealTargetPlatform.XboxOne:
-                case UnrealTargetPlatform.PS4:
-                default:
-                    throw new NotImplementedException("This target platform is not configured for GameAnalytics SDK: " + Target.Platform.ToString());
+                PublicAdditionalLibraries.AddRange(
+                    new string[] {
+                        "sqlite3",
+                        "z",
+                        "c++"
+                });
+            }
+            else if(Target.Platform == UnrealTargetPlatform.HTML5)
+            {
+                if (Target.Architecture != "-win32")
+                {
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "html5", "GameAnalytics.jspre"));
+                    PublicAdditionalLibraries.Add(Path.Combine(libPath, "html5", "GameAnalyticsUnreal.js"));
+                }
+            }
+            else
+            {
+                throw new NotImplementedException("This target platform is not configured for GameAnalytics SDK: " + Target.Platform.ToString());
             }
 
             PublicDependencyModuleNames.AddRange(

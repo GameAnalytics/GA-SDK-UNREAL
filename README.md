@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**3.1.8**
+* added support for unreal engine 4.23
+
 **3.1.7**
 * added check if log files and database can't be created (desktop platforms)
 
