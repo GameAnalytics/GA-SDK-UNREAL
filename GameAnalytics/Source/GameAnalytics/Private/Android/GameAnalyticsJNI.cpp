@@ -1001,7 +1001,7 @@ namespace gameanalytics {
             }
         }
 
-        const char* jni_getCommandCenterValueAsString(const char *key)
+        void jni_getCommandCenterValueAsString(const char *key, char* out)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -1033,10 +1033,11 @@ namespace gameanalytics {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
 
-            return result.c_str();
+			out = new char[result.size() + 1];
+			snprintf(out, result.size() + 1, "%s", result.c_str());
         }
 
-        const char* jni_getCommandCenterValueAsStringWithDefaultValue(const char *key, const char *defaultValue)
+        void jni_getCommandCenterValueAsStringWithDefaultValue(const char *key, const char *defaultValue, char* out)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -1070,7 +1071,8 @@ namespace gameanalytics {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
 
-            return result.c_str();
+			out = new char[result.size() + 1];
+			snprintf(out, result.size() + 1, "%s", result.c_str());
         }
 
         bool jni_isCommandCenterReady()
@@ -1103,7 +1105,7 @@ namespace gameanalytics {
             return result;
         }
 
-        const char* jni_getConfigurationsContentAsString()
+        void jni_getConfigurationsContentAsString(char* out)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -1133,7 +1135,8 @@ namespace gameanalytics {
                 __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
             }
 
-            return result.c_str();
+			out = new char[result.size() + 1];
+			snprintf(out, result.size() + 1, "%s", result.c_str());
         }
     }
 }

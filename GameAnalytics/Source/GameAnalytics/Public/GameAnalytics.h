@@ -104,10 +104,10 @@ public:
 
     static void onQuit();
 
-    static const char* getCommandCenterValueAsString(const char *key);
-    static const char* getCommandCenterValueAsString(const char *key, const char *defaultValue);
+    static FString getCommandCenterValueAsString(const char *key);
+    static FString getCommandCenterValueAsString(const char *key, const char *defaultValue);
     static bool isCommandCenterReady();
-    static const char* getConfigurationsContentAsString();
+    static FString getConfigurationsContentAsString();
 
     // Bluprint functions
 

@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**3.1.9**
+* fixed command center bugs
+
 **3.1.8**
 * added support for unreal engine 4.23
 

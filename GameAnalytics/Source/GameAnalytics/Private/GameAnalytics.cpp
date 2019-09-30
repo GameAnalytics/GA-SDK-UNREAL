@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("3.1.8")
+#define GA_VERSION TEXT("3.1.9")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -641,33 +641,49 @@ void UGameAnalytics::onQuit()
 #endif
 }
 
-const char* UGameAnalytics::getCommandCenterValueAsString(const char *key)
+FString UGameAnalytics::getCommandCenterValueAsString(const char *key)
 {
 #if WITH_EDITOR
     return "";
 #elif PLATFORM_IOS
-    return GameAnalyticsCpp::getCommandCenterValueAsString(key);
+	char* out;
+	GameAnalyticsCpp::getCommandCenterValueAsString(key);
+	FString result(out);
+	delete[] out;
+	return result;
 #elif PLATFORM_ANDROID
-    return gameanalytics::jni_getCommandCenterValueAsString(key);
+	char* out;
+	gameanalytics::jni_getCommandCenterValueAsString(key, out);
+	FString result(out);
+	delete[] out;
+	return result;
 #elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
-    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key).data();
+	return FString(gameanalytics::GameAnalytics::getCommandCenterValueAsString(key).data());
 #elif PLATFORM_HTML5
-    return js_getCommandCenterValueAsString(key);
+    return FString(js_getCommandCenterValueAsString(key));
 #endif
 }
 
-const char* UGameAnalytics::getCommandCenterValueAsString(const char *key, const char *defaultValue)
+FString UGameAnalytics::getCommandCenterValueAsString(const char *key, const char *defaultValue)
 {
 #if WITH_EDITOR
     return "";
 #elif PLATFORM_IOS
-    return GameAnalyticsCpp::getCommandCenterValueAsString(key, defaultValue);
+	char* out;
+    GameAnalyticsCpp::getCommandCenterValueAsString(key, defaultValue, out);
+	FString result(out);
+	delete[] out;
+	return result;
 #elif PLATFORM_ANDROID
-    return gameanalytics::jni_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue);
+	char* out;
+    gameanalytics::jni_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue, out);
+	FString result(out);
+	delete[] out;
+	return result;
 #elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
-    return gameanalytics::GameAnalytics::getCommandCenterValueAsString(key, defaultValue).data();
+	return FString(gameanalytics::GameAnalytics::getCommandCenterValueAsString(key, defaultValue).data());
 #elif PLATFORM_HTML5
-    return js_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue);
+    return FString(js_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue));
 #endif
 }
 
@@ -686,18 +702,26 @@ bool UGameAnalytics::isCommandCenterReady()
 #endif
 }
 
-const char* UGameAnalytics::getConfigurationsContentAsString()
+FString UGameAnalytics::getConfigurationsContentAsString()
 {
 #if WITH_EDITOR
     return "";
 #elif PLATFORM_IOS
-    return GameAnalyticsCpp::getConfigurationsContentAsString();
+	char* out;
+    GameAnalyticsCpp::getConfigurationsContentAsString(out);
+	FString result(out);
+	delete[] out;
+	return result;
 #elif PLATFORM_ANDROID
-    return gameanalytics::jni_getConfigurationsContentAsString();
+	char* out;
+    gameanalytics::jni_getConfigurationsContentAsString(out);
+	FString result(out);
+	delete[] out;
+	return result;
 #elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
-    return gameanalytics::GameAnalytics::getConfigurationsContentAsString().data();
+    return FString(gameanalytics::GameAnalytics::getConfigurationsContentAsString().data());
 #elif PLATFORM_HTML5
-    return js_getConfigurationsContentAsString();
+    return FString(js_getConfigurationsContentAsString());
 #endif
 }
 
@@ -816,12 +840,12 @@ void UGameAnalytics::OnQuit()
 
 FString UGameAnalytics::GetCommandCenterValueAsString(const FString& Key)
 {
-    return FString(getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key)));
+    return getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key));
 }
 
 FString UGameAnalytics::GetCommandCenterValueAsStringWithDefaultValue(const FString& Key, const FString& DefaultValue)
 {
-    return FString(getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key), TCHAR_TO_ANSI(*DefaultValue)));
+    return getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key), TCHAR_TO_ANSI(*DefaultValue));
 }
 
 bool UGameAnalytics::IsCommandCenterReady()
@@ -831,5 +855,5 @@ bool UGameAnalytics::IsCommandCenterReady()
 
 FString UGameAnalytics::GetConfigurationsContentAsString()
 {
-    return FString(getConfigurationsContentAsString());
+    return getConfigurationsContentAsString();
 }

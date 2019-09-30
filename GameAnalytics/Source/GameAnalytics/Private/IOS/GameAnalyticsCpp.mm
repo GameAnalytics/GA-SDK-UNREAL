@@ -263,27 +263,33 @@ void GameAnalyticsCpp::endSession() {
     [GameAnalytics endSession];
 }
 
-const char* GameAnalyticsCpp::getCommandCenterValueAsString(const char *key) {
+void GameAnalyticsCpp::getCommandCenterValueAsString(const char *key, char* out) {
     NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
     NSString *result = [GameAnalytics getCommandCenterValueAsString:keyString];
 
-    return result != nil ? [result UTF8String] : NULL;
+    std::string s = result != nil ? [result UTF8String] : "";
+	out = new char[s.size() + 1];
+	snprintf(out, s.size() + 1, "%s", s.c_str());
 }
 
-const char* GameAnalyticsCpp::getCommandCenterValueAsString(const char *key, const char *defaultValue) {
+void GameAnalyticsCpp::getCommandCenterValueAsString(const char *key, const char *defaultValue, char* out) {
     NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
     NSString *defaultValueString = key != NULL ? [NSString stringWithUTF8String:defaultValue] : nil;
     NSString *result = [GameAnalytics getCommandCenterValueAsString:keyString defaultValue:defaultValueString];
 
-    return result != nil ? [result UTF8String] : NULL;
+    std::string s = result != nil ? [result UTF8String] : "";
+	out = new char[s.size() + 1];
+	snprintf(out, s.size() + 1, "%s", s.c_str());
 }
 
 bool GameAnalyticsCpp::isCommandCenterReady() {
     return [GameAnalytics isCommandCenterReady] ? true : false;
 }
 
-const char* GameAnalyticsCpp::getConfigurationsContentAsString() {
+void GameAnalyticsCpp::getConfigurationsContentAsString(char* out) {
     NSString *result = [GameAnalytics getCommandCenterConfigurations];
 
-    return result != nil ? [result UTF8String] : NULL;
+    std::string s = result != nil ? [result UTF8String] : "";
+	out = new char[s.size() + 1];
+	snprintf(out, s.size() + 1, "%s", s.c_str());
 }
