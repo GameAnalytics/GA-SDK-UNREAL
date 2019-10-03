@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("3.1.9")
+#define GA_VERSION TEXT("3.1.10")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -646,13 +646,13 @@ FString UGameAnalytics::getCommandCenterValueAsString(const char *key)
 #if WITH_EDITOR
     return "";
 #elif PLATFORM_IOS
-	char* out;
-	GameAnalyticsCpp::getCommandCenterValueAsString(key);
+	char* out = NULL;
+	GameAnalyticsCpp::getCommandCenterValueAsString(key, out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
-	char* out;
+	char* out = NULL;
 	gameanalytics::jni_getCommandCenterValueAsString(key, out);
 	FString result(out);
 	delete[] out;
@@ -669,13 +669,13 @@ FString UGameAnalytics::getCommandCenterValueAsString(const char *key, const cha
 #if WITH_EDITOR
     return "";
 #elif PLATFORM_IOS
-	char* out;
+	char* out = NULL;
     GameAnalyticsCpp::getCommandCenterValueAsString(key, defaultValue, out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
-	char* out;
+	char* out = NULL;
     gameanalytics::jni_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue, out);
 	FString result(out);
 	delete[] out;
@@ -707,13 +707,13 @@ FString UGameAnalytics::getConfigurationsContentAsString()
 #if WITH_EDITOR
     return "";
 #elif PLATFORM_IOS
-	char* out;
+	char* out = NULL;
     GameAnalyticsCpp::getConfigurationsContentAsString(out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
-	char* out;
+	char* out = NULL;
     gameanalytics::jni_getConfigurationsContentAsString(out);
 	FString result(out);
 	delete[] out;
