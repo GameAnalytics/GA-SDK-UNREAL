@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**3.1.12**
+* compile error fixes for html5
+
 **3.1.11**
 * fixes android builds
 
