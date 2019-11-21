@@ -263,31 +263,31 @@ void GameAnalyticsCpp::endSession() {
     [GameAnalytics endSession];
 }
 
-void GameAnalyticsCpp::getCommandCenterValueAsString(const char *key, char* out) {
+void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, char* out) {
     NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
-    NSString *result = [GameAnalytics getCommandCenterValueAsString:keyString];
+    NSString *result = [GameAnalytics getRemoteConfigsValueAsString:keyString];
 
     std::string s = result != nil ? [result UTF8String] : "";
 	out = new char[s.size() + 1];
 	snprintf(out, s.size() + 1, "%s", s.c_str());
 }
 
-void GameAnalyticsCpp::getCommandCenterValueAsString(const char *key, const char *defaultValue, char* out) {
+void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char* out) {
     NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
     NSString *defaultValueString = key != NULL ? [NSString stringWithUTF8String:defaultValue] : nil;
-    NSString *result = [GameAnalytics getCommandCenterValueAsString:keyString defaultValue:defaultValueString];
+    NSString *result = [GameAnalytics getRemoteConfigsValueAsString:keyString defaultValue:defaultValueString];
 
     std::string s = result != nil ? [result UTF8String] : "";
 	out = new char[s.size() + 1];
 	snprintf(out, s.size() + 1, "%s", s.c_str());
 }
 
-bool GameAnalyticsCpp::isCommandCenterReady() {
-    return [GameAnalytics isCommandCenterReady] ? true : false;
+bool GameAnalyticsCpp::isRemoteConfigsReady() {
+    return [GameAnalytics isRemoteConfigsReady] ? true : false;
 }
 
-void GameAnalyticsCpp::getConfigurationsContentAsString(char* out) {
-    NSString *result = [GameAnalytics getCommandCenterConfigurations];
+void GameAnalyticsCpp::getRemoteConfigsContentAsString(char* out) {
+    NSString *result = [GameAnalytics getRemoteConfigsConfigurations];
 
     std::string s = result != nil ? [result UTF8String] : "";
 	out = new char[s.size() + 1];

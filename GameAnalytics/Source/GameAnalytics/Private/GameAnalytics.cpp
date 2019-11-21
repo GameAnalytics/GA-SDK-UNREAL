@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("3.1.13")
+#define GA_VERSION TEXT("4.0.0")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -641,87 +641,87 @@ void UGameAnalytics::onQuit()
 #endif
 }
 
-FString UGameAnalytics::getCommandCenterValueAsString(const char *key)
+FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key)
 {
 #if WITH_EDITOR
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
-	GameAnalyticsCpp::getCommandCenterValueAsString(key, out);
+	GameAnalyticsCpp::getRemoteConfigsValueAsString(key, out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
 	char* out = NULL;
-	gameanalytics::jni_getCommandCenterValueAsString(key, out);
+	gameanalytics::jni_getRemoteConfigsValueAsString(key, out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
-	return FString(gameanalytics::GameAnalytics::getCommandCenterValueAsString(key).data());
+	return FString(gameanalytics::GameAnalytics::getRemoteConfigsValueAsString(key).data());
 #elif PLATFORM_HTML5
-    return FString(js_getCommandCenterValueAsString(key));
+    return FString(js_getRemoteConfigsValueAsString(key));
 #endif
 }
 
-FString UGameAnalytics::getCommandCenterValueAsString(const char *key, const char *defaultValue)
+FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key, const char *defaultValue)
 {
 #if WITH_EDITOR
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
-    GameAnalyticsCpp::getCommandCenterValueAsString(key, defaultValue, out);
+    GameAnalyticsCpp::getRemoteConfigsValueAsString(key, defaultValue, out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
 	char* out = NULL;
-    gameanalytics::jni_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue, out);
+    gameanalytics::jni_getRemoteConfigsValueAsStringWithDefaultValue(key, defaultValue, out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
-	return FString(gameanalytics::GameAnalytics::getCommandCenterValueAsString(key, defaultValue).data());
+	return FString(gameanalytics::GameAnalytics::getRemoteConfigsValueAsString(key, defaultValue).data());
 #elif PLATFORM_HTML5
-    return FString(js_getCommandCenterValueAsStringWithDefaultValue(key, defaultValue));
+    return FString(js_getRemoteConfigsValueAsStringWithDefaultValue(key, defaultValue));
 #endif
 }
 
-bool UGameAnalytics::isCommandCenterReady()
+bool UGameAnalytics::isRemoteConfigsReady()
 {
 #if WITH_EDITOR
     return false;
 #elif PLATFORM_IOS
-    return GameAnalyticsCpp::isCommandCenterReady();
+    return GameAnalyticsCpp::isRemoteConfigsReady();
 #elif PLATFORM_ANDROID
-    return gameanalytics::jni_isCommandCenterReady();
+    return gameanalytics::jni_isRemoteConfigsReady();
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    return gameanalytics::GameAnalytics::isCommandCenterReady();
+    return gameanalytics::GameAnalytics::isRemoteConfigsReady();
 #elif PLATFORM_HTML5
-    return js_isCommandCenterReady();
+    return js_isRemoteConfigsReady();
 #endif
 }
 
-FString UGameAnalytics::getConfigurationsContentAsString()
+FString UGameAnalytics::getRemoteConfigsContentAsString()
 {
 #if WITH_EDITOR
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
-    GameAnalyticsCpp::getConfigurationsContentAsString(out);
+    GameAnalyticsCpp::getRemoteConfigsContentAsString(out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
 	char* out = NULL;
-    gameanalytics::jni_getConfigurationsContentAsString(out);
+    gameanalytics::jni_getRemoteConfigsContentAsString(out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
-    return FString(gameanalytics::GameAnalytics::getConfigurationsContentAsString().data());
+    return FString(gameanalytics::GameAnalytics::getRemoteConfigsContentAsString().data());
 #elif PLATFORM_HTML5
-    return FString(js_getConfigurationsContentAsString());
+    return FString(js_getRemoteConfigsContentAsString());
 #endif
 }
 
@@ -838,22 +838,22 @@ void UGameAnalytics::OnQuit()
     onQuit();
 }
 
-FString UGameAnalytics::GetCommandCenterValueAsString(const FString& Key)
+FString UGameAnalytics::GetRemoteConfigsValueAsString(const FString& Key)
 {
-    return getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key));
+    return getRemoteConfigsValueAsString(TCHAR_TO_ANSI(*Key));
 }
 
-FString UGameAnalytics::GetCommandCenterValueAsStringWithDefaultValue(const FString& Key, const FString& DefaultValue)
+FString UGameAnalytics::GetRemoteConfigsValueAsStringWithDefaultValue(const FString& Key, const FString& DefaultValue)
 {
-    return getCommandCenterValueAsString(TCHAR_TO_ANSI(*Key), TCHAR_TO_ANSI(*DefaultValue));
+    return getRemoteConfigsValueAsString(TCHAR_TO_ANSI(*Key), TCHAR_TO_ANSI(*DefaultValue));
 }
 
-bool UGameAnalytics::IsCommandCenterReady()
+bool UGameAnalytics::IsRemoteConfigsReady()
 {
-    return isCommandCenterReady();
+    return isRemoteConfigsReady();
 }
 
-FString UGameAnalytics::GetConfigurationsContentAsString()
+FString UGameAnalytics::GetRemoteConfigsContentAsString()
 {
-    return getConfigurationsContentAsString();
+    return getRemoteConfigsContentAsString();
 }

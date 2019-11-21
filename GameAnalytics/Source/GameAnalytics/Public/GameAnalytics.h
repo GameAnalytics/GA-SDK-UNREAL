@@ -104,10 +104,10 @@ public:
 
     static void onQuit();
 
-    static FString getCommandCenterValueAsString(const char *key);
-    static FString getCommandCenterValueAsString(const char *key, const char *defaultValue);
-    static bool isCommandCenterReady();
-    static FString getConfigurationsContentAsString();
+    static FString getRemoteConfigsValueAsString(const char *key);
+    static FString getRemoteConfigsValueAsString(const char *key, const char *defaultValue);
+    static bool isRemoteConfigsReady();
+    static FString getRemoteConfigsContentAsString();
 
     // Bluprint functions
 
@@ -175,16 +175,16 @@ public:
     static void SetBirthYear(int BirthYear);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static FString GetCommandCenterValueAsString(const FString& Key);
+    static FString GetRemoteConfigsValueAsString(const FString& Key);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static FString GetCommandCenterValueAsStringWithDefaultValue(const FString& Key, const FString& DefaultValue);
+    static FString GetRemoteConfigsValueAsStringWithDefaultValue(const FString& Key, const FString& DefaultValue);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static bool IsCommandCenterReady();
+    static bool IsRemoteConfigsReady();
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static FString GetConfigurationsContentAsString();
+    static FString GetRemoteConfigsContentAsString();
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void OnQuit();

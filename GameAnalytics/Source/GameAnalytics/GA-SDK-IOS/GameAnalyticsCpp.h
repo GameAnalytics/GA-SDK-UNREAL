@@ -41,8 +41,8 @@ public:
     static void startSession();
     static void endSession();
 
-    static void getCommandCenterValueAsString(const char *key, char* out);
-    static void getCommandCenterValueAsString(const char *key, const char *defaultValue, char* out);
-    static bool isCommandCenterReady();
-    static void getConfigurationsContentAsString(char* out);
+    static void getRemoteConfigsValueAsString(const char *key, char* out);
+    static void getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char* out);
+    static bool isRemoteConfigsReady();
+    static void getRemoteConfigsContentAsString(char* out);
 };

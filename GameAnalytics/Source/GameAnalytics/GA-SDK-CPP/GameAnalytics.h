@@ -69,10 +69,10 @@ namespace gameanalytics
         Female = 2
     };
 
-	class ICommandCenterListener
+	class IRemoteConfigsListener
 	{
 	public:
-		virtual void onCommandCenterUpdated() = 0;
+		virtual void onRemoteConfigsUpdated() = 0;
 	};
 
     struct CharArray
@@ -162,12 +162,12 @@ namespace gameanalytics
          static void startSession();
          static void endSession();
 
-         static std::vector<char> getCommandCenterValueAsString(const char* key);
-         static std::vector<char> getCommandCenterValueAsString(const char* key, const char* defaultValue);
-         static bool isCommandCenterReady();
-         static void addCommandCenterListener(const std::shared_ptr<ICommandCenterListener>& listener);
-         static void removeCommandCenterListener(const std::shared_ptr<ICommandCenterListener>& listener);
-         static std::vector<char> getConfigurationsContentAsString();
+         static std::vector<char> getRemoteConfigsValueAsString(const char* key);
+         static std::vector<char> getRemoteConfigsValueAsString(const char* key, const char* defaultValue);
+         static bool isRemoteConfigsReady();
+         static void addRemoteConfigsListener(const std::shared_ptr<IRemoteConfigsListener>& listener);
+         static void removeRemoteConfigsListener(const std::shared_ptr<IRemoteConfigsListener>& listener);
+         static std::vector<char> getRemoteConfigsContentAsString();
 
          // game state changes
          // will affect how session is started / ended

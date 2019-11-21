@@ -1001,11 +1001,11 @@ namespace gameanalytics {
             }
         }
 
-        void jni_getCommandCenterValueAsString(const char *key, char* out)
+        void jni_getRemoteConfigsValueAsString(const char *key, char* out)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "getCommandCenterValueAsString";
+            const char* strMethod = "getRemoteConfigsValueAsString";
             std::string result;
 
             if(jClass)
@@ -1037,11 +1037,11 @@ namespace gameanalytics {
 			snprintf(out, result.size() + 1, "%s", result.c_str());
         }
 
-        void jni_getCommandCenterValueAsStringWithDefaultValue(const char *key, const char *defaultValue, char* out)
+        void jni_getRemoteConfigsValueAsStringWithDefaultValue(const char *key, const char *defaultValue, char* out)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "getCommandCenterValueAsString";
+            const char* strMethod = "getRemoteConfigsValueAsString";
             std::string result;
 
             if(jClass)
@@ -1075,11 +1075,11 @@ namespace gameanalytics {
 			snprintf(out, result.size() + 1, "%s", result.c_str());
         }
 
-        bool jni_isCommandCenterReady()
+        bool jni_isRemoteConfigsReady()
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "isCommandCenterReady";
+            const char* strMethod = "isRemoteConfigsReady";
             bool result = false;
 
             if(jClass)
@@ -1105,11 +1105,11 @@ namespace gameanalytics {
             return result;
         }
 
-        void jni_getConfigurationsContentAsString(char* out)
+        void jni_getRemoteConfigsContentAsString(char* out)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "getConfigurationsContentAsString";
+            const char* strMethod = "getRemoteConfigsContentAsString";
             std::string result;
 
             if(jClass)
