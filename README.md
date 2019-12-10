@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.0.5**
+* added support for Unreal Engine 4.24
+
 **4.0.4**
 * fixed getRemoteConfigsValueAsString (ios)
 

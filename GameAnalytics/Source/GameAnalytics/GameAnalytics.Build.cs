@@ -69,14 +69,14 @@ namespace UnrealBuildTool.Rules
                         "c++"
                 });
             }
-            else if(Target.Platform == UnrealTargetPlatform.HTML5)
+            /*else if(Target.Platform == UnrealTargetPlatform.HTML5)
             {
                 if (Target.Architecture != "-win32")
                 {
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "html5", "GameAnalytics.jspre"));
                     PublicAdditionalLibraries.Add(Path.Combine(libPath, "html5", "GameAnalyticsUnreal.js"));
                 }
-            }
+            }*/
             else
             {
                 throw new NotImplementedException("This target platform is not configured for GameAnalytics SDK: " + Target.Platform.ToString());
@@ -105,7 +105,7 @@ namespace UnrealBuildTool.Rules
                 }
             );
 
-            if (Target.Platform == UnrealTargetPlatform.HTML5)
+            /*if (Target.Platform == UnrealTargetPlatform.HTML5)
             {
                 PrivateDependencyModuleNames.AddRange(
                     new string[]
@@ -120,7 +120,7 @@ namespace UnrealBuildTool.Rules
                         "Json"
                     }
                 );
-            }
+            }*/
 
             PublicIncludePathModuleNames.AddRange(
                 new string[]
