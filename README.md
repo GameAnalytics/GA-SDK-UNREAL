@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.0.8**
+* removed html5 related code
+
 **4.0.7**
 * A/B testing fixes
 

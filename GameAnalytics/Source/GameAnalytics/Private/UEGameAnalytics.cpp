@@ -8,8 +8,8 @@
 #include "Windows/AllowWindowsPlatformTypes.h"
 #endif
 #include "../GA-SDK-CPP/GameAnalytics.h"
-#elif PLATFORM_HTML5
-#include "../GA-SDK-HTML5/GameAnalytics.h"
+// #elif PLATFORM_HTML5
+// #include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
@@ -231,8 +231,8 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.WindowsBuild));
 #elif PLATFORM_LINUX
         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.LinuxBuild));
-#elif PLATFORM_HTML5
-        UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.Html5Build));
+// #elif PLATFORM_HTML5
+//         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.Html5Build));
 #endif
 
         ////// Configure available virtual currencies and item types
@@ -319,15 +319,15 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
                 {
                     secretKey = Attr.ToString();
                 }
-#elif PLATFORM_HTML5
-                if (Attr.AttrName == TEXT("html5_gameKey"))
-                {
-                    gameKey = Attr.ToString();
-                }
-                else if (Attr.AttrName == TEXT("html5_secretKey"))
-                {
-                    secretKey = Attr.ToString();
-                }
+// #elif PLATFORM_HTML5
+//                 if (Attr.AttrName == TEXT("html5_gameKey"))
+//                 {
+//                     gameKey = Attr.ToString();
+//                 }
+//                 else if (Attr.AttrName == TEXT("html5_secretKey"))
+//                 {
+//                     secretKey = Attr.ToString();
+//                 }
 #endif
             }
         }
@@ -348,9 +348,9 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 #elif PLATFORM_LINUX
             gameKey = ProjectSettings.LinuxGameKey;
             secretKey = ProjectSettings.LinuxSecretKey;
-#elif PLATFORM_HTML5
-            gameKey = ProjectSettings.Html5GameKey;
-            secretKey = ProjectSettings.Html5SecretKey;
+// #elif PLATFORM_HTML5
+//             gameKey = ProjectSettings.Html5GameKey;
+//             secretKey = ProjectSettings.Html5SecretKey;
 #endif
         }
         UGameAnalytics::initialize(TCHAR_TO_ANSI(*gameKey), TCHAR_TO_ANSI(*secretKey));
@@ -377,8 +377,8 @@ void FAnalyticsProviderGameAnalytics::EndSession()
 #if WITH_EDITOR
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
             gameanalytics::GameAnalytics::onSuspend();
-#elif PLATFORM_HTML5
-            js_onStop();
+// #elif PLATFORM_HTML5
+//             js_onStop();
 #else
             UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
 #endif
@@ -753,7 +753,7 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
                     UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
                 }
             }
-#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX || PLATFORM_HTML5
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
             UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
 #endif
         }
