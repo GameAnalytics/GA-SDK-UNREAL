@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.0.9**
+* changed editor module type from 'Developer' to 'DeveloperTool'
+
 **4.0.8**
 * removed html5 related code
 
