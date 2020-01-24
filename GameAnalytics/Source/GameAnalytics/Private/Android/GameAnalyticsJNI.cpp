@@ -271,6 +271,33 @@ namespace gameanalytics {
             }
         }
 
+        void jni_configureAutoDetectAppVersion(bool flag)
+        {
+            JNIEnv* env = FAndroidApplication::GetJavaEnv();
+            jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
+            const char* strMethod = "configureAutoDetectAppVersion";
+
+            if(jClass)
+            {
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Z)V");
+
+                if(jMethod)
+                {
+                    env->CallStaticVoidMethod(jClass, jMethod, flag);
+                }
+                else
+                {
+                    __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
+                }
+
+                env->DeleteLocalRef(jClass);
+            }
+            else
+            {
+                __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
+            }
+        }
+
         void jni_configureUserId(const char *userId)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
@@ -850,89 +877,6 @@ namespace gameanalytics {
                     jstring j_customDimension = env->NewStringUTF(customDimension);
                     env->CallStaticVoidMethod(jClass, jMethod, j_customDimension);
                     env->DeleteLocalRef(j_customDimension);
-                }
-                else
-                {
-                    __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
-                }
-
-                env->DeleteLocalRef(jClass);
-            }
-            else
-            {
-                __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
-            }
-        }
-
-        void jni_setFacebookId(const char *facebookId)
-        {
-            JNIEnv* env = FAndroidApplication::GetJavaEnv();
-            jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "setFacebookId";
-
-            if(jClass)
-            {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;)V");
-
-                if(jMethod)
-                {
-                    jstring j_facebookId = env->NewStringUTF(facebookId);
-                    env->CallStaticVoidMethod(jClass, jMethod, j_facebookId);
-                    env->DeleteLocalRef(j_facebookId);
-                }
-                else
-                {
-                    __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
-                }
-
-                env->DeleteLocalRef(jClass);
-            }
-            else
-            {
-                __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
-            }
-        }
-
-        void jni_setGender(int gender)
-        {
-            JNIEnv* env = FAndroidApplication::GetJavaEnv();
-            jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "setGender";
-
-            if(jClass)
-            {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(I)V");
-
-                if(jMethod)
-                {
-                    env->CallStaticVoidMethod(jClass, jMethod, gender);
-                }
-                else
-                {
-                    __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strMethod);
-                }
-
-                env->DeleteLocalRef(jClass);
-            }
-            else
-            {
-                __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
-            }
-        }
-
-        void jni_setBirthYear(int birthYear)
-        {
-            JNIEnv* env = FAndroidApplication::GetJavaEnv();
-            jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "setBirthYear";
-
-            if(jClass)
-            {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(I)V");
-
-                if(jMethod)
-                {
-                    env->CallStaticVoidMethod(jClass, jMethod, birthYear);
                 }
                 else
                 {

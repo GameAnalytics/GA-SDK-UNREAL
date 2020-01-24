@@ -106,6 +106,10 @@ public:
     UPROPERTY(Config, EditAnywhere, Category=Advanced, Meta=(ToolTip="Use manual session handling. Manually choose when to end and start a new session. Note initializing of the SDK will automatically start the first session."))
     bool UseManualSessionHandling = false;
 
+    // Auto detect app version for build field (only Android and iOS)
+    UPROPERTY(Config, EditAnywhere, Category=Advanced, Meta=(ToolTip="Auto detect app version to use for build field (only for Android and iOS)."))
+    bool AutoDetectAppVersion = false;
+
     // Submit Errors
     //UPROPERTY(Config, EditAnywhere, Category=Advanced)
     //bool SubmitErrors = true;

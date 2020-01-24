@@ -13,6 +13,7 @@ public:
     static void configureAvailableResourceItemTypes(const std::vector<std::string>& list);
 
     static void configureBuild(const char *build);
+    static void configureAutoDetectAppVersion(bool flag);
     static void configureUserId(const char *userId);
     static void configureSdkGameEngineVersion(const char *gameEngineSdkVersion);
     static void configureGameEngineVersion(const char *gameEngineVersion);
@@ -34,9 +35,6 @@ public:
     static void setCustomDimension01(const char *customDimension);
     static void setCustomDimension02(const char *customDimension);
     static void setCustomDimension03(const char *customDimension);
-    static void setFacebookId(const char *facebookId);
-    static void setGender(const char *gender);
-    static void setBirthYear(int birthYear);
 
     static void startSession();
     static void endSession();

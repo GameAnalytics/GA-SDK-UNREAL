@@ -103,18 +103,6 @@ var GameAnalyticsUnreal = {
     {
         gameanalytics.GameAnalytics.onStop();
     },
-    js_setFacebookId: function(facebookId)
-    {
-        gameanalytics.GameAnalytics.setFacebookId(Pointer_stringify(facebookId));
-    },
-    js_setGender: function(gender)
-    {
-        gameanalytics.GameAnalytics.setGender(gender);
-    },
-    js_setBirthYear: function(birthYear)
-    {
-        gameanalytics.GameAnalytics.setBirthYear(birthYear);
-    },
     js_getRemoteConfigsValueAsString: function(key)
     {
         var returnStr = gameanalytics.GameAnalytics.getRemoteConfigsValueAsString(Pointer_stringify(key));

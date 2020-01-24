@@ -134,6 +134,10 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
     {
         Settings.UseManualSessionHandling = false;
     }
+    if(!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("AutoDetectAppVersion"), Settings.AutoDetectAppVersion, GetIniName()))
+    {
+        Settings.AutoDetectAppVersion = false;
+    }
     if(!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("InfoLogBuild"), Settings.InfoLogBuild, GetIniName()))
     {
         Settings.InfoLogBuild = true;
@@ -220,11 +224,22 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         UGameAnalytics::setEnabledInfoLog(ProjectSettings.InfoLogBuild);
         UGameAnalytics::setEnabledVerboseLog(ProjectSettings.VerboseLogBuild);
 
+        if(ProjectSettings.AutoDetectAppVersion)
+        {
+            UGameAnalytics::configureAutoDetectAppVersion(ProjectSettings.AutoDetectAppVersion);
+        }
+
         //// Configure build version
 #if PLATFORM_IOS
-        UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.IosBuild));
+        if(!ProjectSettings.AutoDetectAppVersion)
+        {
+            UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.IosBuild));
+        }
 #elif PLATFORM_ANDROID
-        UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.AndroidBuild));
+        if(!ProjectSettings.AutoDetectAppVersion)
+        {
+            UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.AndroidBuild));
+        }
 #elif PLATFORM_MAC
         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.MacBuild));
 #elif PLATFORM_WINDOWS
@@ -462,20 +477,10 @@ void FAnalyticsProviderGameAnalytics::RecordEvent(const FString& EventName, cons
 
 void FAnalyticsProviderGameAnalytics::SetAge(int InAge)
 {
-    UGameAnalytics::setBirthYear(InAge);
 }
 
 void FAnalyticsProviderGameAnalytics::SetGender(const FString& InGender)
 {
-    EGAGender gender = GetEnumValueFromString<EGAGender>("EGAGender", InGender.ToLower());
-
-    if (gender == EGAGender(0))
-    {
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("SetGender: Error value must be either male or female."));
-        return;
-    }
-
-    UGameAnalytics::setGender(gender);
 }
 
 void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error)

@@ -16,6 +16,7 @@ namespace gameanalytics {
         extern void jni_configureBuild(const char *build);
         extern void jni_configureSdkGameEngineVersion(const char *gameEngineSdkVersion);
         extern void jni_configureGameEngineVersion(const char *gameEngineVersion);
+        extern void jni_configureAutoDetectAppVersion(bool flag);
         extern void jni_configureUserId(const char *userId);
         extern void jni_initialize(const char *gameKey, const char *gameSecret);
 
@@ -35,9 +36,6 @@ namespace gameanalytics {
         extern void jni_setCustomDimension01(const char *customDimension);
         extern void jni_setCustomDimension02(const char *customDimension);
         extern void jni_setCustomDimension03(const char *customDimension);
-        extern void jni_setFacebookId(const char *facebookId);
-        extern void jni_setGender(int gender);
-        extern void jni_setBirthYear(int birthYear);
 
         extern void jni_startSession();
         extern void jni_endSession();

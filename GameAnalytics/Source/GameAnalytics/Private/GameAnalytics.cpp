@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.0.9")
+#define GA_VERSION TEXT("4.0.10")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -221,6 +221,17 @@ void UGameAnalytics::configureBuild(const char *build)
     gameanalytics::GameAnalytics::configureBuild(build);
 // #elif PLATFORM_HTML5
 //     js_configureBuild(build);
+}
+
+void UGameAnalytics::configureAutoDetectAppVersion(bool flag)
+{
+#if WITH_EDITOR
+#elif PLATFORM_IOS
+    GameAnalyticsCpp::configureAutoDetectAppVersion(flag);
+#elif PLATFORM_ANDROID
+    gameanalytics::jni_configureAutoDetectAppVersion(flag);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+//#elif PLATFORM_HTML5
 #endif
 }
 
@@ -541,70 +552,6 @@ void UGameAnalytics::setCustomDimension03(const char *customDimension)
 #endif
 }
 
-void UGameAnalytics::setFacebookId(const char *facebookId)
-{
-#if WITH_EDITOR
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setFacebookId(facebookId);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setFacebookId(facebookId);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::setFacebookId(facebookId);
-// #elif PLATFORM_HTML5
-//     js_setFacebookId(facebookId);
-#endif
-}
-
-void UGameAnalytics::setGender(EGAGender gender)
-{
-    switch(gender)
-    {
-        case EGAGender::male:
-        {
-#if WITH_EDITOR
-#elif PLATFORM_IOS
-            GameAnalyticsCpp::setGender("male");
-#elif PLATFORM_ANDROID
-            gameanalytics::jni_setGender((int)gender);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-            gameanalytics::GameAnalytics::setGender((gameanalytics::EGAGender)((int)gender));
-// #elif PLATFORM_HTML5
-//             js_setGender((int)gender);
-#endif
-        }
-        break;
-
-        case EGAGender::female:
-        {
-#if WITH_EDITOR
-#elif PLATFORM_IOS
-            GameAnalyticsCpp::setGender("female");
-#elif PLATFORM_ANDROID
-            gameanalytics::jni_setGender((int)gender);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-            gameanalytics::GameAnalytics::setGender((gameanalytics::EGAGender)((int)gender));
-// #elif PLATFORM_HTML5
-//             js_setGender((int)gender);
-#endif
-        }
-        break;
-    }
-}
-
-void UGameAnalytics::setBirthYear(int birthYear)
-{
-#if WITH_EDITOR
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setBirthYear(birthYear);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setBirthYear(birthYear);
-#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::setBirthYear(birthYear);
-// #elif PLATFORM_HTML5
-//     js_setBirthYear(birthYear);
-#endif
-}
-
 void UGameAnalytics::startSession()
 {
 #if WITH_EDITOR
@@ -816,21 +763,6 @@ void UGameAnalytics::SetCustomDimension02(const FString& CustomDimension)
 void UGameAnalytics::SetCustomDimension03(const FString& CustomDimension)
 {
     setCustomDimension03(TCHAR_TO_ANSI(*CustomDimension));
-}
-
-void UGameAnalytics::SetFacebookId(const FString& FacebookId)
-{
-    setFacebookId(TCHAR_TO_ANSI(*FacebookId));
-}
-
-void UGameAnalytics::SetGender(EGAGender Gender)
-{
-    setGender(Gender);
-}
-
-void UGameAnalytics::SetBirthYear(int BirthYear)
-{
-    setBirthYear(BirthYear);
 }
 
 void UGameAnalytics::OnQuit()

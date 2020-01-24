@@ -29,9 +29,6 @@ extern "C"
     void js_startSession();
     void js_endSession();
     void js_onStop();
-    void js_setFacebookId(const char *facebookId);
-    void js_setGender(int gender);
-    void js_setBirthYear(int birthYear);
     const char* js_getRemoteConfigsValueAsString(const char *key);
     const char* js_getRemoteConfigsValueAsStringWithDefaultValue(const char *key, const char *defaultValue);
     bool js_isRemoteConfigsReady();

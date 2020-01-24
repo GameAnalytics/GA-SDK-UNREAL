@@ -41,14 +41,6 @@ enum class EGAErrorSeverity : uint8
     critical = 5
 };
 
-UENUM()
-enum class EGAGender : uint8
-{
-    undefined = 0,
-    male = 1,
-    female = 2
-};
-
 UCLASS()
 class GAMEANALYTICS_API UGameAnalytics : public UObject
 {
@@ -64,6 +56,7 @@ public:
     static void configureAvailableResourceItemTypes(const TArray<FString>& list);
 
     static void configureBuild(const char *build);
+    static void configureAutoDetectAppVersion(bool flag);
     static void configureUserId(const char *userId);
     static void configureSdkGameEngineVersion(const char *gameEngineSdkVersion);
     static void configureGameEngineVersion(const char *gameEngineVersion);
@@ -95,9 +88,6 @@ public:
     static void setCustomDimension01(const char *customDimension);
     static void setCustomDimension02(const char *customDimension);
     static void setCustomDimension03(const char *customDimension);
-    static void setFacebookId(const char *facebookId);
-    static void setGender(EGAGender gender);
-    static void setBirthYear(int birthYear);
 
     static void startSession();
     static void endSession();
@@ -164,15 +154,6 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void SetCustomDimension03(const FString& CustomDimension);
-
-    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void SetFacebookId(const FString& FacebookId);
-
-    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void SetGender(EGAGender Gender);
-
-    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void SetBirthYear(int BirthYear);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static FString GetRemoteConfigsValueAsString(const FString& Key);
