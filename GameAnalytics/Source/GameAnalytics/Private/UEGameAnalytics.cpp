@@ -457,10 +457,6 @@ void FAnalyticsProviderGameAnalytics::RecordEvent(const FString& EventName, cons
             {
                 UGameAnalytics::setCustomDimension03(TCHAR_TO_ANSI(*Attr.ToString()));
             }
-            else if (Attr.AttrName == TEXT("facebook"))
-            {
-                UGameAnalytics::setFacebookId(TCHAR_TO_ANSI(*Attr.ToString()));
-            }
             else
             {
                 float AttrValue = FCString::Atof(*Attr.ToString());

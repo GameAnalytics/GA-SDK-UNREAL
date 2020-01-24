@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.0.10")
+#define GA_VERSION TEXT("4.0.11")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -221,6 +221,7 @@ void UGameAnalytics::configureBuild(const char *build)
     gameanalytics::GameAnalytics::configureBuild(build);
 // #elif PLATFORM_HTML5
 //     js_configureBuild(build);
+#endif
 }
 
 void UGameAnalytics::configureAutoDetectAppVersion(bool flag)

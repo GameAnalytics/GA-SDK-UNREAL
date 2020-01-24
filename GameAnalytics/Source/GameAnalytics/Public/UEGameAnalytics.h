@@ -78,6 +78,7 @@ public:
         TArray<FString> ResourceCurrencies;
         TArray<FString> ResourceItemTypes;
         bool UseManualSessionHandling;
+		bool AutoDetectAppVersion;
         bool SubmitErrors;
         bool SubmitAverageFPS;
         bool SubmitCriticalFPS;
