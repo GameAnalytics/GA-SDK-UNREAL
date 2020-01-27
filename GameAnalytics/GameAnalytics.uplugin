@@ -3,7 +3,7 @@
 
     "FriendlyName" : "GameAnalytics",
     "Version" : 1,
-    "VersionName" : "4.0.11",
+    "VersionName" : "4.0.12",
     "CreatedBy" : "GameAnalytics",
     "CreatedByURL" : "http://gameanalytics.com",
     "EngineVersion" : "4.24.0",
@@ -21,7 +21,7 @@
         },
         {
             "Name" : "GameAnalyticsEditor",
-            "Type" : "DeveloperTool",
+            "Type" : "UncookedOnly",
             "LoadingPhase" : "PreDefault"
         }
     ]

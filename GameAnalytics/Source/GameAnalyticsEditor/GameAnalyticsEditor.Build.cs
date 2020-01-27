@@ -32,7 +32,7 @@ namespace UnrealBuildTool.Rules
                     "Http",
                     "Json",
                     "JsonUtilities",
-					"InputCore"
+                    "InputCore"
                 }
             );
 
