@@ -135,7 +135,7 @@ public:
     static void AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03/*, const char *fields*/);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEvenWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score/*, const char *fields*/);
+    static void AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score/*, const char *fields*/);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddDesignEvent(const FString& EventId/*, const char *fields*/);
