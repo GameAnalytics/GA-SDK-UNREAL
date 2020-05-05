@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.0.13")
+#define GA_VERSION TEXT("4.1.0")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -455,6 +455,38 @@ void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *messag
 #endif
 }
 
+#if PLATFORM_IOS || PLATFORM_ANDROID
+void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement)
+{
+#if WITH_EDITOR
+#elif PLATFORM_IOS
+    GameAnalyticsCpp::addAdEvent((int)action, (int)action, adSdkName, adPlacement, "");
+#elif PLATFORM_ANDROID
+    gameanalytics::jni_addAdEvent((int)action, (int)action, adSdkName, adPlacement, "");
+#endif
+}
+
+void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64 duration)
+{
+#if WITH_EDITOR
+#elif PLATFORM_IOS
+    GameAnalyticsCpp::addAdEvent((int)action, (int)action, adSdkName, adPlacement, duration, "");
+#elif PLATFORM_ANDROID
+    gameanalytics::jni_addAdEvent((int)action, (int)action, adSdkName, adPlacement, duration, "");
+#endif
+}
+
+void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason)
+{
+#if WITH_EDITOR
+#elif PLATFORM_IOS
+    GameAnalyticsCpp::addAdEvent((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, "");
+#elif PLATFORM_ANDROID
+    gameanalytics::jni_addAdEvent((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, "");
+#endif
+}
+#endif
+
 void UGameAnalytics::setEnabledInfoLog(bool flag)
 {
 #if WITH_EDITOR
@@ -749,6 +781,27 @@ void UGameAnalytics::AddDesignEventWithValue(const FString& EventId, float Value
 void UGameAnalytics::AddErrorEvent(EGAErrorSeverity Severity, const FString& Message/*, const char *fields*/)
 {
     addErrorEvent(Severity, TCHAR_TO_ANSI(*Message));
+}
+
+void UGameAnalytics::AddAdEvent(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement/*, const char *fields*/)
+{
+#if PLATFORM_IOS || PLATFORM_ANDROID
+    addAdEvent(action, adType, TCHAR_TO_ANSI(*adSdkName), TCHAR_TO_ANSI(*adPlacement));
+#endif
+}
+
+void UGameAnalytics::AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration/*, const char *fields*/)
+{
+#if PLATFORM_IOS || PLATFORM_ANDROID
+    addAdEvent(action, adType, TCHAR_TO_ANSI(*adSdkName), TCHAR_TO_ANSI(*adPlacement), duration);
+#endif
+}
+
+void UGameAnalytics::AddAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason/*, const char *fields*/)
+{
+#if PLATFORM_IOS || PLATFORM_ANDROID
+    addAdEvent(action, adType, TCHAR_TO_ANSI(*adSdkName), TCHAR_TO_ANSI(*adPlacement), noAdReason);
+#endif
 }
 
 void UGameAnalytics::SetCustomDimension01(const FString& CustomDimension)

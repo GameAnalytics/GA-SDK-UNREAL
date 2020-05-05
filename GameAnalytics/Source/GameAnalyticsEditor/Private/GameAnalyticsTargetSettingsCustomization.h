@@ -27,12 +27,19 @@ public:
 	struct STUDIO {
 		FString Name;
 		int Id;
+		int OrganizationId;
 		TArray<GAME> Games;
 
 		/*STUDIO (FString aName, int aId, TArray<GAME> aGames) :
 		Name(aName), Id(aId), Games(aGames)
 		{
 		}*/
+	};
+
+	struct ORGANIZATION {
+		FString Name;
+		int Id;
+		TArray<STUDIO> Studios;
 	};
 
 	// Makes a new instance of this detail layout class for a specific detail view requesting it
@@ -48,23 +55,29 @@ public:
 	void PasswordEntered(const FText& NewText, ETextCommit::Type CommitInfo);
 	void PasswordChanged(const FText& NewText);
 
-	void FillStudiosString(TArray<STUDIO> StudioList);
+	void FillOrganizationsString(TArray<ORGANIZATION> OrganizationList);
 	TSharedRef<SWidget> HandleStudiosComboBoxGenerateWidget(TSharedPtr<FString> StringItem);
 	void HandleStudiosComboBoxSelectionChanged(TSharedPtr<FString> StringItem, ESelectInfo::Type SelectInfo);
 	FText HandleStudiosComboBoxContentText() const;
 
 	void OpenStudioAndGameSelector();
 
+	void OnOrganizationMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
 	void OnStudioMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
 	void OnGameMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+	void OnOrganizationMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
 	void OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
 	void OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+	void OnOrganizationMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
     void OnStudioMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
     void OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+	void OnOrganizationMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
 	void OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
     void OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+	void OnOrganizationMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
     void OnStudioMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
     void OnGameMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+	void OnOrganizationMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
     void OnStudioMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
     void OnGameMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
 
@@ -76,17 +89,23 @@ public:
 		return instance;
 	}
 
-	TArray<STUDIO> StudiosAndGames;
+	TArray<ORGANIZATION> Organizations;
+	ORGANIZATION SelectedOrganizationIos;
 	STUDIO SelectedStudioIos;
 	GAME SelectedGameIos;
+	ORGANIZATION SelectedOrganizationAndroid;
 	STUDIO SelectedStudioAndroid;
 	GAME SelectedGameAndroid;
+	ORGANIZATION SelectedOrganizationMac;
     STUDIO SelectedStudioMac;
     GAME SelectedGameMac;
+	ORGANIZATION SelectedOrganizationWindows;
 	STUDIO SelectedStudioWindows;
     GAME SelectedGameWindows;
+	ORGANIZATION SelectedOrganizationLinux;
     STUDIO SelectedStudioLinux;
     GAME SelectedGameLinux;
+	ORGANIZATION SelectedOrganizationHtml5;
     STUDIO SelectedStudioHtml5;
     GAME SelectedGameHtml5;
 
@@ -98,16 +117,22 @@ private:
 
 	FReply OpenSetupWizard();
 	FReply Login();
+	TSharedRef<SWidget> UpdateOrganizationsIos() const;
 	TSharedRef<SWidget> UpdateStudiosIos() const;
 	TSharedRef<SWidget> UpdateGamesIos() const;
+	TSharedRef<SWidget> UpdateOrganizationsAndroid() const;
 	TSharedRef<SWidget> UpdateStudiosAndroid() const;
 	TSharedRef<SWidget> UpdateGamesAndroid() const;
+	TSharedRef<SWidget> UpdateOrganizationsMac() const;
     TSharedRef<SWidget> UpdateStudiosMac() const;
     TSharedRef<SWidget> UpdateGamesMac() const;
+	TSharedRef<SWidget> UpdateOrganizationsWindows() const;
 	TSharedRef<SWidget> UpdateStudiosWindows() const;
     TSharedRef<SWidget> UpdateGamesWindows() const;
+	TSharedRef<SWidget> UpdateOrganizationsLinux() const;
     TSharedRef<SWidget> UpdateStudiosLinux() const;
     TSharedRef<SWidget> UpdateGamesLinux() const;
+	TSharedRef<SWidget> UpdateOrganizationsHtml5() const;
     TSharedRef<SWidget> UpdateStudiosHtml5() const;
     TSharedRef<SWidget> UpdateGamesHtml5() const;
 

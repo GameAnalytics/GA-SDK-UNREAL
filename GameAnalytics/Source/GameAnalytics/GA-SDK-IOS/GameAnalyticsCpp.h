@@ -27,6 +27,9 @@ public:
     static void addDesignEvent(const char *eventId, const char *fields);
     static void addDesignEventWithValue(const char *eventId, float value, const char *fields);
     static void addErrorEvent(int severity, const char *message, const char *fields);
+    static void addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields);
+    static void addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64 duration, const char *fields);
+    static void addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields);
 
     static void setEnabledInfoLog(bool flag);
     static void setEnabledVerboseLog(bool flag);

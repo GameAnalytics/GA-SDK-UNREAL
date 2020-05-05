@@ -31,6 +31,10 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.1.0**
+* added ad event (ios, android)
+* organizations added to games key list
+
 **4.0.13**
 * logo updated
 

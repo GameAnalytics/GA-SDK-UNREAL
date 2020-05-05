@@ -80,16 +80,23 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
     IDetailCategoryBuilder& LinuxCategory = DetailLayout.EditCategory(TEXT("LinuxSetup"), FText::GetEmpty(), ECategoryPriority::Variable);
     IDetailCategoryBuilder& Html5Category = DetailLayout.EditCategory(TEXT("Html5Setup"), FText::GetEmpty(), ECategoryPriority::Variable);
 
-	const FText StudioMenuStringIos = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name);
+
+    const FText OrganizationMenuStringIos = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationIos.Name.IsEmpty() ? LOCTEXT("OrganizationMenu", "Select Organization") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationIos.Name);
+    const FText StudioMenuStringIos = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name);
 	const FText GameMenuStringIos = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.Name);
-	const FText StudioMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name);
+    const FText OrganizationMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationAndroid.Name.IsEmpty() ? LOCTEXT("OrganizationMenu", "Select Organization") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationAndroid.Name);
+    const FText StudioMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name);
 	const FText GameMenuStringAndroid = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.Name);
+    const FText OrganizationMenuStringMac = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationMac.Name.IsEmpty() ? LOCTEXT("OrganizationMenu", "Select Organization") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationMac.Name);
     const FText StudioMenuStringMac = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac.Name);
     const FText GameMenuStringMac = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.Name);
-	const FText StudioMenuStringWindows = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name);
+    const FText OrganizationMenuStringWindows = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationWindows.Name.IsEmpty() ? LOCTEXT("OrganizationMenu", "Select Organization") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationWindows.Name);
+    const FText StudioMenuStringWindows = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows.Name);
     const FText GameMenuStringWindows = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.Name);
+    const FText OrganizationMenuStringLinux = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationLinux.Name.IsEmpty() ? LOCTEXT("OrganizationMenu", "Select Organization") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationLinux.Name);
     const FText StudioMenuStringLinux = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioLinux.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioLinux.Name);
     const FText GameMenuStringLinux = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.Name);
+    const FText OrganizationMenuStringHtml5 = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationHtml5.Name.IsEmpty() ? LOCTEXT("OrganizationMenu", "Select Organization") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationHtml5.Name);
     const FText StudioMenuStringHtml5 = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioHtml5.Name.IsEmpty() ? LOCTEXT("StudioMenu", "Select Studio") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioHtml5.Name);
     const FText GameMenuStringHtml5 = FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.Name.IsEmpty() ? LOCTEXT("GameMenu", "Select Game") : FText::FromString(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.Name);
 	const FText PlatformMenuString = LOCTEXT("PlatformMenu", "Select Platform");
@@ -198,46 +205,84 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 			]
 		];
 
-	//if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
-	//{
-	IosCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
-		.NameContent()
-		[
-			SNew(SHorizontalBox)
-			+ SHorizontalBox::Slot()
-			.Padding(FMargin(0, 1, 0, 1))
-			.FillWidth(1.0f)
-			[
-				SNew(STextBlock)
-				.Text(LOCTEXT("StudiosLabel", "Select Studio"))
-				.Font(DetailLayout.GetDetailFont())
-			]
-		]
-	.ValueContent()
-		[
-			SNew(SHorizontalBox)
-			+ SHorizontalBox::Slot()
-			.FillWidth(1.0f)
-			[
-				SNew(SComboButton)
-				//.VAlign(VAlign_Center)
-				.ToolTipText(LOCTEXT("SelectStudioTooltip", "Studio"))
-				.OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateStudiosIos)
-				.ButtonContent()
-				[
-					SNew(STextBlock)
-					.Text(StudioMenuStringIos)
-					.Font(IDetailLayoutBuilder::GetDetailFont())
-				]
-				.MenuContent()
+    IosCategory.AddCustomRow(LOCTEXT("OrganizationsRow", "Organizations"), false)
+        .NameContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .Padding(FMargin(0, 1, 0, 1))
+            .FillWidth(1.0f)
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("OrganizationsLabel", "Select Organization"))
+                .Font(DetailLayout.GetDetailFont())
+            ]
+        ]
+        .ValueContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .FillWidth(1.0f)
+            [
+                SNew(SComboButton)
+                //.VAlign(VAlign_Center)
+                .ToolTipText(LOCTEXT("SelectOrganizationTooltip", "Organization"))
+                .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsIos)
+                .ButtonContent()
+                [
+                    SNew(STextBlock)
+                    .Text(OrganizationMenuStringIos)
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
+                ]
+                .MenuContent()
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("LoginToSelectOrganizationLabel", "Login To Select Organization."))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
+            ]
+        ];
+
+	if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationIos.Name.IsEmpty())
+	{
+	    IosCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
+		    .NameContent()
+		    [
+			    SNew(SHorizontalBox)
+			    + SHorizontalBox::Slot()
+			    .Padding(FMargin(0, 1, 0, 1))
+			    .FillWidth(1.0f)
+			    [
+				    SNew(STextBlock)
+				    .Text(LOCTEXT("StudiosLabel", "Select Studio"))
+				    .Font(DetailLayout.GetDetailFont())
+			    ]
+		    ]
+	        .ValueContent()
+		    [
+			    SNew(SHorizontalBox)
+			    + SHorizontalBox::Slot()
+			    .FillWidth(1.0f)
+			    [
+				    SNew(SComboButton)
+				    //.VAlign(VAlign_Center)
+				    .ToolTipText(LOCTEXT("SelectStudioTooltip", "Studio"))
+				    .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateStudiosIos)
+				    .ButtonContent()
+				    [
+					    SNew(STextBlock)
+					    .Text(StudioMenuStringIos)
+					    .Font(IDetailLayoutBuilder::GetDetailFont())
+				    ]
+				    .MenuContent()
 					[
 						SNew(STextBlock)
 						.Text(LOCTEXT("LoginToSelectStudioLabel", "Login To Select Studio."))
 						.Font(DetailLayout.GetDetailFont())
 					]
-			]
-		];
-	//}
+			    ]
+		    ];
+	}
 
 	if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos.Name.IsEmpty())
 	{
@@ -273,52 +318,90 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 					.MenuContent()
 						[
 							SNew(STextBlock)
-							.Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Studio."))
+							.Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Game."))
 							.Font(DetailLayout.GetDetailFont())
 						]
 				]
 			];
 	}
 
-	//if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
+    AndroidCategory.AddCustomRow(LOCTEXT("OrganizationRow", "Organizations"), false)
+        .NameContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .Padding(FMargin(0, 1, 0, 1))
+            .FillWidth(1.0f)
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("OrganizationsLabel", "Select Organization"))
+                .Font(DetailLayout.GetDetailFont())
+            ]
+        ]
+        .ValueContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .FillWidth(1.0f)
+            [
+                SNew(SComboButton)
+                //.VAlign(VAlign_Center)
+                .ToolTipText(LOCTEXT("SelectOrganizationTooltip", "Organization"))
+                .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsAndroid)
+                .ButtonContent()
+                [
+                    SNew(STextBlock)
+                    .Text(OrganizationMenuStringAndroid)
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
+                ]
+                .MenuContent()
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("LoginToSelectOrganizationLabel", "Login To Select Organization."))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
+            ]
+        ];
+
+	if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationAndroid.Name.IsEmpty())
 	{
-	AndroidCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
-		.NameContent()
-		[
-			SNew(SHorizontalBox)
-			+ SHorizontalBox::Slot()
-			.Padding(FMargin(0, 1, 0, 1))
-			.FillWidth(1.0f)
-			[
-				SNew(STextBlock)
-				.Text(LOCTEXT("StudiosLabel", "Select Studio"))
-				.Font(DetailLayout.GetDetailFont())
-			]
-		]
-	.ValueContent()
-		[
-			SNew(SHorizontalBox)
-			+ SHorizontalBox::Slot()
-			.FillWidth(1.0f)
-			[
-				SNew(SComboButton)
-				//.VAlign(VAlign_Center)
-				.ToolTipText(LOCTEXT("SelectStudioTooltip", "Studio"))
-				.OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateStudiosAndroid)
-				.ButtonContent()
-				[
-					SNew(STextBlock)
-					.Text(StudioMenuStringAndroid)
-					.Font(IDetailLayoutBuilder::GetDetailFont())
-				]
-				.MenuContent()
-					[
-						SNew(STextBlock)
-						.Text(LOCTEXT("LoginToSelectStudioLabel", "Login To Select Studio."))
-						.Font(DetailLayout.GetDetailFont())
-					]
-			]
-		];
+	    AndroidCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
+		    .NameContent()
+		    [
+			    SNew(SHorizontalBox)
+			    + SHorizontalBox::Slot()
+			    .Padding(FMargin(0, 1, 0, 1))
+			    .FillWidth(1.0f)
+			    [
+				    SNew(STextBlock)
+				    .Text(LOCTEXT("StudiosLabel", "Select Studio"))
+				    .Font(DetailLayout.GetDetailFont())
+			    ]
+		    ]
+	        .ValueContent()
+		    [
+			    SNew(SHorizontalBox)
+			    + SHorizontalBox::Slot()
+			    .FillWidth(1.0f)
+			    [
+				    SNew(SComboButton)
+				    //.VAlign(VAlign_Center)
+				    .ToolTipText(LOCTEXT("SelectStudioTooltip", "Studio"))
+				    .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateStudiosAndroid)
+				    .ButtonContent()
+				    [
+					    SNew(STextBlock)
+					    .Text(StudioMenuStringAndroid)
+					    .Font(IDetailLayoutBuilder::GetDetailFont())
+				    ]
+				    .MenuContent()
+					    [
+						    SNew(STextBlock)
+						    .Text(LOCTEXT("LoginToSelectStudioLabel", "Login To Select Studio."))
+						    .Font(DetailLayout.GetDetailFont())
+					    ]
+			    ]
+		    ];
 	}
 
 	if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid.Name.IsEmpty())
@@ -355,14 +438,52 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 					.MenuContent()
 						[
 							SNew(STextBlock)
-							.Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Studio."))
+							.Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Game."))
 							.Font(DetailLayout.GetDetailFont())
 						]
 				]
 			];
 	}
 
-    //if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
+    MacCategory.AddCustomRow(LOCTEXT("OrganizationsRow", "Organizations"), false)
+        .NameContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .Padding(FMargin(0, 1, 0, 1))
+            .FillWidth(1.0f)
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("OrganizationsLabel", "Select Organization"))
+                .Font(DetailLayout.GetDetailFont())
+            ]
+        ]
+        .ValueContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .FillWidth(1.0f)
+            [
+                SNew(SComboButton)
+                //.VAlign(VAlign_Center)
+                .ToolTipText(LOCTEXT("SelectOrganizationTooltip", "Organization"))
+                .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsMac)
+                .ButtonContent()
+                [
+                    SNew(STextBlock)
+                    .Text(OrganizationMenuStringMac)
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
+                ]
+                .MenuContent()
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("LoginToSelectOrganizationLabel", "Login To Select Organization."))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
+            ]
+        ];
+
+    if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationMac.Name.IsEmpty())
     {
         MacCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
             .NameContent()
@@ -437,14 +558,52 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
                     .MenuContent()
                     [
                         SNew(STextBlock)
-                        .Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Studio."))
+                        .Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Game."))
                         .Font(DetailLayout.GetDetailFont())
                     ]
                 ]
             ];
     }
 
-	//if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
+    WindowsCategory.AddCustomRow(LOCTEXT("OrganizationsRow", "Organizations"), false)
+        .NameContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .Padding(FMargin(0, 1, 0, 1))
+            .FillWidth(1.0f)
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("OrganizationsLabel", "Select Organization"))
+                .Font(DetailLayout.GetDetailFont())
+            ]
+        ]
+        .ValueContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .FillWidth(1.0f)
+            [
+                SNew(SComboButton)
+                //.VAlign(VAlign_Center)
+                .ToolTipText(LOCTEXT("SelectOrganizationTooltip", "Organization"))
+                .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsWindows)
+                .ButtonContent()
+                [
+                    SNew(STextBlock)
+                    .Text(OrganizationMenuStringWindows)
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
+                ]
+                .MenuContent()
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("LoginToSelectOrganizationLabel", "Login To Select Organization."))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
+            ]
+        ];
+
+	if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationWindows.Name.IsEmpty())
     {
         WindowsCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
             .NameContent()
@@ -519,51 +678,89 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
                     .MenuContent()
                     [
                         SNew(STextBlock)
-                        .Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Studio."))
+                        .Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Game."))
                         .Font(DetailLayout.GetDetailFont())
                     ]
                 ]
             ];
     }
 
-    //if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
+    LinuxCategory.AddCustomRow(LOCTEXT("OrganizationsRow", "Organizations"), false)
+        .NameContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .Padding(FMargin(0, 1, 0, 1))
+            .FillWidth(1.0f)
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("OrganizationsLabel", "Select Organization"))
+                .Font(DetailLayout.GetDetailFont())
+            ]
+        ]
+        .ValueContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .FillWidth(1.0f)
+            [
+                SNew(SComboButton)
+                //.VAlign(VAlign_Center)
+                .ToolTipText(LOCTEXT("SelectOrganizationTooltip", "Organization"))
+                .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsLinux)
+                .ButtonContent()
+                [
+                    SNew(STextBlock)
+                    .Text(OrganizationMenuStringLinux)
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
+                ]
+                .MenuContent()
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("LoginToSelectOrganizationLabel", "Login To Select Organization."))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
+            ]
+        ];
+
+    if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationLinux.Name.IsEmpty())
     {
         LinuxCategory.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
             .NameContent()
             [
                 SNew(SHorizontalBox)
                 + SHorizontalBox::Slot()
-            .Padding(FMargin(0, 1, 0, 1))
-            .FillWidth(1.0f)
-            [
-                SNew(STextBlock)
-                .Text(LOCTEXT("StudiosLabel", "Select Studio"))
-            .Font(DetailLayout.GetDetailFont())
+                .Padding(FMargin(0, 1, 0, 1))
+                .FillWidth(1.0f)
+                [
+                    SNew(STextBlock)
+                    .Text(LOCTEXT("StudiosLabel", "Select Studio"))
+                    .Font(DetailLayout.GetDetailFont())
+                ]
             ]
-            ]
-        .ValueContent()
+            .ValueContent()
             [
                 SNew(SHorizontalBox)
                 + SHorizontalBox::Slot()
-            .FillWidth(1.0f)
-            [
-                SNew(SComboButton)
-                //.VAlign(VAlign_Center)
-            .ToolTipText(LOCTEXT("SelectStudioTooltip", "Studio"))
-            .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateStudiosLinux)
-            .ButtonContent()
-            [
-                SNew(STextBlock)
-                .Text(StudioMenuStringLinux)
-            .Font(IDetailLayoutBuilder::GetDetailFont())
-            ]
-        .MenuContent()
-            [
-                SNew(STextBlock)
-                .Text(LOCTEXT("LoginToSelectStudioLabel", "Login To Select Studio."))
-            .Font(DetailLayout.GetDetailFont())
-            ]
-            ]
+                .FillWidth(1.0f)
+                [
+                    SNew(SComboButton)
+                    //.VAlign(VAlign_Center)
+                    .ToolTipText(LOCTEXT("SelectStudioTooltip", "Studio"))
+                    .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateStudiosLinux)
+                    .ButtonContent()
+                    [
+                        SNew(STextBlock)
+                        .Text(StudioMenuStringLinux)
+                        .Font(IDetailLayoutBuilder::GetDetailFont())
+                    ]
+                    .MenuContent()
+                    [
+                        SNew(STextBlock)
+                        .Text(LOCTEXT("LoginToSelectStudioLabel", "Login To Select Studio."))
+                        .Font(DetailLayout.GetDetailFont())
+                    ]
+                ]
             ];
     }
 
@@ -601,14 +798,52 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
         .MenuContent()
             [
                 SNew(STextBlock)
-                .Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Studio."))
+                .Text(LOCTEXT("LoginToSelectGameLabel", "Please select a Game."))
             .Font(DetailLayout.GetDetailFont())
             ]
             ]
             ];
     }
 
-    //if (FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames.Num() > 0)
+    Html5Category.AddCustomRow(LOCTEXT("OrganizationsRow", "Organizations"), false)
+        .NameContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+        .Padding(FMargin(0, 1, 0, 1))
+        .FillWidth(1.0f)
+        [
+            SNew(STextBlock)
+            .Text(LOCTEXT("OrganizationsLabel", "Select Organization"))
+        .Font(DetailLayout.GetDetailFont())
+        ]
+        ]
+    .ValueContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+        .FillWidth(1.0f)
+        [
+            SNew(SComboButton)
+            //.VAlign(VAlign_Center)
+        .ToolTipText(LOCTEXT("SelectOrganizationTooltip", "Organization"))
+        .OnGetMenuContent(this, &FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsHtml5)
+        .ButtonContent()
+        [
+            SNew(STextBlock)
+            .Text(OrganizationMenuStringHtml5)
+        .Font(IDetailLayoutBuilder::GetDetailFont())
+        ]
+    .MenuContent()
+        [
+            SNew(STextBlock)
+            .Text(LOCTEXT("LoginToSelectOrganizationLabel", "Login To Select Organization."))
+        .Font(DetailLayout.GetDetailFont())
+        ]
+        ]
+        ];
+
+    if (!FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationHtml5.Name.IsEmpty())
     {
         Html5Category.AddCustomRow(LOCTEXT("StudiosRow", "Studios"), false)
             .NameContent()
@@ -1009,13 +1244,115 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedHtml5(FGame
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsIos() const
+{
+    FMenuBuilder OrganizationMenuBuilder(true, NULL);
+    {
+        OrganizationMenuBuilder.BeginSection("Organizations");
+        {
+            for (auto& o : FGameAnalyticsTargetSettingsCustomization::getInstance().Organizations)
+            {
+                OrganizationMenuBuilder.AddMenuEntry(FText::FromString(o.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedIos, o)), NAME_None);
+            }
+        }
+        OrganizationMenuBuilder.EndSection();
+    }
+
+    return OrganizationMenuBuilder.MakeWidget();
+}
+
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsAndroid() const
+{
+    FMenuBuilder OrganizationMenuBuilder(true, NULL);
+    {
+        OrganizationMenuBuilder.BeginSection("Organizations");
+        {
+            for (auto& o : FGameAnalyticsTargetSettingsCustomization::getInstance().Organizations)
+            {
+                OrganizationMenuBuilder.AddMenuEntry(FText::FromString(o.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedAndroid, o)), NAME_None);
+            }
+        }
+        OrganizationMenuBuilder.EndSection();
+    }
+
+    return OrganizationMenuBuilder.MakeWidget();
+}
+
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsMac() const
+{
+    FMenuBuilder OrganizationMenuBuilder(true, NULL);
+    {
+        OrganizationMenuBuilder.BeginSection("Organizations");
+        {
+            for (auto& o : FGameAnalyticsTargetSettingsCustomization::getInstance().Organizations)
+            {
+                OrganizationMenuBuilder.AddMenuEntry(FText::FromString(o.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedMac, o)), NAME_None);
+            }
+        }
+        OrganizationMenuBuilder.EndSection();
+    }
+
+    return OrganizationMenuBuilder.MakeWidget();
+}
+
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsWindows() const
+{
+    FMenuBuilder OrganizationMenuBuilder(true, NULL);
+    {
+        OrganizationMenuBuilder.BeginSection("Organizations");
+        {
+            for (auto& o : FGameAnalyticsTargetSettingsCustomization::getInstance().Organizations)
+            {
+                OrganizationMenuBuilder.AddMenuEntry(FText::FromString(o.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedWindows, o)), NAME_None);
+            }
+        }
+        OrganizationMenuBuilder.EndSection();
+    }
+
+    return OrganizationMenuBuilder.MakeWidget();
+}
+
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsLinux() const
+{
+    FMenuBuilder OrganizationMenuBuilder(true, NULL);
+    {
+        OrganizationMenuBuilder.BeginSection("Organizations");
+        {
+            for (auto& o : FGameAnalyticsTargetSettingsCustomization::getInstance().Organizations)
+            {
+                OrganizationMenuBuilder.AddMenuEntry(FText::FromString(o.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedLinux, o)), NAME_None);
+            }
+        }
+        OrganizationMenuBuilder.EndSection();
+    }
+
+    return OrganizationMenuBuilder.MakeWidget();
+}
+
+TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateOrganizationsHtml5() const
+{
+    FMenuBuilder OrganizationMenuBuilder(true, NULL);
+    {
+        OrganizationMenuBuilder.BeginSection("Organizations");
+        {
+            for (auto& o : FGameAnalyticsTargetSettingsCustomization::getInstance().Organizations)
+            {
+                OrganizationMenuBuilder.AddMenuEntry(FText::FromString(o.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedHtml5, o)), NAME_None);
+            }
+        }
+        OrganizationMenuBuilder.EndSection();
+    }
+
+    return OrganizationMenuBuilder.MakeWidget();
+}
+
 TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosIos() const
 {
 	FMenuBuilder StudioMenuBuilder(true, NULL);
 	{
 		StudioMenuBuilder.BeginSection("Studios");
 		{
-			for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames)
+			for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationIos.Studios)
 			{
 				StudioMenuBuilder.AddMenuEntry(FText::FromString(s.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedIos, s)), NAME_None);
 			}
@@ -1032,7 +1369,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosAndr
 	{
 		StudioMenuBuilder.BeginSection("Studios");
 		{
-			for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames)
+			for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationAndroid.Studios)
 			{
 				StudioMenuBuilder.AddMenuEntry(FText::FromString(s.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedAndroid, s)), NAME_None);
 			}
@@ -1049,7 +1386,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosMac(
     {
         StudioMenuBuilder.BeginSection("Studios");
         {
-            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames)
+            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationMac.Studios)
             {
                 StudioMenuBuilder.AddMenuEntry(FText::FromString(s.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedMac, s)), NAME_None);
             }
@@ -1066,7 +1403,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosWind
     {
         StudioMenuBuilder.BeginSection("Studios");
         {
-            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames)
+            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationWindows.Studios)
             {
                 StudioMenuBuilder.AddMenuEntry(FText::FromString(s.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedWindows, s)), NAME_None);
             }
@@ -1083,7 +1420,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosLinu
     {
         StudioMenuBuilder.BeginSection("Studios");
         {
-            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames)
+            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationLinux.Studios)
             {
                 StudioMenuBuilder.AddMenuEntry(FText::FromString(s.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedLinux, s)), NAME_None);
             }
@@ -1100,7 +1437,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosHtml
     {
         StudioMenuBuilder.BeginSection("Studios");
         {
-            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().StudiosAndGames)
+            for (auto& s : FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationHtml5.Studios)
             {
                 StudioMenuBuilder.AddMenuEntry(FText::FromString(s.Name), FText::GetEmpty(), FSlateIcon(), FUIAction(FExecuteAction::CreateSP(this, &FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedHtml5, s)), NAME_None);
             }
@@ -1109,6 +1446,78 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosHtml
     }
 
     return StudioMenuBuilder.MakeWidget();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationIos = OrganizationItem;
+
+    FGameAnalyticsTargetSettingsCustomization::STUDIO Studio;
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos = Studio;
+
+    UE_LOG(LogTemp, Warning, TEXT("iOS Organization selected: %s"), *OrganizationItem.Name);
+
+    SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationAndroid = OrganizationItem;
+
+    FGameAnalyticsTargetSettingsCustomization::STUDIO Studio;
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid = Studio;
+
+    UE_LOG(LogTemp, Warning, TEXT("Android Organization selected: %s"), *OrganizationItem.Name);
+
+    SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationMac = OrganizationItem;
+
+    FGameAnalyticsTargetSettingsCustomization::STUDIO Studio;
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac = Studio;
+
+    UE_LOG(LogTemp, Warning, TEXT("Mac Organization selected: %s"), *OrganizationItem.Name);
+
+    SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationWindows = OrganizationItem;
+
+    FGameAnalyticsTargetSettingsCustomization::STUDIO Studio;
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows = Studio;
+
+    UE_LOG(LogTemp, Warning, TEXT("Windows Organization selected: %s"), *OrganizationItem.Name);
+
+    SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationLinux = OrganizationItem;
+
+    FGameAnalyticsTargetSettingsCustomization::STUDIO Studio;
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioLinux = Studio;
+
+    UE_LOG(LogTemp, Warning, TEXT("Linux Organization selected: %s"), *OrganizationItem.Name);
+
+    SavedLayoutBuilder->ForceRefreshDetails();
+}
+
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+{
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationHtml5 = OrganizationItem;
+
+    FGameAnalyticsTargetSettingsCustomization::STUDIO Studio;
+    FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioHtml5 = Studio;
+
+    UE_LOG(LogTemp, Warning, TEXT("Html5 Organization selected: %s"), *OrganizationItem.Name);
+
+    SavedLayoutBuilder->ForceRefreshDetails();
 }
 
 void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
@@ -1183,9 +1592,9 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedHtml5(FGa
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::FillStudiosString(TArray<STUDIO> StudioList)
+void FGameAnalyticsTargetSettingsCustomization::FillOrganizationsString(TArray<ORGANIZATION> OrganizationList)
 {
-	StudiosAndGames = StudioList;
+    Organizations = OrganizationList;
 
 	//UE_LOG(LogTemp, Warning, TEXT("Studio length: %i"), StudioList.Num());
 	//UE_LOG(LogTemp, Warning, TEXT("Studio and games length: %i"), StudiosAndGames.Num());
@@ -1443,9 +1852,20 @@ void HttpCaller::OnGetUserDataResponseReceived(FHttpRequestPtr Request, FHttpRes
 
 				TSharedPtr<FJsonObject> JsonResults = Results[0]->AsObject();
 
+                TSharedPtr<FJsonObject> Organizations = JsonResults->GetObjectField(TEXT("organizations"));
 				TArray<TSharedPtr<FJsonValue>> Studios = JsonResults->GetArrayField(TEXT("studios"));
 
-				TArray<FGameAnalyticsTargetSettingsCustomization::STUDIO> StudioList;
+                TMap<FString, FGameAnalyticsTargetSettingsCustomization::ORGANIZATION> OrganizationMap;
+				TArray<FGameAnalyticsTargetSettingsCustomization::ORGANIZATION> OrganizationList;
+
+                for (auto currJsonValue = Organizations->Values.CreateConstIterator(); currJsonValue; ++currJsonValue)
+                {
+                    TSharedPtr<FJsonObject> JsonOrganization = (*currJsonValue).Value->AsObject();
+                    FGameAnalyticsTargetSettingsCustomization::ORGANIZATION Organization;
+                    Organization.Name = JsonOrganization->GetStringField(TEXT("name"));
+                    Organization.Id = (int)JsonOrganization->GetNumberField(TEXT("id"));
+                    OrganizationMap.Add(FString::FromInt(Organization.Id), Organization);
+                }
 
 				for (int i = 0; i < Studios.Num(); i++)
 				{
@@ -1456,6 +1876,7 @@ void HttpCaller::OnGetUserDataResponseReceived(FHttpRequestPtr Request, FHttpRes
 					FGameAnalyticsTargetSettingsCustomization::STUDIO Studio;
 					Studio.Name = JsonStudio->GetStringField(TEXT("name"));
 					Studio.Id = (int)JsonStudio->GetNumberField(TEXT("id"));
+                    Studio.OrganizationId = (int)JsonStudio->GetNumberField(TEXT("org_id"));
 
 					TArray<TSharedPtr<FJsonValue>> Games = JsonStudio->GetArrayField(TEXT("games"));
 
@@ -1472,10 +1893,15 @@ void HttpCaller::OnGetUserDataResponseReceived(FHttpRequestPtr Request, FHttpRes
 						Studio.Games.Add(Game);
 					}
 
-					StudioList.Add(Studio);
+					OrganizationMap[FString::FromInt(Studio.OrganizationId)].Studios.Add(Studio);
 				}
 
-				FGameAnalyticsTargetSettingsCustomization::getInstance().FillStudiosString(StudioList);
+                for (auto currOrg = OrganizationMap.CreateConstIterator(); currOrg; ++currOrg)
+                {
+                    OrganizationList.Add((*currOrg).Value);
+                }
+
+				FGameAnalyticsTargetSettingsCustomization::getInstance().FillOrganizationsString(OrganizationList);
 			}
 		}
 	}
