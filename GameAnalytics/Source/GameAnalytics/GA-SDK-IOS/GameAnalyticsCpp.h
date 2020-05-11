@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GenericPlatform/GenericPlatform.h"
 #import <vector>
 #import <string>
 

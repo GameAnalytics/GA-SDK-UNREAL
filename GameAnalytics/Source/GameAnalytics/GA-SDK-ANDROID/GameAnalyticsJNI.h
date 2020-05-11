@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GenericPlatform/GenericPlatform.h"
 #include <vector>
 #include <string>
 

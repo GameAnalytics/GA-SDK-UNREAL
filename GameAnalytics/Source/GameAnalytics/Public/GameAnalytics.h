@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include "GenericPlatform/GenericPlatform.h"
 #include "UObject/Object.h"
 #include "GameAnalytics.generated.h"
 
