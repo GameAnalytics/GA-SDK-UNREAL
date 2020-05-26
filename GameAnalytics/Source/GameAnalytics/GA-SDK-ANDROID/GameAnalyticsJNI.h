@@ -1,8 +1,8 @@
 #pragma once
 
-#include "GenericPlatform/GenericPlatform.h"
 #include <vector>
 #include <string>
+#include <stdint.h>
 
 namespace gameanalytics {
     extern "C"
@@ -30,7 +30,7 @@ namespace gameanalytics {
         extern void jni_addDesignEventWithValue(const char *eventId, float value, const char *fields);
         extern void jni_addErrorEvent(int severity, const char *message, const char *fields);
         extern void jni_addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields);
-        extern void jni_addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, FGenericPlatformTypes::int64 duration, const char *fields);
+        extern void jni_addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields);
         extern void jni_addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields);
 
         extern void jni_setEnabledInfoLog(bool flag);

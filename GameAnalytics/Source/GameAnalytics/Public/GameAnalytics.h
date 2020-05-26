@@ -9,8 +9,8 @@
 
 #include <string>
 #include <vector>
+#include <stdint.h>
 
-#include "GenericPlatform/GenericPlatform.h"
 #include "UObject/Object.h"
 #include "GameAnalytics.generated.h"
 
@@ -119,7 +119,7 @@ public:
     static void addErrorEvent(EGAErrorSeverity severity, const char *message/*, const char *fields*/);
 #if PLATFORM_IOS || PLATFORM_ANDROID
     static void addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement);
-    static void addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, FGenericPlatformTypes::int64 duration);
+    static void addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration);
     static void addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason);
 #endif
 
@@ -194,7 +194,7 @@ public:
 
     // ONLY FOR IOS AND ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, FGenericPlatformTypes::int64 duration/*, const char *fields*/);
+    static void AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration/*, const char *fields*/);
 
     // ONLY FOR IOS AND ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")

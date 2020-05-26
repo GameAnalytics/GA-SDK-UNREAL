@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.1.4**
+* added support for unreal engine 4.25
+
 **4.1.3**
 * fixed compile errors
 

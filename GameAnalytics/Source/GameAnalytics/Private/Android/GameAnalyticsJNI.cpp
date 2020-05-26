@@ -727,7 +727,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, FGenericPlatformTypes::int64 duration, const char *fields)
+        void jni_addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);

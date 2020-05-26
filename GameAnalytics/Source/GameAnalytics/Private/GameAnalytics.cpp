@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.1.3")
+#define GA_VERSION TEXT("4.1.4")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -466,7 +466,7 @@ void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char
 #endif
 }
 
-void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, FGenericPlatformTypes::int64 duration)
+void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration)
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
@@ -790,7 +790,7 @@ void UGameAnalytics::AddAdEvent(EGAAdAction action, EGAAdType adType, const FStr
 #endif
 }
 
-void UGameAnalytics::AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, FGenericPlatformTypes::int64 duration/*, const char *fields*/)
+void UGameAnalytics::AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration/*, const char *fields*/)
 {
 #if PLATFORM_IOS || PLATFORM_ANDROID
     addAdEventWithDuration(action, adType, TCHAR_TO_ANSI(*adSdkName), TCHAR_TO_ANSI(*adPlacement), duration);
