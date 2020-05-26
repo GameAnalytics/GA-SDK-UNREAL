@@ -696,7 +696,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement)
+        void jni_addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -727,7 +727,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64 duration)
+        void jni_addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, FGenericPlatformTypes::int64 duration, const char *fields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -758,7 +758,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason)
+        void jni_addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);

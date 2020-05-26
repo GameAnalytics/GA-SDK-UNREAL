@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.1.2")
+#define GA_VERSION TEXT("4.1.3")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -460,19 +460,19 @@ void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addAdEvent((int)action, (int)action, adSdkName, adPlacement/*, ""*/);
+    GameAnalyticsCpp::addAdEvent((int)action, (int)action, adSdkName, adPlacement, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEvent((int)action, (int)action, adSdkName, adPlacement/*, ""*/);
+    gameanalytics::jni_addAdEvent((int)action, (int)action, adSdkName, adPlacement, "");
 #endif
 }
 
-void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64 duration)
+void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, FGenericPlatformTypes::int64 duration)
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration/*, ""*/);
+    GameAnalyticsCpp::addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration/*, ""*/);
+    gameanalytics::jni_addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration, "");
 #endif
 }
 
@@ -480,9 +480,9 @@ void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adTy
 {
 #if WITH_EDITOR
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason/*, ""*/);
+    GameAnalyticsCpp::addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, "");
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason/*, ""*/);
+    gameanalytics::jni_addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, "");
 #endif
 }
 #endif
@@ -790,7 +790,7 @@ void UGameAnalytics::AddAdEvent(EGAAdAction action, EGAAdType adType, const FStr
 #endif
 }
 
-void UGameAnalytics::AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration/*, const char *fields*/)
+void UGameAnalytics::AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, FGenericPlatformTypes::int64 duration/*, const char *fields*/)
 {
 #if PLATFORM_IOS || PLATFORM_ANDROID
     addAdEventWithDuration(action, adType, TCHAR_TO_ANSI(*adSdkName), TCHAR_TO_ANSI(*adPlacement), duration);

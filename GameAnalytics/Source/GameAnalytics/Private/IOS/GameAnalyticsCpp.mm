@@ -227,7 +227,7 @@ void addAdEvent(int action, int adType, const char *adSdkName, const char *adPla
                             adPlacement:adPlacementString
                                /*fields:fields_dict*/];
 }
-void addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64 duration, const char *fields) {
+void addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, FGenericPlatformTypes::int64 duration, const char *fields) {
     NSString *adSdkNameString = adSdkName != NULL ? [NSString stringWithUTF8String:adSdkName] : nil;
     NSString *adPlacementString = adPlacement != NULL ? [NSString stringWithUTF8String:adPlacement] : nil;
     NSString *fieldsString = fields != NULL ? [NSString stringWithUTF8String:fields] : nil;
@@ -322,7 +322,7 @@ bool GameAnalyticsCpp::isRemoteConfigsReady() {
 }
 
 void GameAnalyticsCpp::getRemoteConfigsContentAsString(char* out) {
-    NSString *result = [GameAnalytics getRemoteConfigsConfigurations];
+    NSString *result = [GameAnalytics getRemoteConfigsContentAsString];
 
     std::string s = result != nil ? [result UTF8String] : "";
 	out = new char[s.size() + 1];
