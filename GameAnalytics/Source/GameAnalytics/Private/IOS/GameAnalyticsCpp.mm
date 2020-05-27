@@ -213,7 +213,7 @@ void GameAnalyticsCpp::addErrorEvent(int severity, const char *message, const ch
     [GameAnalytics addErrorEventWithSeverity:(GAErrorSeverity)severity message:messageString /*fields:fields_dict*/];
 }
 
-void addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields) {
+void GameAnalyticsCpp::addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields) {
     NSString *adSdkNameString = adSdkName != NULL ? [NSString stringWithUTF8String:adSdkName] : nil;
     NSString *adPlacementString = adPlacement != NULL ? [NSString stringWithUTF8String:adPlacement] : nil;
     NSString *fieldsString = fields != NULL ? [NSString stringWithUTF8String:fields] : nil;
@@ -227,7 +227,7 @@ void addAdEvent(int action, int adType, const char *adSdkName, const char *adPla
                             adPlacement:adPlacementString
                                /*fields:fields_dict*/];
 }
-void addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields) {
+void GameAnalyticsCpp::addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields) {
     NSString *adSdkNameString = adSdkName != NULL ? [NSString stringWithUTF8String:adSdkName] : nil;
     NSString *adPlacementString = adPlacement != NULL ? [NSString stringWithUTF8String:adPlacement] : nil;
     NSString *fieldsString = fields != NULL ? [NSString stringWithUTF8String:fields] : nil;
@@ -243,7 +243,7 @@ void addAdEventWithDuration(int action, int adType, const char *adSdkName, const
                                /*fields:fields_dict*/];
 }
 
-void addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields) {
+void GameAnalyticsCpp::addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields) {
     NSString *adSdkNameString = adSdkName != NULL ? [NSString stringWithUTF8String:adSdkName] : nil;
     NSString *adPlacementString = adPlacement != NULL ? [NSString stringWithUTF8String:adPlacement] : nil;
     NSString *fieldsString = fields != NULL ? [NSString stringWithUTF8String:fields] : nil;
