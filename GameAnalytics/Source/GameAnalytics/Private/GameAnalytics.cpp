@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.1.5")
+#define GA_VERSION TEXT("4.2.0")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -705,6 +705,52 @@ FString UGameAnalytics::getRemoteConfigsContentAsString()
 #endif
 }
 
+FString UGameAnalytics::getABTestingId()
+{
+#if WITH_EDITOR
+    return "";
+#elif PLATFORM_IOS
+	char* out = NULL;
+    GameAnalyticsCpp::getABTestingId(out);
+	FString result(out);
+	delete[] out;
+	return result;
+#elif PLATFORM_ANDROID
+	char* out = NULL;
+    gameanalytics::jni_getABTestingId(out);
+	FString result(out);
+	delete[] out;
+	return result;
+#elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
+    return FString(gameanalytics::GameAnalytics::getABTestingId().data());
+// #elif PLATFORM_HTML5
+//     return FString(js_getABTestingId());
+#endif
+}
+
+FString UGameAnalytics::getABTestingVariantId()
+{
+#if WITH_EDITOR
+    return "";
+#elif PLATFORM_IOS
+	char* out = NULL;
+    GameAnalyticsCpp::getABTestingVariantId(out);
+	FString result(out);
+	delete[] out;
+	return result;
+#elif PLATFORM_ANDROID
+	char* out = NULL;
+    gameanalytics::jni_getABTestingVariantId(out);
+	FString result(out);
+	delete[] out;
+	return result;
+#elif PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_WINDOWS
+    return FString(gameanalytics::GameAnalytics::getABTestingVariantId().data());
+// #elif PLATFORM_HTML5
+//     return FString(js_getABTestingVariantId());
+#endif
+}
+
 // Blueprint functions
 
 void UGameAnalytics::AddBusinessEventIOS(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt/*, const char *fields*/)
@@ -842,4 +888,14 @@ bool UGameAnalytics::IsRemoteConfigsReady()
 FString UGameAnalytics::GetRemoteConfigsContentAsString()
 {
     return getRemoteConfigsContentAsString();
+}
+
+FString UGameAnalytics::GetABTestingId()
+{
+    return getABTestingId();
+}
+
+FString UGameAnalytics::GetABTestingVariantId()
+{
+    return getABTestingVariantId();
 }

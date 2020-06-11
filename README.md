@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.2.0**
+* exposed functions to get AB testing id and variant id
+
 **4.1.5**
 * fixed link errors for ios
 

@@ -141,6 +141,9 @@ public:
     static bool isRemoteConfigsReady();
     static FString getRemoteConfigsContentAsString();
 
+    static FString getABTestingId();
+    static FString getABTestingVariantId();
+
     // Bluprint functions
 
     // ONLY FOR IOS
@@ -220,6 +223,12 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static FString GetRemoteConfigsContentAsString();
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static FString GetABTestingId();
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static FString GetABTestingVariantId();
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void OnQuit();

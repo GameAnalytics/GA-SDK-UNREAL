@@ -130,6 +130,22 @@ var GameAnalyticsUnreal = {
         var buffer = _malloc(bufferSize);
         stringToUTF8(returnStr, buffer, bufferSize);
         return buffer;
+    },
+    js_getABTestingId: function()
+    {
+        var returnStr = gameanalytics.GameAnalytics.getABTestingId();
+        var bufferSize = lengthBytesUTF8(returnStr) + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
+        return buffer;
+    },
+    js_getABTestingVariantId: function()
+    {
+        var returnStr = gameanalytics.GameAnalytics.getABTestingVariantId();
+        var bufferSize = lengthBytesUTF8(returnStr) + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
+        return buffer;
     }
 };
 

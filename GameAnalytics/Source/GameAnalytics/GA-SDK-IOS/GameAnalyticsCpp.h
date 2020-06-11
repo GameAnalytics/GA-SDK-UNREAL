@@ -47,4 +47,7 @@ public:
     static void getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char* out);
     static bool isRemoteConfigsReady();
     static void getRemoteConfigsContentAsString(char* out);
+
+    static void getABTestingId(char* out);
+    static void getABTestingVariantId(char* out);
 };

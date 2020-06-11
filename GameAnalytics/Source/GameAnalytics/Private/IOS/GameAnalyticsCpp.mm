@@ -303,8 +303,8 @@ void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, char* out)
     NSString *result = [GameAnalytics getRemoteConfigsValueAsString:keyString];
 
     std::string s = result != nil ? [result UTF8String] : "";
-	out = new char[s.size() + 1];
-	snprintf(out, s.size() + 1, "%s", s.c_str());
+    out = new char[s.size() + 1];
+    snprintf(out, s.size() + 1, "%s", s.c_str());
 }
 
 void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char* out) {
@@ -313,8 +313,8 @@ void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, const char
     NSString *result = [GameAnalytics getRemoteConfigsValueAsString:keyString defaultValue:defaultValueString];
 
     std::string s = result != nil ? [result UTF8String] : "";
-	out = new char[s.size() + 1];
-	snprintf(out, s.size() + 1, "%s", s.c_str());
+    out = new char[s.size() + 1];
+    snprintf(out, s.size() + 1, "%s", s.c_str());
 }
 
 bool GameAnalyticsCpp::isRemoteConfigsReady() {
@@ -325,6 +325,22 @@ void GameAnalyticsCpp::getRemoteConfigsContentAsString(char* out) {
     NSString *result = [GameAnalytics getRemoteConfigsContentAsString];
 
     std::string s = result != nil ? [result UTF8String] : "";
-	out = new char[s.size() + 1];
-	snprintf(out, s.size() + 1, "%s", s.c_str());
+    out = new char[s.size() + 1];
+    snprintf(out, s.size() + 1, "%s", s.c_str());
+}
+
+void GameAnalyticsCpp::getABTestingId(char* out) {
+    NSString *result = [GameAnalytics getABTestingId];
+
+    std::string s = result != nil ? [result UTF8String] : "";
+    out = new char[s.size() + 1];
+    snprintf(out, s.size() + 1, "%s", s.c_str());
+}
+
+void GameAnalyticsCpp::getABTestingVariantId(char* out) {
+    NSString *result = [GameAnalytics getABTestingVariantId];
+
+    std::string s = result != nil ? [result UTF8String] : "";
+    out = new char[s.size() + 1];
+    snprintf(out, s.size() + 1, "%s", s.c_str());
 }

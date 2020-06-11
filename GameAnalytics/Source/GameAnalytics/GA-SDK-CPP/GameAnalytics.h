@@ -160,6 +160,9 @@ namespace gameanalytics
          static void removeRemoteConfigsListener(const std::shared_ptr<IRemoteConfigsListener>& listener);
          static std::vector<char> getRemoteConfigsContentAsString();
 
+         static std::vector<char> getABTestingId();
+         static std::vector<char> getABTestingVariantId();
+
          // game state changes
          // will affect how session is started / ended
          static void onResume();

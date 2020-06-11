@@ -33,4 +33,6 @@ extern "C"
     const char* js_getRemoteConfigsValueAsStringWithDefaultValue(const char *key, const char *defaultValue);
     bool js_isRemoteConfigsReady();
     const char* js_getRemoteConfigsContentAsString();
+    const char* js_getABTestingId();
+    const char* js_getABTestingVariantId();
 }
