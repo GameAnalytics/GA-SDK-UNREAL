@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.2.0")
+#define GA_VERSION TEXT("4.2.1")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
