@@ -21,11 +21,13 @@ namespace UnrealBuildTool.Rules
             if(Target.Platform == UnrealTargetPlatform.Win64)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
+                PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "Sqlite.lib"));
                 PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
             }
             else if(Target.Platform == UnrealTargetPlatform.Win32)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
+                PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "Sqlite.lib"));
                 PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
             }
             else if(Target.Platform == UnrealTargetPlatform.Android)
@@ -36,6 +38,7 @@ namespace UnrealBuildTool.Rules
             else if(Target.Platform == UnrealTargetPlatform.Mac)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
+                PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libSqlite.a"));
                 PublicAdditionalLibraries.Add("curl");
                 PublicFrameworks.AddRange(
                     new string[] {
