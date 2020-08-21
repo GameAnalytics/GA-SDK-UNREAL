@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.3.2**
+* fix to the seperation of sqlite code for some platforms
+
 **4.3.1**
 * seperated sqlite code into its own library (osx, windows, linux)
 
