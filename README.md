@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.3.3**
+* improved user identifer flow for ios (ios)
+
 **4.3.2**
 * fix to the seperation of sqlite code for some platforms
 
