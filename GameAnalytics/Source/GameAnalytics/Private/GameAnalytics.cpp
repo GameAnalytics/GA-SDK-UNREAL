@@ -14,7 +14,9 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.3.3")
+#define GA_VERSION TEXT("4.3.4")
+
+DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -23,6 +25,8 @@ UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Su
 void UGameAnalytics::configureAvailableCustomDimensions01(const TArray<FString>& list)
 {
 #if WITH_EDITOR
+    FString s = FString::Join(list, TEXT(","));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableCustomDimensions01(%s)"), *s);
 #elif PLATFORM_IOS
     std::vector<std::string> v;
     for (const FString& item : list)
@@ -61,6 +65,8 @@ void UGameAnalytics::configureAvailableCustomDimensions01(const TArray<FString>&
 void UGameAnalytics::configureAvailableCustomDimensions02(const TArray<FString>& list)
 {
 #if WITH_EDITOR
+    FString s = FString::Join(list, TEXT(","));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableCustomDimensions02(%s)"), *s);
 #elif PLATFORM_IOS
     std::vector<std::string> v;
     for (const FString& item : list)
@@ -99,6 +105,8 @@ void UGameAnalytics::configureAvailableCustomDimensions02(const TArray<FString>&
 void UGameAnalytics::configureAvailableCustomDimensions03(const TArray<FString>& list)
 {
 #if WITH_EDITOR
+    FString s = FString::Join(list, TEXT(","));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableCustomDimensions03(%s)"), *s);
 #elif PLATFORM_IOS
     std::vector<std::string> v;
     for (const FString& item : list)
@@ -137,6 +145,8 @@ void UGameAnalytics::configureAvailableCustomDimensions03(const TArray<FString>&
 void UGameAnalytics::configureAvailableResourceCurrencies(const TArray<FString>& list)
 {
 #if WITH_EDITOR
+    FString s = FString::Join(list, TEXT(","));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableResourceCurrencies(%s)"), *s);
 #elif PLATFORM_IOS
     std::vector<std::string> v;
     for (const FString& item : list)
@@ -175,6 +185,8 @@ void UGameAnalytics::configureAvailableResourceCurrencies(const TArray<FString>&
 void UGameAnalytics::configureAvailableResourceItemTypes(const TArray<FString>& list)
 {
 #if WITH_EDITOR
+    FString s = FString::Join(list, TEXT(","));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableResourceItemTypes(%s)"), *s);
 #elif PLATFORM_IOS
     std::vector<std::string> v;
     for (const FString& item : list)
@@ -213,6 +225,7 @@ void UGameAnalytics::configureAvailableResourceItemTypes(const TArray<FString>& 
 void UGameAnalytics::configureBuild(const char *build)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureBuild(%s)"), build);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::configureBuild(build);
 #elif PLATFORM_ANDROID
@@ -227,6 +240,7 @@ void UGameAnalytics::configureBuild(const char *build)
 void UGameAnalytics::configureAutoDetectAppVersion(bool flag)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAutoDetectAppVersion(%s)"), flag ? "true" : "false");
 #elif PLATFORM_IOS
     GameAnalyticsCpp::configureAutoDetectAppVersion(flag);
 #elif PLATFORM_ANDROID
@@ -239,6 +253,7 @@ void UGameAnalytics::configureAutoDetectAppVersion(bool flag)
 void UGameAnalytics::configureUserId(const char *userId)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureUserId(%s)"), userId);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::configureUserId(userId);
 #elif PLATFORM_ANDROID
@@ -253,6 +268,7 @@ void UGameAnalytics::configureUserId(const char *userId)
 void UGameAnalytics::configureSdkGameEngineVersion(const char *gameEngineSdkVersion)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureSdkGameEngineVersion(%s)"), gameEngineSdkVersion);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::configureSdkGameEngineVersion(gameEngineSdkVersion);
 #elif PLATFORM_ANDROID
@@ -267,6 +283,7 @@ void UGameAnalytics::configureSdkGameEngineVersion(const char *gameEngineSdkVers
 void UGameAnalytics::configureGameEngineVersion(const char *gameEngineVersion)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureGameEngineVersion(%s)"), gameEngineVersion);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::configureGameEngineVersion(gameEngineVersion);
 #elif PLATFORM_ANDROID
@@ -287,6 +304,7 @@ void UGameAnalytics::initialize(const char *gameKey, const char *gameSecret)
     UGameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_ANSI(*SdkVersionString));
 
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::initialize(%s, %s)"), gameKey, gameSecret);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::initialize(gameKey, gameSecret);
 #elif PLATFORM_ANDROID
@@ -303,6 +321,8 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
 {
 #if !WITH_EDITOR
     GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, "");
+#else
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s)"), currency, amount, itemType, itemId, cartType, receipt);
 #endif
 }
 
@@ -310,6 +330,8 @@ void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, i
 {
 #if !WITH_EDITOR
     GameAnalyticsCpp::addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType, "");
+#else
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEventAndAutoFetchReceipt(%s, %d, %s, %s, %s)"), currency, amount, itemType, itemId, cartType);
 #endif
 }
 #elif PLATFORM_ANDROID
@@ -317,6 +339,8 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
 {
 #if !WITH_EDITOR
     gameanalytics::jni_addBusinessEventWithReceipt(currency, amount, itemType, itemId, cartType, receipt, "google_play", signature, "");
+#else
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s, %s)"), currency, amount, itemType, itemId, cartType, receipt, signature);
 #endif
 }
 #endif
@@ -324,6 +348,7 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s)"), currency, amount, itemType, itemId, cartType);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, NULL, "");
 #elif PLATFORM_ANDROID
@@ -338,6 +363,7 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
 void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addResourceEvent(%d, %s, %f, %s, %s)"), (int)flowType, currency, amount, itemType, itemId);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addResourceEvent((int)flowType, currency, amount, itemType, itemId, "");
 #elif PLATFORM_ANDROID
@@ -388,6 +414,7 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addProgressionEvent(%d, %s, %s, %s)"), (int)progressionStatus, progression01, progression02, progression03);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, "");
 #elif PLATFORM_ANDROID
@@ -402,6 +429,7 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addProgressionEvent(%d, %s, %s, %s, %d)"), (int)progressionStatus, progression01, progression02, progression03, score);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, "");
 #elif PLATFORM_ANDROID
@@ -416,6 +444,7 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
 void UGameAnalytics::addDesignEvent(const char *eventId)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addDesignEvent(%s)"), eventId);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addDesignEvent(eventId, "");
 #elif PLATFORM_ANDROID
@@ -430,6 +459,7 @@ void UGameAnalytics::addDesignEvent(const char *eventId)
 void UGameAnalytics::addDesignEvent(const char *eventId, float value)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addDesignEvent(%s, %f)"), eventId, value);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addDesignEventWithValue(eventId, value, "");
 #elif PLATFORM_ANDROID
@@ -444,6 +474,7 @@ void UGameAnalytics::addDesignEvent(const char *eventId, float value)
 void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *message)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addErrorEvent(%d, %s)"), (int)severity, message);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addErrorEvent((int)severity, message, "");
 #elif PLATFORM_ANDROID
@@ -459,6 +490,7 @@ void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *messag
 void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEvent(%d, %d, %s, %s)"), (int)action, (int)adType, adSdkName, adPlacement);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addAdEvent((int)action, (int)action, adSdkName, adPlacement, "");
 #elif PLATFORM_ANDROID
@@ -469,6 +501,7 @@ void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char
 void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEventWithDuration(%d, %d, %s, %s, %d)"), (int)action, (int)adType, adSdkName, adPlacement, duration);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration, "");
 #elif PLATFORM_ANDROID
@@ -479,6 +512,7 @@ void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType
 void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEventWithNoAdReason(%d, %d, %s, %s, %d)"), (int)action, (int)adType, adSdkName, adPlacement, (int)noAdReason);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, "");
 #elif PLATFORM_ANDROID
@@ -490,6 +524,7 @@ void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adTy
 void UGameAnalytics::setEnabledInfoLog(bool flag)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledInfoLog(%s)"), flag ? "true" : "false");
 #elif PLATFORM_IOS
     GameAnalyticsCpp::setEnabledInfoLog(flag);
 #elif PLATFORM_ANDROID
@@ -504,6 +539,7 @@ void UGameAnalytics::setEnabledInfoLog(bool flag)
 void UGameAnalytics::setEnabledVerboseLog(bool flag)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledVerboseLog(%s)"), flag ? "true" : "false");
 #elif PLATFORM_IOS
     GameAnalyticsCpp::setEnabledVerboseLog(flag);
 #elif PLATFORM_ANDROID
@@ -518,6 +554,7 @@ void UGameAnalytics::setEnabledVerboseLog(bool flag)
 void UGameAnalytics::setEnabledManualSessionHandling(bool flag)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledManualSessionHandling(%s)"), flag ? "true" : "false");
 #elif PLATFORM_IOS
     GameAnalyticsCpp::setEnabledManualSessionHandling(flag);
 #elif PLATFORM_ANDROID
@@ -532,6 +569,7 @@ void UGameAnalytics::setEnabledManualSessionHandling(bool flag)
 void UGameAnalytics::setEnabledEventSubmission(bool flag)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledEventSubmission(%s)"), flag ? "true" : "false");
 #elif PLATFORM_IOS
     GameAnalyticsCpp::setEnabledEventSubmission(flag);
 #elif PLATFORM_ANDROID
@@ -546,6 +584,7 @@ void UGameAnalytics::setEnabledEventSubmission(bool flag)
 void UGameAnalytics::setCustomDimension01(const char *customDimension)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setCustomDimension01(%s)"), customDimension);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::setCustomDimension01(customDimension);
 #elif PLATFORM_ANDROID
@@ -560,6 +599,7 @@ void UGameAnalytics::setCustomDimension01(const char *customDimension)
 void UGameAnalytics::setCustomDimension02(const char *customDimension)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setCustomDimension02(%s)"), customDimension);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::setCustomDimension02(customDimension);
 #elif PLATFORM_ANDROID
@@ -574,6 +614,7 @@ void UGameAnalytics::setCustomDimension02(const char *customDimension)
 void UGameAnalytics::setCustomDimension03(const char *customDimension)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setCustomDimension03(%s)"), customDimension);
 #elif PLATFORM_IOS
     GameAnalyticsCpp::setCustomDimension03(customDimension);
 #elif PLATFORM_ANDROID
@@ -588,6 +629,7 @@ void UGameAnalytics::setCustomDimension03(const char *customDimension)
 void UGameAnalytics::startSession()
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::startSession()"));
 #elif PLATFORM_IOS
     GameAnalyticsCpp::startSession();
 #elif PLATFORM_ANDROID
@@ -602,6 +644,7 @@ void UGameAnalytics::startSession()
 void UGameAnalytics::endSession()
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::endSession()"));
 #elif PLATFORM_IOS
     GameAnalyticsCpp::endSession();
 #elif PLATFORM_ANDROID
@@ -616,6 +659,7 @@ void UGameAnalytics::endSession()
 void UGameAnalytics::onQuit()
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::onQuit()"));
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     gameanalytics::GameAnalytics::onQuit();
 #endif
@@ -624,6 +668,7 @@ void UGameAnalytics::onQuit()
 FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getRemoteConfigsValueAsString(%s)"), key);
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
@@ -647,6 +692,7 @@ FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key)
 FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key, const char *defaultValue)
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getRemoteConfigsValueAsString(%s, %s)"), key, defaultValue);
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
@@ -670,6 +716,7 @@ FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key, const cha
 bool UGameAnalytics::isRemoteConfigsReady()
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::isRemoteConfigsReady()"));
     return false;
 #elif PLATFORM_IOS
     return GameAnalyticsCpp::isRemoteConfigsReady();
@@ -685,6 +732,7 @@ bool UGameAnalytics::isRemoteConfigsReady()
 FString UGameAnalytics::getRemoteConfigsContentAsString()
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getRemoteConfigsContentAsString()"));
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
@@ -708,6 +756,7 @@ FString UGameAnalytics::getRemoteConfigsContentAsString()
 FString UGameAnalytics::getABTestingId()
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getABTestingId()"));
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
@@ -731,6 +780,7 @@ FString UGameAnalytics::getABTestingId()
 FString UGameAnalytics::getABTestingVariantId()
 {
 #if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getABTestingVariantId()"));
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;

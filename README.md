@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.3.4**
+* added editor logs when calling functions in editor play mode
+
 **4.3.3**
 * improved user identifer flow for ios (ios)
 
