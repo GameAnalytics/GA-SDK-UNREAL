@@ -14,6 +14,8 @@
 #include "UObject/Object.h"
 #include "GameAnalytics.generated.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
+
 UENUM()
 enum class EGAResourceFlowType : uint8
 {

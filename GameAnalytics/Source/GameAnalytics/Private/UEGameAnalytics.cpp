@@ -12,8 +12,6 @@
 // #include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
 
-DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
-
 IMPLEMENT_MODULE( FAnalyticsGameAnalytics, GameAnalytics )
 
 void FAnalyticsGameAnalytics::StartupModule()
@@ -214,9 +212,9 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 #if WITH_EDITOR
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
 #if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
-        gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_ANSI(*FPaths::ProjectSavedDir()));
+        gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_UTF8(*FPaths::ProjectSavedDir()));
 #else
-        gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_ANSI(*FPaths::GameSavedDir()));
+        gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_UTF8(*FPaths::GameSavedDir()));
 #endif
 #endif
 
@@ -233,21 +231,21 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 #if PLATFORM_IOS
         if(!ProjectSettings.AutoDetectAppVersion)
         {
-            UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.IosBuild));
+            UGameAnalytics::configureBuild(TCHAR_TO_UTF8(*ProjectSettings.IosBuild));
         }
 #elif PLATFORM_ANDROID
         if(!ProjectSettings.AutoDetectAppVersion)
         {
-            UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.AndroidBuild));
+            UGameAnalytics::configureBuild(TCHAR_TO_UTF8(*ProjectSettings.AndroidBuild));
         }
 #elif PLATFORM_MAC
-        UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.MacBuild));
+        UGameAnalytics::configureBuild(TCHAR_TO_UTF8(*ProjectSettings.MacBuild));
 #elif PLATFORM_WINDOWS
-        UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.WindowsBuild));
+        UGameAnalytics::configureBuild(TCHAR_TO_UTF8(*ProjectSettings.WindowsBuild));
 #elif PLATFORM_LINUX
-        UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.LinuxBuild));
+        UGameAnalytics::configureBuild(TCHAR_TO_UTF8(*ProjectSettings.LinuxBuild));
 // #elif PLATFORM_HTML5
-//         UGameAnalytics::configureBuild(TCHAR_TO_ANSI(*ProjectSettings.Html5Build));
+//         UGameAnalytics::configureBuild(TCHAR_TO_UTF8(*ProjectSettings.Html5Build));
 #endif
 
         ////// Configure available virtual currencies and item types
@@ -368,7 +366,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 //             secretKey = ProjectSettings.Html5SecretKey;
 #endif
         }
-        UGameAnalytics::initialize(TCHAR_TO_ANSI(*gameKey), TCHAR_TO_ANSI(*secretKey));
+        UGameAnalytics::initialize(TCHAR_TO_UTF8(*gameKey), TCHAR_TO_UTF8(*secretKey));
         bHasSessionStarted = true;
     }
     else if(ProjectSettings.UseManualSessionHandling)
@@ -411,7 +409,7 @@ void FAnalyticsProviderGameAnalytics::SetUserID(const FString& InUserID)
     if(!bHasSessionStarted)
     {
         UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("GameAnalytics::SetCustomId('%s')"), *InUserID);
-        UGameAnalytics::configureUserId(TCHAR_TO_ANSI(*InUserID));
+        UGameAnalytics::configureUserId(TCHAR_TO_UTF8(*InUserID));
         UserId = InUserID;
     }
     else
@@ -447,27 +445,27 @@ void FAnalyticsProviderGameAnalytics::RecordEvent(const FString& EventName, cons
         {
             if (Attr.AttrName == TEXT("custom1"))
             {
-                UGameAnalytics::setCustomDimension01(TCHAR_TO_ANSI(*Attr.ToString()));
+                UGameAnalytics::setCustomDimension01(TCHAR_TO_UTF8(*Attr.ToString()));
             }
             else if (Attr.AttrName == TEXT("custom2"))
             {
-                UGameAnalytics::setCustomDimension02(TCHAR_TO_ANSI(*Attr.ToString()));
+                UGameAnalytics::setCustomDimension02(TCHAR_TO_UTF8(*Attr.ToString()));
             }
             else if (Attr.AttrName == TEXT("custom3"))
             {
-                UGameAnalytics::setCustomDimension03(TCHAR_TO_ANSI(*Attr.ToString()));
+                UGameAnalytics::setCustomDimension03(TCHAR_TO_UTF8(*Attr.ToString()));
             }
             else
             {
                 float AttrValue = FCString::Atof(*Attr.ToString());
-                UGameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*Attr.AttrName), AttrValue);
+                UGameAnalytics::addDesignEvent(TCHAR_TO_UTF8(*Attr.AttrName), AttrValue);
             }
         }
     }
     else if (EventName.Len() > 0)
     {
         // Send an event without value
-        UGameAnalytics::addDesignEvent(TCHAR_TO_ANSI(*EventName));
+        UGameAnalytics::addDesignEvent(TCHAR_TO_UTF8(*EventName));
     }
 }
 
@@ -501,7 +499,7 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TA
         {
             if (Attr.AttrName == TEXT("message"))
             {
-                UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_ANSI(*Attr.ToString()));
+                UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_UTF8(*Attr.ToString()));
             }
         }
     }
@@ -521,7 +519,7 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
         return;
     }
 
-    UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy));
+    UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy));
 }
 
 void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes)
@@ -543,14 +541,14 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
             int32 value = FCString::Atoi(*Attr.ToString());
             useValue = true;
 
-            UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy), value);
+            UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy), value);
             break;
         }
     }
 
     if (!useValue)
     {
-        UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy));
+        UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy));
     }
 }
 
@@ -579,15 +577,15 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
 
                 if (ProgressHierarchyCount > 2)
                 {
-                    UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), TCHAR_TO_ANSI(*ProgressHierarchy[2]), value);
+                    UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy[0]), TCHAR_TO_UTF8(*ProgressHierarchy[1]), TCHAR_TO_UTF8(*ProgressHierarchy[2]), value);
                 }
                 else if (ProgressHierarchyCount > 1)
                 {
-                    UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), value);
+                    UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy[0]), TCHAR_TO_UTF8(*ProgressHierarchy[1]), value);
                 }
                 else
                 {
-                    UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), value);
+                    UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy[0]), value);
                 }
                 break;
             }
@@ -597,21 +595,21 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
         {
             if(!useValue)
             {
-                UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]), TCHAR_TO_ANSI(*ProgressHierarchy[2]));
+                UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy[0]), TCHAR_TO_UTF8(*ProgressHierarchy[1]), TCHAR_TO_UTF8(*ProgressHierarchy[2]));
             }
         }
         else if (ProgressHierarchyCount > 1)
         {
             if(!useValue)
             {
-                UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]), TCHAR_TO_ANSI(*ProgressHierarchy[1]));
+                UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy[0]), TCHAR_TO_UTF8(*ProgressHierarchy[1]));
             }
         }
         else
         {
             if(!useValue)
             {
-                UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_ANSI(*ProgressHierarchy[0]));
+                UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy[0]));
             }
         }
     }
@@ -659,7 +657,7 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
 
         if (!Currency.IsEmpty() && !ItemType.IsEmpty())
         {
-            UGameAnalytics::addResourceEvent(FlowType, TCHAR_TO_ANSI(*Currency), ItemQuantity, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId));
+            UGameAnalytics::addResourceEvent(FlowType, TCHAR_TO_UTF8(*Currency), ItemQuantity, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId));
         }
         else
         {
@@ -732,30 +730,30 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
 #if PLATFORM_ANDROID
             if (!Receipt.IsEmpty() && !Signature.IsEmpty())
             {
-                UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType), TCHAR_TO_ANSI(*Receipt), TCHAR_TO_ANSI(*Signature));
+                UGameAnalytics::addBusinessEvent(TCHAR_TO_UTF8(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), TCHAR_TO_UTF8(*Signature));
             }
             else
             {
-                UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
+                UGameAnalytics::addBusinessEvent(TCHAR_TO_UTF8(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
             }
 #elif PLATFORM_IOS
             if (!Receipt.IsEmpty())
             {
-                UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType), TCHAR_TO_ANSI(*Receipt));
+                UGameAnalytics::addBusinessEvent(TCHAR_TO_UTF8(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt));
             }
             else
             {
                 if(AutoFetchReceipt)
                 {
-                    UGameAnalytics::addBusinessEventAndAutoFetchReceipt(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
+                    UGameAnalytics::addBusinessEventAndAutoFetchReceipt(TCHAR_TO_UTF8(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
                 }
                 else
                 {
-                    UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
+                    UGameAnalytics::addBusinessEvent(TCHAR_TO_UTF8(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
                 }
             }
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-            UGameAnalytics::addBusinessEvent(TCHAR_TO_ANSI(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_ANSI(*ItemType), TCHAR_TO_ANSI(*ItemId), TCHAR_TO_ANSI(*CartType));
+            UGameAnalytics::addBusinessEvent(TCHAR_TO_UTF8(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
 #endif
         }
         else
