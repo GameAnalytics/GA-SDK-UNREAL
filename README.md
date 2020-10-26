@@ -32,6 +32,9 @@ Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
 **4.3.6**
+* fixed build errors for linux (small correction)
+
+**4.3.6**
 * fixed build errors for linux
 
 **4.3.5**
