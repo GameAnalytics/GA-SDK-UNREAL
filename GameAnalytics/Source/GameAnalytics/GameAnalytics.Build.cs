@@ -52,6 +52,7 @@ namespace UnrealBuildTool.Rules
             else if(Target.Platform == UnrealTargetPlatform.Linux)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libGameAnalytics.a"));
+                PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libSqlite.a"));
                 PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl" });
             }
             else if(Target.Platform == UnrealTargetPlatform.IOS)

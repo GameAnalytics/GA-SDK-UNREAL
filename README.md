@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.3.6**
+* fixed build errors for linux
+
 **4.3.5**
 * fixed log messages output to console in editor
 
