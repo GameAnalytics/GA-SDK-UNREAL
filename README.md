@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.3.8**
+* corrected ad event annotation
+
 **4.3.7**
 * added ARM64 architecture to mac libs
 
