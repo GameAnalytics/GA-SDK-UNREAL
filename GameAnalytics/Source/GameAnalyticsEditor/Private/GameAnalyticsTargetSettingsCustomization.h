@@ -62,24 +62,24 @@ public:
 
 	void OpenStudioAndGameSelector();
 
-	void OnOrganizationMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
-	void OnStudioMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
-	void OnGameMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
-	void OnOrganizationMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
-	void OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
-	void OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
-	void OnOrganizationMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
-    void OnStudioMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
-    void OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
-	void OnOrganizationMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
-	void OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
-    void OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
-	void OnOrganizationMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
-    void OnStudioMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
-    void OnGameMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
-	void OnOrganizationMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem);
-    void OnStudioMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem);
-    void OnGameMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::GAME GameItem);
+	void OnOrganizationMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const;
+	void OnStudioMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const;
+	void OnGameMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const;
+	void OnOrganizationMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const;
+	void OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const;
+	void OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const;
+	void OnOrganizationMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const;
+    void OnStudioMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const;
+    void OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const;
+	void OnOrganizationMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const;
+	void OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const;
+    void OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const;
+	void OnOrganizationMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const;
+    void OnStudioMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const;
+    void OnGameMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const;
+	void OnOrganizationMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const;
+    void OnStudioMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const;
+    void OnGameMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const;
 
 public:
 	static FGameAnalyticsTargetSettingsCustomization& getInstance()

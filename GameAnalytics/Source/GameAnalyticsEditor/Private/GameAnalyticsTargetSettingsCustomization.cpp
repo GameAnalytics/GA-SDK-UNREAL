@@ -1029,7 +1029,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateGamesHtml5(
 }
 
 
-void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const
 {
 	FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos = GameItem;
 
@@ -1064,7 +1064,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAn
 	SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const
 {
 	FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid = GameItem;
 
@@ -1100,7 +1100,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGa
 	SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac = GameItem;
 
@@ -1136,7 +1136,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedMac(FGameAn
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows = GameItem;
 
@@ -1172,7 +1172,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedWindows(FGa
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux = GameItem;
 
@@ -1208,7 +1208,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedLinux(FGame
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::GAME GameItem)
+void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::GAME GameItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5 = GameItem;
 
@@ -1448,7 +1448,7 @@ TSharedRef<SWidget> FGameAnalyticsTargetSettingsCustomization::UpdateStudiosHtml
     return StudioMenuBuilder.MakeWidget();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationIos = OrganizationItem;
 
@@ -1460,7 +1460,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedIos
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationAndroid = OrganizationItem;
 
@@ -1472,7 +1472,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedAnd
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationMac = OrganizationItem;
 
@@ -1484,7 +1484,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedMac
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationWindows = OrganizationItem;
 
@@ -1496,7 +1496,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedWin
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationLinux = OrganizationItem;
 
@@ -1508,7 +1508,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedLin
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem)
+void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::ORGANIZATION OrganizationItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedOrganizationHtml5 = OrganizationItem;
 
@@ -1520,7 +1520,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnOrganizationMenuItemClickedHtm
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedIos(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const
 {
 	FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioIos = StudioItem;
 
@@ -1532,7 +1532,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedIos(FGame
 	SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedAndroid(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const
 {
 	FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioAndroid = StudioItem;
 
@@ -1544,7 +1544,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedAndroid(F
 	SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedMac(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioMac = StudioItem;
 
@@ -1556,7 +1556,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedMac(FGame
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedWindows(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioWindows = StudioItem;
 
@@ -1568,7 +1568,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedWindows(F
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedLinux(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioLinux = StudioItem;
 
@@ -1580,7 +1580,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedLinux(FGa
     SavedLayoutBuilder->ForceRefreshDetails();
 }
 
-void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem)
+void FGameAnalyticsTargetSettingsCustomization::OnStudioMenuItemClickedHtml5(FGameAnalyticsTargetSettingsCustomization::STUDIO StudioItem) const
 {
     FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedStudioHtml5 = StudioItem;
 
@@ -1666,7 +1666,7 @@ void HttpCaller::LoginHttp(FName Email, FName Password)
 
 	//~~~~~~~~~~~~~~~~~~~~~~
 
-	TSharedRef < IHttpRequest > Request = Http->CreateRequest();
+	TSharedRef < IHttpRequest, ESPMode::ThreadSafe > Request = Http->CreateRequest();
 
 	/**
 	* Instantiates a new Http request for the current platform
@@ -1793,7 +1793,7 @@ void HttpCaller::GetUserDataHttp(FString Token)
 
 	//~~~~~~~~~~~~~~~~~~~~~~
 
-	TSharedRef < IHttpRequest > Request = Http->CreateRequest();
+	TSharedRef < IHttpRequest, ESPMode::ThreadSafe > Request = Http->CreateRequest();
 
 	/**
 	* Instantiates a new Http request for the current platform

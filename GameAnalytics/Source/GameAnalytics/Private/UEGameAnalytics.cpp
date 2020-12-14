@@ -288,58 +288,58 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
             for (auto Attr : Attributes)
             {
 #if PLATFORM_IOS
-                if (Attr.AttrName == TEXT("ios_gameKey"))
+                if (Attr.GetName() == TEXT("ios_gameKey"))
                 {
-                    gameKey = Attr.ToString();
+                    gameKey = Attr.GetValue();
                 }
-                else if (Attr.AttrName == TEXT("ios_secretKey"))
+                else if (Attr.GetName() == TEXT("ios_secretKey"))
                 {
-                    secretKey = Attr.ToString();
+                    secretKey = Attr.GetValue();
                 }
 #elif PLATFORM_ANDROID
-                if (Attr.AttrName == TEXT("android_gameKey"))
+                if (Attr.GetName() == TEXT("android_gameKey"))
                 {
-                    gameKey = Attr.ToString();
+                    gameKey = Attr.GetValue();
                 }
-                else if (Attr.AttrName == TEXT("android_secretKey"))
+                else if (Attr.GetName() == TEXT("android_secretKey"))
                 {
-                    secretKey = Attr.ToString();
+                    secretKey = Attr.GetValue();
                 }
 #elif PLATFORM_MAC
-                if (Attr.AttrName == TEXT("mac_gameKey"))
+                if (Attr.GetName() == TEXT("mac_gameKey"))
                 {
-                    gameKey = Attr.ToString();
+                    gameKey = Attr.GetValue();
                 }
-                else if (Attr.AttrName == TEXT("mac_secretKey"))
+                else if (Attr.GetName() == TEXT("mac_secretKey"))
                 {
-                    secretKey = Attr.ToString();
+                    secretKey = Attr.GetValue();
                 }
 #elif PLATFORM_WINDOWS
-                if (Attr.AttrName == TEXT("windows_gameKey"))
+                if (Attr.GetName() == TEXT("windows_gameKey"))
                 {
-                    gameKey = Attr.ToString();
+                    gameKey = Attr.GetValue();
                 }
-                else if (Attr.AttrName == TEXT("windows_secretKey"))
+                else if (Attr.GetName() == TEXT("windows_secretKey"))
                 {
-                    secretKey = Attr.ToString();
+                    secretKey = Attr.GetValue();
                 }
 #elif PLATFORM_LINUX
-                if (Attr.AttrName == TEXT("linux_gameKey"))
+                if (Attr.GetName() == TEXT("linux_gameKey"))
                 {
-                    gameKey = Attr.ToString();
+                    gameKey = Attr.GetValue();
                 }
-                else if (Attr.AttrName == TEXT("linux_secretKey"))
+                else if (Attr.GetName() == TEXT("linux_secretKey"))
                 {
-                    secretKey = Attr.ToString();
+                    secretKey = Attr.GetValue();
                 }
 // #elif PLATFORM_HTML5
-//                 if (Attr.AttrName == TEXT("html5_gameKey"))
+//                 if (Attr.GetName() == TEXT("html5_gameKey"))
 //                 {
-//                     gameKey = Attr.ToString();
+//                     gameKey = Attr.GetValue();
 //                 }
-//                 else if (Attr.AttrName == TEXT("html5_secretKey"))
+//                 else if (Attr.GetName() == TEXT("html5_secretKey"))
 //                 {
-//                     secretKey = Attr.ToString();
+//                     secretKey = Attr.GetValue();
 //                 }
 #endif
             }
@@ -443,22 +443,22 @@ void FAnalyticsProviderGameAnalytics::RecordEvent(const FString& EventName, cons
         // Send an event for each attribute
         for (auto Attr : Attributes)
         {
-            if (Attr.AttrName == TEXT("custom1"))
+            if (Attr.GetName() == TEXT("custom1"))
             {
-                UGameAnalytics::setCustomDimension01(TCHAR_TO_UTF8(*Attr.ToString()));
+                UGameAnalytics::setCustomDimension01(TCHAR_TO_UTF8(*Attr.GetValue()));
             }
-            else if (Attr.AttrName == TEXT("custom2"))
+            else if (Attr.GetName() == TEXT("custom2"))
             {
-                UGameAnalytics::setCustomDimension02(TCHAR_TO_UTF8(*Attr.ToString()));
+                UGameAnalytics::setCustomDimension02(TCHAR_TO_UTF8(*Attr.GetValue()));
             }
-            else if (Attr.AttrName == TEXT("custom3"))
+            else if (Attr.GetName() == TEXT("custom3"))
             {
-                UGameAnalytics::setCustomDimension03(TCHAR_TO_UTF8(*Attr.ToString()));
+                UGameAnalytics::setCustomDimension03(TCHAR_TO_UTF8(*Attr.GetValue()));
             }
             else
             {
-                float AttrValue = FCString::Atof(*Attr.ToString());
-                UGameAnalytics::addDesignEvent(TCHAR_TO_UTF8(*Attr.AttrName), AttrValue);
+                float AttrValue = FCString::Atof(*Attr.GetValue());
+                UGameAnalytics::addDesignEvent(TCHAR_TO_UTF8(*Attr.GetName()), AttrValue);
             }
         }
     }
@@ -497,9 +497,9 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TA
     {
         for (auto Attr : Attributes)
         {
-            if (Attr.AttrName == TEXT("message"))
+            if (Attr.GetName() == TEXT("message"))
             {
-                UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_UTF8(*Attr.ToString()));
+                UGameAnalytics::addErrorEvent(ErrorSeverity, TCHAR_TO_UTF8(*Attr.GetValue()));
             }
         }
     }
@@ -536,9 +536,9 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
 
     for (auto Attr : Attributes)
     {
-        if (Attr.AttrName == TEXT("value"))
+        if (Attr.GetName() == TEXT("value"))
         {
-            int32 value = FCString::Atoi(*Attr.ToString());
+            int32 value = FCString::Atoi(*Attr.GetValue());
             useValue = true;
 
             UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy), value);
@@ -569,10 +569,10 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
 
         for (auto Attr : Attributes)
         {
-            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: Attributes. AttrName=%s"), *Attr.AttrName);
-            if (Attr.AttrName == TEXT("value"))
+            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: Attributes. AttrName=%s"), *Attr.GetName());
+            if (Attr.GetName() == TEXT("value"))
             {
-                int32 value = FCString::Atoi(*Attr.ToString());
+                int32 value = FCString::Atoi(*Attr.GetValue());
                 useValue = true;
 
                 if (ProgressHierarchyCount > 2)
@@ -635,23 +635,23 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
     {
         for (auto Attr : Attributes)
         {
-            if (Attr.AttrName == TEXT("flowType"))
+            if (Attr.GetName() == TEXT("flowType"))
             {
-                FlowType = GetEnumValueFromString<EGAResourceFlowType>("EGAResourceFlowType", Attr.ToString().ToLower());
+                FlowType = GetEnumValueFromString<EGAResourceFlowType>("EGAResourceFlowType", Attr.GetValue().ToLower());
 
                 if (FlowType == EGAResourceFlowType(0))
                 {
-                    UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.ToString());
+                    UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.GetValue());
                     return;
                 }
             }
-            else if (Attr.AttrName == TEXT("currency"))
+            else if (Attr.GetName() == TEXT("currency"))
             {
-                Currency = Attr.ToString();
+                Currency = Attr.GetValue();
             }
-            else if (Attr.AttrName == TEXT("itemType"))
+            else if (Attr.GetName() == TEXT("itemType"))
             {
-                ItemType = Attr.ToString();
+                ItemType = Attr.GetValue();
             }
         }
 
@@ -694,34 +694,34 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
     {
         for (auto Attr : Attributes)
         {
-            FString AttrString = Attr.AttrName;
+            FString AttrString = Attr.GetName();
 
-            if (Attr.AttrName == TEXT("itemType"))
+            if (Attr.GetName() == TEXT("itemType"))
             {
-                ItemType = Attr.ToString();
+                ItemType = Attr.GetValue();
             }
-            else if (Attr.AttrName == TEXT("itemId"))
+            else if (Attr.GetName() == TEXT("itemId"))
             {
-                ItemId = Attr.ToString();
+                ItemId = Attr.GetValue();
             }
-            else if (Attr.AttrName == TEXT("cartType"))
+            else if (Attr.GetName() == TEXT("cartType"))
             {
-                CartType = Attr.ToString();
+                CartType = Attr.GetValue();
             }
-            else if (Attr.AttrName == TEXT("receipt"))
+            else if (Attr.GetName() == TEXT("receipt"))
             {
-                Receipt = Attr.ToString();
+                Receipt = Attr.GetValue();
             }
-            else if (Attr.AttrName == TEXT("autoFetchReceipt"))
+            else if (Attr.GetName() == TEXT("autoFetchReceipt"))
             {
-                if (Attr.ToString().ToBool())
+                if (Attr.GetValue().ToBool())
                 {
                     AutoFetchReceipt = true;
                 }
             }
-            else if (Attr.AttrName == TEXT("signature"))
+            else if (Attr.GetName() == TEXT("signature"))
             {
-                Signature = Attr.ToString();
+                Signature = Attr.GetValue();
             }
         }
 
