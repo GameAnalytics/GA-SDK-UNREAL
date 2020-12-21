@@ -44,12 +44,12 @@ namespace gameanalytics {
         extern void jni_startSession();
         extern void jni_endSession();
 
-        extern void jni_getRemoteConfigsValueAsString(const char *key, char* out);
-        extern void jni_getRemoteConfigsValueAsStringWithDefaultValue(const char *key, const char *defaultValue, char* out);
+        extern void jni_getRemoteConfigsValueAsString(const char *key, char** out);
+        extern void jni_getRemoteConfigsValueAsStringWithDefaultValue(const char *key, const char *defaultValue, char** out);
         extern bool jni_isRemoteConfigsReady();
-        extern void jni_getRemoteConfigsContentAsString(char* out);
+        extern void jni_getRemoteConfigsContentAsString(char** out);
 
-        extern void jni_getABTestingId(char* out);
-        extern void jni_getABTestingVariantId(char* out);
+        extern void jni_getABTestingId(char** out);
+        extern void jni_getABTestingVariantId(char** out);
     }
 }

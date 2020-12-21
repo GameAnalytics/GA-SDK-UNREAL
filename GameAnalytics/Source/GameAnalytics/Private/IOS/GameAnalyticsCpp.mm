@@ -298,49 +298,54 @@ void GameAnalyticsCpp::endSession() {
     [GameAnalytics endSession];
 }
 
-void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, char* out) {
+void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, char** out) {
     NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
     NSString *result = [GameAnalytics getRemoteConfigsValueAsString:keyString];
 
     std::string s = result != nil ? [result UTF8String] : "";
-    out = new char[s.size() + 1];
-    snprintf(out, s.size() + 1, "%s", s.c_str());
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
 }
 
-void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char* out) {
+void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char** out) {
     NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
     NSString *defaultValueString = key != NULL ? [NSString stringWithUTF8String:defaultValue] : nil;
     NSString *result = [GameAnalytics getRemoteConfigsValueAsString:keyString defaultValue:defaultValueString];
 
     std::string s = result != nil ? [result UTF8String] : "";
-    out = new char[s.size() + 1];
-    snprintf(out, s.size() + 1, "%s", s.c_str());
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
 }
 
 bool GameAnalyticsCpp::isRemoteConfigsReady() {
     return [GameAnalytics isRemoteConfigsReady] ? true : false;
 }
 
-void GameAnalyticsCpp::getRemoteConfigsContentAsString(char* out) {
+void GameAnalyticsCpp::getRemoteConfigsContentAsString(char** out) {
     NSString *result = [GameAnalytics getRemoteConfigsContentAsString];
 
     std::string s = result != nil ? [result UTF8String] : "";
-    out = new char[s.size() + 1];
-    snprintf(out, s.size() + 1, "%s", s.c_str());
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
 }
 
-void GameAnalyticsCpp::getABTestingId(char* out) {
+void GameAnalyticsCpp::getABTestingId(char** out) {
     NSString *result = [GameAnalytics getABTestingId];
 
     std::string s = result != nil ? [result UTF8String] : "";
-    out = new char[s.size() + 1];
-    snprintf(out, s.size() + 1, "%s", s.c_str());
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
 }
 
-void GameAnalyticsCpp::getABTestingVariantId(char* out) {
+void GameAnalyticsCpp::getABTestingVariantId(char** out) {
     NSString *result = [GameAnalytics getABTestingVariantId];
 
     std::string s = result != nil ? [result UTF8String] : "";
-    out = new char[s.size() + 1];
-    snprintf(out, s.size() + 1, "%s", s.c_str());
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
 }

@@ -43,11 +43,11 @@ public:
     static void startSession();
     static void endSession();
 
-    static void getRemoteConfigsValueAsString(const char *key, char* out);
-    static void getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char* out);
+    static void getRemoteConfigsValueAsString(const char *key, char** out);
+    static void getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char** out);
     static bool isRemoteConfigsReady();
-    static void getRemoteConfigsContentAsString(char* out);
+    static void getRemoteConfigsContentAsString(char** out);
 
-    static void getABTestingId(char* out);
-    static void getABTestingVariantId(char* out);
+    static void getABTestingId(char** out);
+    static void getABTestingVariantId(char** out);
 };

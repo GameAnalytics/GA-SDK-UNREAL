@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.3.9")
+#define GA_VERSION TEXT("4.3.10")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -670,13 +670,13 @@ FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key)
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
-	GameAnalyticsCpp::getRemoteConfigsValueAsString(key, out);
+	GameAnalyticsCpp::getRemoteConfigsValueAsString(key, &out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
 	char* out = NULL;
-	gameanalytics::jni_getRemoteConfigsValueAsString(key, out);
+	gameanalytics::jni_getRemoteConfigsValueAsString(key, &out);
 	FString result(out);
 	delete[] out;
 	return result;
@@ -694,13 +694,13 @@ FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key, const cha
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
-    GameAnalyticsCpp::getRemoteConfigsValueAsString(key, defaultValue, out);
+    GameAnalyticsCpp::getRemoteConfigsValueAsString(key, defaultValue, &out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
 	char* out = NULL;
-    gameanalytics::jni_getRemoteConfigsValueAsStringWithDefaultValue(key, defaultValue, out);
+    gameanalytics::jni_getRemoteConfigsValueAsStringWithDefaultValue(key, defaultValue, &out);
 	FString result(out);
 	delete[] out;
 	return result;
@@ -734,13 +734,13 @@ FString UGameAnalytics::getRemoteConfigsContentAsString()
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
-    GameAnalyticsCpp::getRemoteConfigsContentAsString(out);
+    GameAnalyticsCpp::getRemoteConfigsContentAsString(&out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
 	char* out = NULL;
-    gameanalytics::jni_getRemoteConfigsContentAsString(out);
+    gameanalytics::jni_getRemoteConfigsContentAsString(&out);
 	FString result(out);
 	delete[] out;
 	return result;
@@ -758,13 +758,13 @@ FString UGameAnalytics::getABTestingId()
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
-    GameAnalyticsCpp::getABTestingId(out);
+    GameAnalyticsCpp::getABTestingId(&out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
 	char* out = NULL;
-    gameanalytics::jni_getABTestingId(out);
+    gameanalytics::jni_getABTestingId(&out);
 	FString result(out);
 	delete[] out;
 	return result;
@@ -782,13 +782,13 @@ FString UGameAnalytics::getABTestingVariantId()
     return "";
 #elif PLATFORM_IOS
 	char* out = NULL;
-    GameAnalyticsCpp::getABTestingVariantId(out);
+    GameAnalyticsCpp::getABTestingVariantId(&out);
 	FString result(out);
 	delete[] out;
 	return result;
 #elif PLATFORM_ANDROID
 	char* out = NULL;
-    gameanalytics::jni_getABTestingVariantId(out);
+    gameanalytics::jni_getABTestingVariantId(&out);
 	FString result(out);
 	delete[] out;
 	return result;
