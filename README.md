@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.3.11**
+* fixed dependencies for iOS
+
 **4.3.10**
 * fixed return values for remote configs and ab testing functions
 

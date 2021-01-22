@@ -62,7 +62,8 @@ namespace UnrealBuildTool.Rules
                 PublicFrameworks.AddRange(
                     new string[] {
                         "AdSupport",
-                        "SystemConfiguration"
+                        "SystemConfiguration",
+                        "AppTrackingTransparency"
                     }
                 );
 
