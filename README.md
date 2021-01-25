@@ -32,7 +32,7 @@ Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
 **4.3.11**
-* fixed dependencies for iOS
+* fixed dependencies for iOS (min. XCode 12 required)
 
 **4.3.10**
 * fixed return values for remote configs and ab testing functions
