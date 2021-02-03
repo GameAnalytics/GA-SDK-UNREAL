@@ -14,7 +14,7 @@
 #endif
 #include "Misc/EngineVersion.h"
 
-#define GA_VERSION TEXT("4.3.12")
+#define GA_VERSION TEXT("4.3.13")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -244,6 +244,18 @@ void UGameAnalytics::configureAutoDetectAppVersion(bool flag)
 #elif PLATFORM_ANDROID
     gameanalytics::jni_configureAutoDetectAppVersion(flag);
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+//#elif PLATFORM_HTML5
+#endif
+}
+
+void UGameAnalytics::disableDeviceInfo()
+{
+#if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::disableDeviceInfo()"));
+#elif PLATFORM_IOS
+#elif PLATFORM_ANDROID
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    gameanalytics::GameAnalytics::disableDeviceInfo();
 //#elif PLATFORM_HTML5
 #endif
 }

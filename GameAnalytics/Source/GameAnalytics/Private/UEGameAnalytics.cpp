@@ -136,6 +136,10 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
     {
         Settings.AutoDetectAppVersion = false;
     }
+    if (!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("DisableDeviceInfo"), Settings.DisableDeviceInfo, GetIniName()))
+    {
+        Settings.DisableDeviceInfo = false;
+    }
     if(!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("InfoLogBuild"), Settings.InfoLogBuild, GetIniName()))
     {
         Settings.InfoLogBuild = true;
@@ -225,6 +229,11 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         if(ProjectSettings.AutoDetectAppVersion)
         {
             UGameAnalytics::configureAutoDetectAppVersion(ProjectSettings.AutoDetectAppVersion);
+        }
+
+        if (ProjectSettings.DisableDeviceInfo)
+        {
+            UGameAnalytics::disableDeviceInfo();
         }
 
         //// Configure build version

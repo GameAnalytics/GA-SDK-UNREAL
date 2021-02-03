@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.3.13**
+* added disable device info to settings
+
 **4.3.12**
 * updated client ts validator
 

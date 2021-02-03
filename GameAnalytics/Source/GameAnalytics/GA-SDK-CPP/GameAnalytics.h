@@ -110,6 +110,7 @@ namespace gameanalytics
          static void configureAvailableResourceItemTypes(const char* resourceItemTypes);
          static void configureBuild(const char* build);
          static void configureWritablePath(const char* writablePath);
+         static void disableDeviceInfo();
          static void configureDeviceModel(const char* deviceModel);
          static void configureDeviceManufacturer(const char* deviceManufacturer);
 

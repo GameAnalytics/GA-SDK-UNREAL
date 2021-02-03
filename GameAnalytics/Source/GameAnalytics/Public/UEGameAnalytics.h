@@ -79,6 +79,7 @@ public:
         TArray<FString> ResourceItemTypes;
         bool UseManualSessionHandling;
 		bool AutoDetectAppVersion;
+        bool DisableDeviceInfo;
         bool SubmitErrors;
         bool SubmitAverageFPS;
         bool SubmitCriticalFPS;

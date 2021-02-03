@@ -110,6 +110,10 @@ public:
     UPROPERTY(Config, EditAnywhere, Category=Advanced, Meta=(ToolTip="Auto detect app version to use for build field (only for Android and iOS)."))
     bool AutoDetectAppVersion = false;
 
+    // Disable device info (only Mac, Windows and Linux)
+    UPROPERTY(Config, EditAnywhere, Category = Advanced, Meta = (ToolTip = "Disable device info (only Mac, Windows and Linux)."))
+    bool DisableDeviceInfo = false;
+
     // Submit Errors
     //UPROPERTY(Config, EditAnywhere, Category=Advanced)
     //bool SubmitErrors = true;
