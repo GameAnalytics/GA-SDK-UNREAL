@@ -389,7 +389,7 @@ namespace gameanalytics {
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "initializeWithGameKey";
+            const char* strMethod = "initialize";
 
             if(jClass)
             {
@@ -421,7 +421,7 @@ namespace gameanalytics {
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "addBusinessEventWithCurrency";
+            const char* strMethod = "addBusinessEvent";
 
             if(jClass)
             {
@@ -459,7 +459,7 @@ namespace gameanalytics {
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "addBusinessEventWithCurrency";
+            const char* strMethod = "addBusinessEvent";
 
             if(jClass)
             {
@@ -502,7 +502,7 @@ namespace gameanalytics {
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "addResourceEventWithFlowType";
+            const char* strMethod = "addResourceEvent";
 
             if(jClass)
             {
@@ -537,7 +537,7 @@ namespace gameanalytics {
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "addProgressionEventWithProgressionStatus";
+            const char* strMethod = "addProgressionEvent";
 
             if(jClass)
             {
@@ -572,7 +572,7 @@ namespace gameanalytics {
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "addProgressionEventWithProgressionStatus";
+            const char* strMethod = "addProgressionEvent";
 
             if(jClass)
             {
@@ -607,7 +607,7 @@ namespace gameanalytics {
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "addDesignEventWithEventId";
+            const char* strMethod = "addDesignEvent";
 
             if(jClass)
             {
@@ -638,7 +638,7 @@ namespace gameanalytics {
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "addDesignEventWithEventId";
+            const char* strMethod = "addDesignEvent";
 
             if(jClass)
             {
@@ -669,7 +669,7 @@ namespace gameanalytics {
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
-            const char* strMethod = "addErrorEventWithSeverity";
+            const char* strMethod = "addErrorEvent";
 
             if(jClass)
             {
