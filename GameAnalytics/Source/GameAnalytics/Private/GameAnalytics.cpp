@@ -13,8 +13,10 @@
 //#include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
 #include "Misc/EngineVersion.h"
+#include "Dom/JsonObject.h"
+#include "AnalyticsEventAttribute.h"
 
-#define GA_VERSION TEXT("5.0.1")
+#define GA_VERSION TEXT("5.1.0")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -327,44 +329,81 @@ void UGameAnalytics::initialize(const char *gameKey, const char *gameSecret)
 }
 
 #if PLATFORM_IOS
+
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt)
 {
+    FJsonObject fields;
+    addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, fields);
+}
+
+void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if !WITH_EDITOR
-    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, "");
+    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, TCHAR_TO_UTF8(*fieldsString));
 #else
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), UTF8_TO_TCHAR(receipt));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), UTF8_TO_TCHAR(receipt), *fieldsString);
 #endif
 }
 
 void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType)
 {
+    FJsonObject fields;
+    addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType, fields);
+}
+
+void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if !WITH_EDITOR
-    GameAnalyticsCpp::addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType, "");
+    GameAnalyticsCpp::addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType, TCHAR_TO_UTF8(*fieldsString));
 #else
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEventAndAutoFetchReceipt(%s, %d, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEventAndAutoFetchReceipt(%s, %d, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), *fieldsString);
 #endif
 }
 #elif PLATFORM_ANDROID
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature)
 {
+    FJsonObject fields;
+    addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, signature, fields);
+}
+
+void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if !WITH_EDITOR
-    gameanalytics::jni_addBusinessEventWithReceipt(currency, amount, itemType, itemId, cartType, receipt, "google_play", signature, "");
+    gameanalytics::jni_addBusinessEventWithReceipt(currency, amount, itemType, itemId, cartType, receipt, "google_play", signature, TCHAR_TO_UTF8(*fieldsString));
 #else
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), UTF8_TO_TCHAR(receipt), UTF8_TO_TCHAR(signature));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), UTF8_TO_TCHAR(receipt), UTF8_TO_TCHAR(signature), *fieldsString);
 #endif
 }
 #endif
 
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addBusinessEvent(currency, amount, itemType, itemId, cartType, fields);
+}
+
+void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, NULL, "");
+    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, NULL, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addBusinessEvent(currency, amount, itemType, itemId, cartType, "");
+    gameanalytics::jni_addBusinessEvent(currency, amount, itemType, itemId, cartType, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addBusinessEvent(currency, amount, itemType, itemId, cartType/*, ""*/);
+    gameanalytics::GameAnalytics::addBusinessEvent(currency, amount, itemType, itemId, cartType, TCHAR_TO_UTF8(*fieldsString));
 // #elif PLATFORM_HTML5
 //     js_addBusinessEvent(currency, amount, itemType, itemId, cartType, "");
 #endif
@@ -372,14 +411,23 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
 
 void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addResourceEvent(flowType, currency, amount, itemType, itemId, fields);
+}
+
+void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addResourceEvent(%d, %s, %f, %s, %s)"), (int)flowType, UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addResourceEvent(%d, %s, %f, %s, %s, %s)"), (int)flowType, UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addResourceEvent((int)flowType, currency, amount, itemType, itemId, "");
+    GameAnalyticsCpp::addResourceEvent((int)flowType, currency, amount, itemType, itemId, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addResourceEvent((int)flowType, currency, amount, itemType, itemId, "");
+    gameanalytics::jni_addResourceEvent((int)flowType, currency, amount, itemType, itemId, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addResourceEvent((gameanalytics::EGAResourceFlowType)((int)flowType), currency, amount, itemType, itemId/*, ""*/);
+    gameanalytics::GameAnalytics::addResourceEvent((gameanalytics::EGAResourceFlowType)((int)flowType), currency, amount, itemType, itemId, TCHAR_TO_UTF8(*fieldsString));
 // #elif PLATFORM_HTML5
 //     js_addResourceEvent((int)flowType, currency, amount, itemType, itemId, "");
 #endif
@@ -387,50 +435,83 @@ void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addProgressionEvent(progressionStatus, progression01, fields);
+}
+
+void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const TSharedRef<FJsonObject> &fields)
+{
 #if PLATFORM_IOS
-    addProgressionEvent(progressionStatus, progression01, (const char *)NULL, (const char *)NULL);
+    addProgressionEvent(progressionStatus, progression01, (const char *)NULL, (const char *)NULL, fields);
 #else
-    addProgressionEvent(progressionStatus, progression01, "", "");
+    addProgressionEvent(progressionStatus, progression01, "", "", fields);
 #endif
 }
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, int score)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addProgressionEvent(progressionStatus, progression01, score, fields);
+}
+
+void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, int score, const TSharedRef<FJsonObject> &fields)
+{
 #if PLATFORM_IOS
-    addProgressionEvent(progressionStatus, progression01, (const char *)NULL, (const char *)NULL, score);
+    addProgressionEvent(progressionStatus, progression01, (const char *)NULL, (const char *)NULL, score, fields);
 #else
-    addProgressionEvent(progressionStatus, progression01, "", "", score);
+    addProgressionEvent(progressionStatus, progression01, "", "", score, fields);
 #endif
 }
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addProgressionEvent(progressionStatus, progression01, progression02, fields);
+}
+
+void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const TSharedRef<FJsonObject> &fields)
+{
 #if PLATFORM_IOS
-    addProgressionEvent(progressionStatus, progression01, progression02, (const char *)NULL);
+    addProgressionEvent(progressionStatus, progression01, progression02, (const char *)NULL, fields);
 #else
-    addProgressionEvent(progressionStatus, progression01, progression02, "");
+    addProgressionEvent(progressionStatus, progression01, progression02, "", fields);
 #endif
 }
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, int score)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addProgressionEvent(progressionStatus, progression01, progression02, score, fields);
+}
+
+void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, int score, const TSharedRef<FJsonObject> &fields)
+{
 #if PLATFORM_IOS
-    addProgressionEvent(progressionStatus, progression01, progression02, (const char *)NULL, score);
+    addProgressionEvent(progressionStatus, progression01, progression02, (const char *)NULL, score, fields);
 #else
-    addProgressionEvent(progressionStatus, progression01, progression02, "", score);
+    addProgressionEvent(progressionStatus, progression01, progression02, "", score, fields);
 #endif
 }
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addProgressionEvent(progressionStatus, progression01, progression02, progression03, fields);
+}
+
+void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addProgressionEvent(%d, %s, %s, %s)"), (int)progressionStatus, UTF8_TO_TCHAR(progression01), UTF8_TO_TCHAR(progression02), UTF8_TO_TCHAR(progression03));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addProgressionEvent(%d, %s, %s, %s, %s)"), (int)progressionStatus, UTF8_TO_TCHAR(progression01), UTF8_TO_TCHAR(progression02), UTF8_TO_TCHAR(progression03), *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, "");
+    GameAnalyticsCpp::addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, "");
+    gameanalytics::jni_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03/*, ""*/);
+    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03, TCHAR_TO_UTF8(*fieldsString));
 // #elif PLATFORM_HTML5
 //     js_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, "");
 #endif
@@ -438,14 +519,23 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
 
 void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addProgressionEvent(progressionStatus, progression01, progression02, progression03, score, fields);
+}
+
+void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addProgressionEvent(%d, %s, %s, %s, %d)"), (int)progressionStatus, UTF8_TO_TCHAR(progression01), UTF8_TO_TCHAR(progression02), UTF8_TO_TCHAR(progression03), score);
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addProgressionEvent(%d, %s, %s, %s, %d, %s)"), (int)progressionStatus, UTF8_TO_TCHAR(progression01), UTF8_TO_TCHAR(progression02), UTF8_TO_TCHAR(progression03), score, *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, "");
+    GameAnalyticsCpp::addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, "");
+    gameanalytics::jni_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03, score/*, ""*/);
+    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03, score, TCHAR_TO_UTF8(*fieldsString));
 // #elif PLATFORM_HTML5
 //     js_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, "");
 #endif
@@ -453,14 +543,23 @@ void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus,
 
 void UGameAnalytics::addDesignEvent(const char *eventId)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addDesignEvent(eventId, fields);
+}
+
+void UGameAnalytics::addDesignEvent(const char *eventId, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addDesignEvent(%s)"), UTF8_TO_TCHAR(eventId));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addDesignEvent(%s, %s)"), UTF8_TO_TCHAR(eventId), *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addDesignEvent(eventId, "");
+    GameAnalyticsCpp::addDesignEvent(eventId, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addDesignEvent(eventId, "");
+    gameanalytics::jni_addDesignEvent(eventId, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addDesignEvent(eventId/*, ""*/);
+    gameanalytics::GameAnalytics::addDesignEvent(eventId, TCHAR_TO_UTF8(*fieldsString));
 // #elif PLATFORM_HTML5
 //     js_addDesignEvent(eventId, "");
 #endif
@@ -468,14 +567,23 @@ void UGameAnalytics::addDesignEvent(const char *eventId)
 
 void UGameAnalytics::addDesignEvent(const char *eventId, float value)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addDesignEvent(eventId, value, fields);
+}
+
+void UGameAnalytics::addDesignEvent(const char *eventId, float value, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addDesignEvent(%s, %f)"), UTF8_TO_TCHAR(eventId), value);
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addDesignEvent(%s, %f, %s)"), UTF8_TO_TCHAR(eventId), value, *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addDesignEventWithValue(eventId, value, "");
+    GameAnalyticsCpp::addDesignEventWithValue(eventId, value, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addDesignEventWithValue(eventId, value, "");
+    gameanalytics::jni_addDesignEventWithValue(eventId, value, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addDesignEvent(eventId, value/*, ""*/);
+    gameanalytics::GameAnalytics::addDesignEvent(eventId, value, TCHAR_TO_UTF8(*fieldsString));
 // #elif PLATFORM_HTML5
 //     js_addDesignEventWithValue(eventId, value, "");
 #endif
@@ -483,14 +591,23 @@ void UGameAnalytics::addDesignEvent(const char *eventId, float value)
 
 void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *message)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addErrorEvent(severity, message, fields);
+}
+
+void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *message, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addErrorEvent(%d, %s)"), (int)severity, UTF8_TO_TCHAR(message));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addErrorEvent(%d, %s, %s)"), (int)severity, UTF8_TO_TCHAR(message), *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addErrorEvent((int)severity, message, "");
+    GameAnalyticsCpp::addErrorEvent((int)severity, message, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addErrorEvent((int)severity, message, "");
+    gameanalytics::jni_addErrorEvent((int)severity, message, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-    gameanalytics::GameAnalytics::addErrorEvent((gameanalytics::EGAErrorSeverity)((int)severity), message/*, ""*/);
+    gameanalytics::GameAnalytics::addErrorEvent((gameanalytics::EGAErrorSeverity)((int)severity), message, TCHAR_TO_UTF8(*fieldsString));
 // #elif PLATFORM_HTML5
 //     js_addErrorEvent((int)severity, message, "");
 #endif
@@ -499,34 +616,61 @@ void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *messag
 #if PLATFORM_IOS || PLATFORM_ANDROID
 void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addAdEvent(action, adType, adSdkName, adPlacement, fields);
+}
+
+void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEvent(%d, %d, %s, %s)"), (int)action, (int)adType, UTF8_TO_TCHAR(adSdkName), UTF8_TO_TCHAR(adPlacement));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEvent(%d, %d, %s, %s, %s)"), (int)action, (int)adType, UTF8_TO_TCHAR(adSdkName), UTF8_TO_TCHAR(adPlacement), *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addAdEvent((int)action, (int)action, adSdkName, adPlacement, "");
+    GameAnalyticsCpp::addAdEvent((int)action, (int)action, adSdkName, adPlacement, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEvent((int)action, (int)action, adSdkName, adPlacement, "");
+    gameanalytics::jni_addAdEvent((int)action, (int)action, adSdkName, adPlacement, TCHAR_TO_UTF8(*fieldsString));
 #endif
 }
 
 void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addAdEventWithDuration(action, adType, adSdkName, adPlacement, duration, fields);
+}
+
+void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEventWithDuration(%d, %d, %s, %s, %d)"), (int)action, (int)adType, UTF8_TO_TCHAR(adSdkName), UTF8_TO_TCHAR(adPlacement), duration);
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEventWithDuration(%d, %d, %s, %s, %d, %s)"), (int)action, (int)adType, UTF8_TO_TCHAR(adSdkName), UTF8_TO_TCHAR(adPlacement), duration, *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration, "");
+    GameAnalyticsCpp::addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration, "");
+    gameanalytics::jni_addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration, TCHAR_TO_UTF8(*fieldsString));
 #endif
 }
 
 void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    addAdEventWithNoAdReason(action, adType, adSdkName, adPlacement, noAdReason, fields);
+}
+
+void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason, const TSharedRef<FJsonObject> &fields)
+{
+    FString fieldsString;
+    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    FJsonSerializer::Serialize(fields, Writer);
 #if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEventWithNoAdReason(%d, %d, %s, %s, %d)"), (int)action, (int)adType, UTF8_TO_TCHAR(adSdkName), UTF8_TO_TCHAR(adPlacement), (int)noAdReason);
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEventWithNoAdReason(%d, %d, %s, %s, %d, %s)"), (int)action, (int)adType, UTF8_TO_TCHAR(adSdkName), UTF8_TO_TCHAR(adPlacement), (int)noAdReason, *fieldsString);
 #elif PLATFORM_IOS
-    GameAnalyticsCpp::addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, "");
+    GameAnalyticsCpp::addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, TCHAR_TO_UTF8(*fieldsString));
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, "");
+    gameanalytics::jni_addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, TCHAR_TO_UTF8(*fieldsString));
 #endif
 }
 #endif
@@ -813,97 +957,199 @@ FString UGameAnalytics::getABTestingVariantId()
 
 // Blueprint functions
 
-void UGameAnalytics::AddBusinessEventIOS(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt/*, const char *fields*/)
+void UGameAnalytics::AddBusinessEventIOS(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt)
 {
 #if PLATFORM_IOS
     addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt));
 #endif
 }
 
-void UGameAnalytics::AddBusinessEventAndAutoFetchReceipt(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType/*, const char *fields*/)
+void UGameAnalytics::AddBusinessEventIOSWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        
+    }
+#if PLATFORM_IOS
+    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt));
+#endif
+}
+
+void UGameAnalytics::AddBusinessEventAndAutoFetchReceipt(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType)
 {
 #if PLATFORM_IOS
     addBusinessEventAndAutoFetchReceipt(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
 #endif
 }
 
-void UGameAnalytics::AddBusinessEventAndroid(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature/*, const char *fields*/)
+void UGameAnalytics::AddBusinessEventAndAutoFetchReceiptWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+#if PLATFORM_IOS
+    addBusinessEventAndAutoFetchReceipt(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
+#endif
+}
+
+void UGameAnalytics::AddBusinessEventAndroid(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature)
 {
 #if PLATFORM_ANDROID
     addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), TCHAR_TO_UTF8(*Signature));
 #endif
 }
 
-void UGameAnalytics::AddBusinessEvent(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType/*, const char *fields*/)
+void UGameAnalytics::AddBusinessEventAndroidWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+#if PLATFORM_ANDROID
+    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), TCHAR_TO_UTF8(*Signature));
+#endif
+}
+
+void UGameAnalytics::AddBusinessEvent(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType)
 {
     addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
 }
 
-void UGameAnalytics::AddResourceEvent(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId/*, const char *fields*/)
+void UGameAnalytics::AddBusinessEventWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
+}
+
+void UGameAnalytics::AddResourceEvent(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId)
 {
     addResourceEvent(FlowType, TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId));
 }
 
-void UGameAnalytics::AddProgressionEventWithOne(EGAProgressionStatus ProgressionStatus, const FString& Progression01/*, const char *fields*/)
+void UGameAnalytics::AddResourceEventWithFields(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addResourceEvent(FlowType, TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId));
+}
+
+void UGameAnalytics::AddProgressionEventWithOne(EGAProgressionStatus ProgressionStatus, const FString& Progression01)
 {
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01));
 }
 
-void UGameAnalytics::AddProgressionEventWithOneAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score/*, const char *fields*/)
+void UGameAnalytics::AddProgressionEventWithOneAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01));
+}
+
+void UGameAnalytics::AddProgressionEventWithOneAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score)
 {
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), Score);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneAndTwo(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02/*, const char *fields*/)
+void UGameAnalytics::AddProgressionEventWithOneScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), Score);
+}
+
+void UGameAnalytics::AddProgressionEventWithOneAndTwo(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02)
 {
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02));
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score/*, const char *fields*/)
+void UGameAnalytics::AddProgressionEventWithOneTwoAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02));
+}
+
+void UGameAnalytics::AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score)
 {
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), Score);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03/*, const char *fields*/)
+void UGameAnalytics::AddProgressionEventWithOneTwoScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), Score);
+}
+
+void UGameAnalytics::AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03)
 {
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03));
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score/*, const char *fields*/)
+void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03));
+}
+
+void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score)
 {
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), Score);
 }
 
-void UGameAnalytics::AddDesignEvent(const FString& EventId/*, const char *fields*/)
+void UGameAnalytics::AddProgressionEventWithOneTwoThreeScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), Score);
+}
+
+void UGameAnalytics::AddDesignEvent(const FString& EventId)
 {
     addDesignEvent(TCHAR_TO_UTF8(*EventId));
 }
 
-void UGameAnalytics::AddDesignEventWithValue(const FString& EventId, float Value/*, const char *fields*/)
+void UGameAnalytics::AddDesignEventWithFields(const FString& EventId, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addDesignEvent(TCHAR_TO_UTF8(*EventId));
+}
+
+void UGameAnalytics::AddDesignEventWithValue(const FString& EventId, float Value)
 {
     addDesignEvent(TCHAR_TO_UTF8(*EventId), Value);
 }
 
-void UGameAnalytics::AddErrorEvent(EGAErrorSeverity Severity, const FString& Message/*, const char *fields*/)
+void UGameAnalytics::AddDesignEventWithValueAndFields(const FString& EventId, float Value, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addDesignEvent(TCHAR_TO_UTF8(*EventId), Value);
+}
+
+void UGameAnalytics::AddErrorEvent(EGAErrorSeverity Severity, const FString& Message)
 {
     addErrorEvent(Severity, TCHAR_TO_UTF8(*Message));
 }
 
-void UGameAnalytics::AddAdEvent(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement/*, const char *fields*/)
+void UGameAnalytics::AddErrorEventWithFields(EGAErrorSeverity Severity, const FString& Message, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+    addErrorEvent(Severity, TCHAR_TO_UTF8(*Message));
+}
+
+void UGameAnalytics::AddAdEvent(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement)
 {
 #if PLATFORM_IOS || PLATFORM_ANDROID
     addAdEvent(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement));
 #endif
 }
 
-void UGameAnalytics::AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration/*, const char *fields*/)
+void UGameAnalytics::AddAdEventWithFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+#if PLATFORM_IOS || PLATFORM_ANDROID
+    addAdEvent(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement));
+#endif
+}
+
+void UGameAnalytics::AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration)
 {
 #if PLATFORM_IOS || PLATFORM_ANDROID
     addAdEventWithDuration(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), duration);
 #endif
 }
 
-void UGameAnalytics::AddAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason/*, const char *fields*/)
+void UGameAnalytics::AddAdEventWithDurationAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+{
+#if PLATFORM_IOS || PLATFORM_ANDROID
+    addAdEventWithDuration(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), duration);
+#endif
+}
+
+void UGameAnalytics::AddAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason)
+{
+#if PLATFORM_IOS || PLATFORM_ANDROID
+    addAdEventWithNoAdReason(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), noAdReason);
+#endif
+}
+
+void UGameAnalytics::AddAdEventWithNoAdReasonAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason, const TArray<FGameAnalyticsEventAttr>& CustomFields)
 {
 #if PLATFORM_IOS || PLATFORM_ANDROID
     addAdEventWithNoAdReason(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), noAdReason);

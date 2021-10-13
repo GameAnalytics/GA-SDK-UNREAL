@@ -101,7 +101,7 @@ void GameAnalyticsCpp::addBusinessEvent(const char *currency, int amount, const 
                                          itemId:itemIdString
                                        cartType:cartTypeString
                                         receipt:receiptString
-                                         /*fields:fields_dict*/];
+                                         customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *fields) {
@@ -122,7 +122,7 @@ void GameAnalyticsCpp::addBusinessEventAndAutoFetchReceipt(const char *currency,
                                          itemId:itemIdString
                                        cartType:cartTypeString
                                autoFetchReceipt:true
-                                         /*fields:fields_dict*/];
+                                         customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::addResourceEvent(int flowType, const char *currency, float amount, const char *itemType, const char *itemId, const char *fields) {
@@ -141,7 +141,7 @@ void GameAnalyticsCpp::addResourceEvent(int flowType, const char *currency, floa
                                          amount:amountNumber
                                        itemType:itemTypeString
                                          itemId:itemIdString
-                                         /*fields:fields_dict*/];
+                                         customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::addProgressionEvent(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, const char *fields) {
@@ -158,7 +158,7 @@ void GameAnalyticsCpp::addProgressionEvent(int progressionStatus, const char *pr
                                               progression01:progression01String
                                               progression02:progression02String
                                               progression03:progression03String
-                                                     /*fields:fields_dict*/];
+                                                     customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::addProgressionEventWithScore(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const char *fields) {
@@ -176,7 +176,7 @@ void GameAnalyticsCpp::addProgressionEventWithScore(int progressionStatus, const
                                               progression02:progression02String
                                               progression03:progression03String
                                                       score:score
-                                                     /*fields:fields_dict*/];
+                                                     customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::addDesignEvent(const char *eventId, const char *fields) {
@@ -187,7 +187,7 @@ void GameAnalyticsCpp::addDesignEvent(const char *eventId, const char *fields) {
         fields_dict = [NSJSONSerialization JSONObjectWithData:[fieldsString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     }
 
-    [GameAnalytics addDesignEventWithEventId:eventIdString value:nil /*fields:fields_dict*/];
+    [GameAnalytics addDesignEventWithEventId:eventIdString value:nil customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::addDesignEventWithValue(const char *eventId, float value, const char *fields) {
@@ -199,7 +199,7 @@ void GameAnalyticsCpp::addDesignEventWithValue(const char *eventId, float value,
         fields_dict = [NSJSONSerialization JSONObjectWithData:[fieldsString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     }
 
-    [GameAnalytics addDesignEventWithEventId:eventIdString value:valueNumber /*fields:fields_dict*/];
+    [GameAnalytics addDesignEventWithEventId:eventIdString value:valueNumber customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::addErrorEvent(int severity, const char *message, const char *fields) {
@@ -210,7 +210,7 @@ void GameAnalyticsCpp::addErrorEvent(int severity, const char *message, const ch
         fields_dict = [NSJSONSerialization JSONObjectWithData:[fieldsString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     }
 
-    [GameAnalytics addErrorEventWithSeverity:(GAErrorSeverity)severity message:messageString /*fields:fields_dict*/];
+    [GameAnalytics addErrorEventWithSeverity:(GAErrorSeverity)severity message:messageString customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields) {
@@ -225,7 +225,7 @@ void GameAnalyticsCpp::addAdEvent(int action, int adType, const char *adSdkName,
                                  adType:(GAAdType)adType
                               adSdkName:adSdkNameString
                             adPlacement:adPlacementString
-                               /*fields:fields_dict*/];
+                               customFields:fields_dict];
 }
 void GameAnalyticsCpp::addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields) {
     NSString *adSdkNameString = adSdkName != NULL ? [NSString stringWithUTF8String:adSdkName] : nil;
@@ -240,7 +240,7 @@ void GameAnalyticsCpp::addAdEventWithDuration(int action, int adType, const char
                               adSdkName:adSdkNameString
                             adPlacement:adPlacementString
                                duration:(NSInteger)duration
-                               /*fields:fields_dict*/];
+                               customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields) {
@@ -256,7 +256,7 @@ void GameAnalyticsCpp::addAdEventWithNoAdReason(int action, int adType, const ch
                               adSdkName:adSdkNameString
                             adPlacement:adPlacementString
                                noAdReason:(GAAdError)noAdReason
-                               /*fields:fields_dict*/];
+                               customFields:fields_dict];
 }
 
 void GameAnalyticsCpp::setEnabledInfoLog(bool flag) {

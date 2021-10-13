@@ -93,6 +93,7 @@ namespace UnrealBuildTool.Rules
                     "Core",
                     "CoreUObject",
                     "Engine",
+                    "Json"
                     // ... add other public dependencies that you statically link with here ...
                 }
             );
@@ -106,32 +107,17 @@ namespace UnrealBuildTool.Rules
                 new string[]
                 {
                     "Analytics",
-                    "Engine"
+                    "Engine",
+                    "Json"
                 }
             );
-
-            /*if (Target.Platform == UnrealTargetPlatform.HTML5)
-            {
-                PrivateDependencyModuleNames.AddRange(
-                    new string[]
-                    {
-                        "Json"
-                    }
-                );
-
-                PublicIncludePathModuleNames.AddRange(
-                    new string[]
-                    {
-                        "Json"
-                    }
-                );
-            }*/
 
             PublicIncludePathModuleNames.AddRange(
                 new string[]
                 {
                     "Analytics",
-                    "Engine"
+                    "Engine",
+                    "Json"
                 }
             );
 

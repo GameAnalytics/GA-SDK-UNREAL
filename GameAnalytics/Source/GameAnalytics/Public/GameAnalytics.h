@@ -80,6 +80,18 @@ enum class EGAAdError : uint8
     unabletoprecache = 6
 };
 
+USTRUCT(BlueprintType)
+struct FGameAnalyticsEventAttr
+{
+    GENERATED_USTRUCT_BODY();
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameAnalytics")
+    FString Name;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameAnalytics")
+    FString Value;
+};
+
 UCLASS()
 class GAMEANALYTICS_API UGameAnalytics : public UObject
 {
@@ -103,27 +115,44 @@ public:
     static void initialize(const char *gameKey, const char *gameSecret);
 
 #if PLATFORM_IOS
-    static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt/*, const char *fields*/);
-    static void addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType/*, const char *fields*/);
+    static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt);
+    static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const TSharedRef<FJsonObject> &customFields);
+    static void addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType);
+    static void addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const TSharedRef<FJsonObject> &customFields);
 #elif PLATFORM_ANDROID
-    static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature/*, const char *fields*/);
+    static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature);
+    static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature, const TSharedRef<FJsonObject> &customFields);
 #endif
 
-    static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType/*, const char *fields*/);
-    static void addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId/*, const char *fields*/);
-    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01/*, const char *fields*/);
-    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, int score/*, const char *fields*/);
-    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02/*, const char *fields*/);
-    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, int score/*, const char *fields*/);
-    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03/*, const char *fields*/);
-    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score/*, const char *fields*/);
-    static void addDesignEvent(const char *eventId/*, const char *fields*/);
-    static void addDesignEvent(const char *eventId, float value/*, const char *fields*/);
-    static void addErrorEvent(EGAErrorSeverity severity, const char *message/*, const char *fields*/);
+    static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType);
+    static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const TSharedRef<FJsonObject> &customFields);
+    static void addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId);
+    static void addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId, const TSharedRef<FJsonObject> &customFields);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const TSharedRef<FJsonObject> &customFields);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, int score);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, int score, const TSharedRef<FJsonObject> &customFields);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const TSharedRef<FJsonObject> &customFields);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, int score);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, int score, const TSharedRef<FJsonObject> &customFields);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, const TSharedRef<FJsonObject> &customFields);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score);
+    static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const TSharedRef<FJsonObject> &customFields);
+    static void addDesignEvent(const char *eventId);
+    static void addDesignEvent(const char *eventId, const TSharedRef<FJsonObject> &customFields);
+    static void addDesignEvent(const char *eventId, float value);
+    static void addDesignEvent(const char *eventId, float value, const TSharedRef<FJsonObject> &customFields);
+    static void addErrorEvent(EGAErrorSeverity severity, const char *message);
+    static void addErrorEvent(EGAErrorSeverity severity, const char *message, const TSharedRef<FJsonObject> &customFields);
 #if PLATFORM_IOS || PLATFORM_ANDROID
     static void addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement);
+    static void addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, const TSharedRef<FJsonObject> &customFields);
     static void addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration);
+    static void addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration, const TSharedRef<FJsonObject> &customFields);
     static void addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason);
+    static void addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason, const TSharedRef<FJsonObject> &customFields);
 #endif
 
     static void setEnabledInfoLog(bool flag);
@@ -151,60 +180,111 @@ public:
 
     // ONLY FOR IOS
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddBusinessEventIOS(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt/*, const char *fields*/);
+    static void AddBusinessEventIOS(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType, const FString &Receipt);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddBusinessEventIOSWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     // ONLY FOR IOS
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddBusinessEventAndAutoFetchReceipt(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType/*, const char *fields*/);
+    static void AddBusinessEventAndAutoFetchReceipt(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddBusinessEventAndAutoFetchReceiptWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     // ONLY FOR ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddBusinessEventAndroid(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature/*, const char *fields*/);
+    static void AddBusinessEventAndroid(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType, const FString &Receipt, const FString &Signature);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddBusinessEvent(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType/*, const char *fields*/);
+    static void AddBusinessEventAndroidWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddResourceEvent(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId/*, const char *fields*/);
+    static void AddBusinessEvent(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOne(EGAProgressionStatus ProgressionStatus, const FString& Progression01/*, const char *fields*/);
+    static void AddBusinessEventWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score/*, const char *fields*/);
+    static void AddResourceEvent(EGAResourceFlowType FlowType, const FString &Currency, float Amount, const FString &ItemType, const FString &ItemId);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneAndTwo(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02/*, const char *fields*/);
+    static void AddResourceEventWithFields(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score/*, const char *fields*/);
+    static void AddProgressionEventWithOne(EGAProgressionStatus ProgressionStatus, const FString &Progression01);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03/*, const char *fields*/);
+    static void AddProgressionEventWithOneAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score/*, const char *fields*/);
+    static void AddProgressionEventWithOneAndScore(EGAProgressionStatus ProgressionStatus, const FString &Progression01, int Score);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddDesignEvent(const FString& EventId/*, const char *fields*/);
+    static void AddProgressionEventWithOneScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddDesignEventWithValue(const FString& EventId, float Value/*, const char *fields*/);
+    static void AddProgressionEventWithOneAndTwo(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddErrorEvent(EGAErrorSeverity Severity, const FString& Message/*, const char *fields*/);
+    static void AddProgressionEventWithOneTwoAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, int Score);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddProgressionEventWithOneTwoScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, const FString &Progression03);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddProgressionEventWithOneTwoThreeAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, const FString &Progression03, int Score);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddProgressionEventWithOneTwoThreeScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddDesignEvent(const FString &EventId);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddDesignEventWithFields(const FString& EventId, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddDesignEventWithValue(const FString &EventId, float Value);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddDesignEventWithValueAndFields(const FString& EventId, float Value, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddErrorEvent(EGAErrorSeverity Severity, const FString &Message);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddErrorEventWithFields(EGAErrorSeverity Severity, const FString& Message, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     // ONLY FOR IOS AND ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddAdEvent(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement/*, const char *fields*/);
+    static void AddAdEvent(EGAAdAction action, EGAAdType adType, const FString &adSdkName, const FString &adPlacement);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddAdEventWithFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     // ONLY FOR IOS AND ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration/*, const char *fields*/);
+    static void AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString &adSdkName, const FString &adPlacement, int64 duration);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddAdEventWithDurationAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     // ONLY FOR IOS AND ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason/*, const char *fields*/);
+    static void AddAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const FString &adSdkName, const FString &adPlacement, EGAAdError noAdReason);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddAdEventWithNoAdReasonAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason, const TArray<FGameAnalyticsEventAttr>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void SetCustomDimension01(const FString& CustomDimension);
@@ -235,4 +315,5 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void OnQuit();
+
 };
