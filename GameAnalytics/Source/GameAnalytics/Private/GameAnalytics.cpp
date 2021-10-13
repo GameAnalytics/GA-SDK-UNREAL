@@ -16,7 +16,7 @@
 #include "Dom/JsonObject.h"
 #include "AnalyticsEventAttribute.h"
 
-#define GA_VERSION TEXT("5.1.0")
+#define GA_VERSION TEXT("5.1.1")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -332,7 +332,7 @@ void UGameAnalytics::initialize(const char *gameKey, const char *gameSecret)
 
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt)
 {
-    FJsonObject fields;
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
     addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, fields);
 }
 
@@ -350,7 +350,7 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
 
 void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType)
 {
-    FJsonObject fields;
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
     addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType, fields);
 }
 
@@ -368,7 +368,7 @@ void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, i
 #elif PLATFORM_ANDROID
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature)
 {
-    FJsonObject fields;
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
     addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, signature, fields);
 }
 
@@ -964,15 +964,23 @@ void UGameAnalytics::AddBusinessEventIOS(const FString& Currency, int Amount, co
 #endif
 }
 
-void UGameAnalytics::AddBusinessEventIOSWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddBusinessEventIOSWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
     TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
     for (auto item : CustomFields)
     {
-        
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
     }
 #if PLATFORM_IOS
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt));
+    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), fields);
 #endif
 }
 
@@ -983,10 +991,23 @@ void UGameAnalytics::AddBusinessEventAndAutoFetchReceipt(const FString& Currency
 #endif
 }
 
-void UGameAnalytics::AddBusinessEventAndAutoFetchReceiptWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddBusinessEventAndAutoFetchReceiptWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
 #if PLATFORM_IOS
-    addBusinessEventAndAutoFetchReceipt(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
+    addBusinessEventAndAutoFetchReceipt(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), fields);
 #endif
 }
 
@@ -997,10 +1018,23 @@ void UGameAnalytics::AddBusinessEventAndroid(const FString& Currency, int Amount
 #endif
 }
 
-void UGameAnalytics::AddBusinessEventAndroidWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddBusinessEventAndroidWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
 #if PLATFORM_ANDROID
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), TCHAR_TO_UTF8(*Signature));
+    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), TCHAR_TO_UTF8(*Signature), fields);
 #endif
 }
 
@@ -1009,9 +1043,22 @@ void UGameAnalytics::AddBusinessEvent(const FString& Currency, int Amount, const
     addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
 }
 
-void UGameAnalytics::AddBusinessEventWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddBusinessEventWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), fields);
 }
 
 void UGameAnalytics::AddResourceEvent(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId)
@@ -1019,9 +1066,22 @@ void UGameAnalytics::AddResourceEvent(EGAResourceFlowType FlowType, const FStrin
     addResourceEvent(FlowType, TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId));
 }
 
-void UGameAnalytics::AddResourceEventWithFields(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddResourceEventWithFields(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addResourceEvent(FlowType, TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId));
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addResourceEvent(FlowType, TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), fields);
 }
 
 void UGameAnalytics::AddProgressionEventWithOne(EGAProgressionStatus ProgressionStatus, const FString& Progression01)
@@ -1029,9 +1089,22 @@ void UGameAnalytics::AddProgressionEventWithOne(EGAProgressionStatus Progression
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01));
 }
 
-void UGameAnalytics::AddProgressionEventWithOneAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddProgressionEventWithOneAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01));
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), fields);
 }
 
 void UGameAnalytics::AddProgressionEventWithOneAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score)
@@ -1039,9 +1112,22 @@ void UGameAnalytics::AddProgressionEventWithOneAndScore(EGAProgressionStatus Pro
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), Score);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddProgressionEventWithOneScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), Score);
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), Score, fields);
 }
 
 void UGameAnalytics::AddProgressionEventWithOneAndTwo(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02)
@@ -1049,9 +1135,22 @@ void UGameAnalytics::AddProgressionEventWithOneAndTwo(EGAProgressionStatus Progr
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02));
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddProgressionEventWithOneTwoAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02));
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), fields);
 }
 
 void UGameAnalytics::AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score)
@@ -1059,9 +1158,22 @@ void UGameAnalytics::AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus 
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), Score);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddProgressionEventWithOneTwoScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), Score);
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), Score, fields);
 }
 
 void UGameAnalytics::AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03)
@@ -1069,9 +1181,22 @@ void UGameAnalytics::AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus 
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03));
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03));
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), fields);
 }
 
 void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score)
@@ -1079,9 +1204,22 @@ void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionSt
     addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), Score);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoThreeScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddProgressionEventWithOneTwoThreeScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), Score);
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), Score, fields);
 }
 
 void UGameAnalytics::AddDesignEvent(const FString& EventId)
@@ -1089,9 +1227,22 @@ void UGameAnalytics::AddDesignEvent(const FString& EventId)
     addDesignEvent(TCHAR_TO_UTF8(*EventId));
 }
 
-void UGameAnalytics::AddDesignEventWithFields(const FString& EventId, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddDesignEventWithFields(const FString& EventId, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addDesignEvent(TCHAR_TO_UTF8(*EventId));
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addDesignEvent(TCHAR_TO_UTF8(*EventId), fields);
 }
 
 void UGameAnalytics::AddDesignEventWithValue(const FString& EventId, float Value)
@@ -1099,9 +1250,22 @@ void UGameAnalytics::AddDesignEventWithValue(const FString& EventId, float Value
     addDesignEvent(TCHAR_TO_UTF8(*EventId), Value);
 }
 
-void UGameAnalytics::AddDesignEventWithValueAndFields(const FString& EventId, float Value, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddDesignEventWithValueAndFields(const FString& EventId, float Value, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addDesignEvent(TCHAR_TO_UTF8(*EventId), Value);
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addDesignEvent(TCHAR_TO_UTF8(*EventId), Value, fields);
 }
 
 void UGameAnalytics::AddErrorEvent(EGAErrorSeverity Severity, const FString& Message)
@@ -1109,9 +1273,22 @@ void UGameAnalytics::AddErrorEvent(EGAErrorSeverity Severity, const FString& Mes
     addErrorEvent(Severity, TCHAR_TO_UTF8(*Message));
 }
 
-void UGameAnalytics::AddErrorEventWithFields(EGAErrorSeverity Severity, const FString& Message, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddErrorEventWithFields(EGAErrorSeverity Severity, const FString& Message, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
-    addErrorEvent(Severity, TCHAR_TO_UTF8(*Message));
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
+    addErrorEvent(Severity, TCHAR_TO_UTF8(*Message), fields);
 }
 
 void UGameAnalytics::AddAdEvent(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement)
@@ -1121,10 +1298,23 @@ void UGameAnalytics::AddAdEvent(EGAAdAction action, EGAAdType adType, const FStr
 #endif
 }
 
-void UGameAnalytics::AddAdEventWithFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddAdEventWithFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
 #if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEvent(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement));
+    addAdEvent(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), fields);
 #endif
 }
 
@@ -1135,10 +1325,23 @@ void UGameAnalytics::AddAdEventWithDuration(EGAAdAction action, EGAAdType adType
 #endif
 }
 
-void UGameAnalytics::AddAdEventWithDurationAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddAdEventWithDurationAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
 #if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEventWithDuration(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), duration);
+    addAdEventWithDuration(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), duration, fields);
 #endif
 }
 
@@ -1149,10 +1352,23 @@ void UGameAnalytics::AddAdEventWithNoAdReason(EGAAdAction action, EGAAdType adTy
 #endif
 }
 
-void UGameAnalytics::AddAdEventWithNoAdReasonAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason, const TArray<FGameAnalyticsEventAttr>& CustomFields)
+void UGameAnalytics::AddAdEventWithNoAdReasonAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
+    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
+    for (auto item : CustomFields)
+    {
+        if (item.Value.IsNumeric())
+        {
+            double n = FCString::Atod(*item.Value);
+            fields->SetNumberField(item.Key, n);
+        }
+        else
+        {
+            fields->SetStringField(item.Key, item.Value);
+        }
+    }
 #if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEventWithNoAdReason(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), noAdReason);
+    addAdEventWithNoAdReason(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), noAdReason, fields);
 #endif
 }
 

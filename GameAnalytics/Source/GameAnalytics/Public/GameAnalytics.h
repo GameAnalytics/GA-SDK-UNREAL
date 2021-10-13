@@ -81,12 +81,12 @@ enum class EGAAdError : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FGameAnalyticsEventAttr
+struct FGameAnalyticsCustomEventField
 {
     GENERATED_USTRUCT_BODY();
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameAnalytics")
-    FString Name;
+    FString Key;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameAnalytics")
     FString Value;
@@ -183,108 +183,108 @@ public:
     static void AddBusinessEventIOS(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType, const FString &Receipt);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddBusinessEventIOSWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddBusinessEventIOSWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     // ONLY FOR IOS
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddBusinessEventAndAutoFetchReceipt(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddBusinessEventAndAutoFetchReceiptWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddBusinessEventAndAutoFetchReceiptWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     // ONLY FOR ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddBusinessEventAndroid(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType, const FString &Receipt, const FString &Signature);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddBusinessEventAndroidWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddBusinessEventAndroidWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddBusinessEvent(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddBusinessEventWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddBusinessEventWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddResourceEvent(EGAResourceFlowType FlowType, const FString &Currency, float Amount, const FString &ItemType, const FString &ItemId);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddResourceEventWithFields(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddResourceEventWithFields(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddProgressionEventWithOne(EGAProgressionStatus ProgressionStatus, const FString &Progression01);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddProgressionEventWithOneAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddProgressionEventWithOneAndScore(EGAProgressionStatus ProgressionStatus, const FString &Progression01, int Score);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddProgressionEventWithOneScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddProgressionEventWithOneAndTwo(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneTwoAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddProgressionEventWithOneTwoAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, int Score);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneTwoScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddProgressionEventWithOneTwoScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, const FString &Progression03);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneTwoThreeAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddProgressionEventWithOneTwoThreeAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, const FString &Progression03, int Score);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEventWithOneTwoThreeScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddProgressionEventWithOneTwoThreeScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddDesignEvent(const FString &EventId);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddDesignEventWithFields(const FString& EventId, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddDesignEventWithFields(const FString& EventId, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddDesignEventWithValue(const FString &EventId, float Value);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddDesignEventWithValueAndFields(const FString& EventId, float Value, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddDesignEventWithValueAndFields(const FString& EventId, float Value, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddErrorEvent(EGAErrorSeverity Severity, const FString &Message);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddErrorEventWithFields(EGAErrorSeverity Severity, const FString& Message, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddErrorEventWithFields(EGAErrorSeverity Severity, const FString& Message, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     // ONLY FOR IOS AND ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddAdEvent(EGAAdAction action, EGAAdType adType, const FString &adSdkName, const FString &adPlacement);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddAdEventWithFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddAdEventWithFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     // ONLY FOR IOS AND ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString &adSdkName, const FString &adPlacement, int64 duration);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddAdEventWithDurationAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddAdEventWithDurationAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     // ONLY FOR IOS AND ANDROID
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const FString &adSdkName, const FString &adPlacement, EGAAdError noAdReason);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddAdEventWithNoAdReasonAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason, const TArray<FGameAnalyticsEventAttr>& CustomFields);
+    static void AddAdEventWithNoAdReasonAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason, const TArray<FGameAnalyticsCustomEventField>& CustomFields);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void SetCustomDimension01(const FString& CustomDimension);

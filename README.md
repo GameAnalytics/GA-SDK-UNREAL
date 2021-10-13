@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**5.1.1**
+* small compile fix
+
 **5.1.0**
 * added custom event fields feature
 
