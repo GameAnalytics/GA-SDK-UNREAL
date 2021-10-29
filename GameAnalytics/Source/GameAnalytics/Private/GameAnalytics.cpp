@@ -16,7 +16,7 @@
 #include "Dom/JsonObject.h"
 #include "AnalyticsEventAttribute.h"
 
-#define GA_VERSION TEXT("5.1.1")
+#define GA_VERSION TEXT("5.1.2")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
