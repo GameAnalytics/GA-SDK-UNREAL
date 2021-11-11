@@ -271,6 +271,10 @@ void GameAnalyticsCpp::setEnabledManualSessionHandling(bool flag) {
     [GameAnalytics setEnabledManualSessionHandling:flag];
 }
 
+void GameAnalyticsCpp::setEnabledErrorReporting(bool flag) {
+    [GameAnalytics setEnabledErrorReporting:flag];
+}
+
 void GameAnalyticsCpp::setEnabledEventSubmission(bool flag) {
     [GameAnalytics setEnabledEventSubmission:flag];
 }

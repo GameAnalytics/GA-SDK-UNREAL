@@ -80,6 +80,7 @@ public:
         bool UseManualSessionHandling;
 		bool AutoDetectAppVersion;
         bool DisableDeviceInfo;
+        bool UseErrorReporting;
         bool SubmitErrors;
         bool SubmitAverageFPS;
         bool SubmitCriticalFPS;

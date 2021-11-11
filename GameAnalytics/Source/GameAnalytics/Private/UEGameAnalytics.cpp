@@ -140,6 +140,10 @@ FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings FAnalyticsGameAnalytics::
     {
         Settings.DisableDeviceInfo = false;
     }
+    if (!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("UseErrorReporting"), Settings.UseErrorReporting, GetIniName()))
+    {
+        Settings.UseErrorReporting = true;
+    }
     if(!GConfig->GetBool(TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings"), TEXT("InfoLogBuild"), Settings.InfoLogBuild, GetIniName()))
     {
         Settings.InfoLogBuild = true;
@@ -288,6 +292,8 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         {
             UGameAnalytics::setEnabledManualSessionHandling(ProjectSettings.UseManualSessionHandling);
         }
+
+        UGameAnalytics::setEnabledErrorReporting(ProjectSettings.UseErrorReporting);
 
         const int32 AttrCount = Attributes.Num();
         FString gameKey;

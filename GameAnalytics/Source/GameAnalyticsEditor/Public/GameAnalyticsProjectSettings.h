@@ -114,6 +114,10 @@ public:
     UPROPERTY(Config, EditAnywhere, Category = Advanced, Meta = (ToolTip = "Disable device info (only Mac, Windows and Linux)."))
     bool DisableDeviceInfo = false;
 
+    // Use Error Reports
+    UPROPERTY(Config, EditAnywhere, Category = Advanced, Meta = (ToolTip = "Use automatic error reporting."))
+    bool UseErrorReporting = true;
+
     // Submit Errors
     //UPROPERTY(Config, EditAnywhere, Category=Advanced)
     //bool SubmitErrors = true;

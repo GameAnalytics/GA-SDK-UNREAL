@@ -16,7 +16,7 @@
 #include "Dom/JsonObject.h"
 #include "AnalyticsEventAttribute.h"
 
-#define GA_VERSION TEXT("5.1.2")
+#define GA_VERSION TEXT("5.1.3")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -717,6 +717,21 @@ void UGameAnalytics::setEnabledManualSessionHandling(bool flag)
     gameanalytics::GameAnalytics::setEnabledManualSessionHandling(flag);
 // #elif PLATFORM_HTML5
 //     js_setManualSessionHandling(flag);
+#endif
+}
+
+void UGameAnalytics::setEnabledErrorReporting(bool flag)
+{
+#if WITH_EDITOR
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledErrorReporting(%s)"), flag ? TEXT("true") : TEXT("false"));
+#elif PLATFORM_IOS
+    GameAnalyticsCpp::setEnabledErrorReporting(flag);
+#elif PLATFORM_ANDROID
+    gameanalytics::jni_setEnabledErrorReporting(flag);
+#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    gameanalytics::GameAnalytics::setEnabledErrorReporting(flag);
+// #elif PLATFORM_HTML5
+//     js_setEnabledErrorReporting(flag);
 #endif
 }
 
