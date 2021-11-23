@@ -13,10 +13,9 @@
 //#include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
 #include "Misc/EngineVersion.h"
-#include "Dom/JsonObject.h"
 #include "AnalyticsEventAttribute.h"
 
-#define GA_VERSION TEXT("5.1.3")
+#define GA_VERSION TEXT("5.1.4")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

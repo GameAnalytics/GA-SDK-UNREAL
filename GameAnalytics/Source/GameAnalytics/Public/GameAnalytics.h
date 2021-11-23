@@ -12,6 +12,7 @@
 #include <stdint.h>
 
 #include "UObject/Object.h"
+#include "Dom/JsonObject.h"
 #include "GameAnalytics.generated.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
