@@ -15,8 +15,9 @@
 #include "Misc/EngineVersion.h"
 #include "AnalyticsEventAttribute.h"
 #include "Serialization/JsonWriter.h"
+#include "Serialization/JsonSerializer.h"
 
-#define GA_VERSION TEXT("5.1.5")
+#define GA_VERSION TEXT("5.1.6")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
