@@ -417,7 +417,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *fields)
+        void jni_addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -425,7 +425,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V");
 
                 if(jMethod)
                 {
@@ -434,7 +434,7 @@ namespace gameanalytics {
                     jstring j_itemId = env->NewStringUTF(itemId);
                     jstring j_cartType = env->NewStringUTF(cartType);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, j_currency, amount, j_itemType, j_itemId, j_cartType, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, j_currency, amount, j_itemType, j_itemId, j_cartType, j_fields, mergeFields);
                     env->DeleteLocalRef(j_currency);
                     env->DeleteLocalRef(j_itemType);
                     env->DeleteLocalRef(j_itemId);
@@ -455,7 +455,7 @@ namespace gameanalytics {
         }
 
         void jni_addBusinessEventWithReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType,
-            const char *receipt, const char *store, const char *signature, const char *fields)
+                                             const char *receipt, const char *store, const char *signature, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -463,7 +463,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V");
 
                 if(jMethod)
                 {
@@ -475,7 +475,7 @@ namespace gameanalytics {
                     jstring j_store = env->NewStringUTF(store);
                     jstring j_signature = env->NewStringUTF(signature);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, j_currency, amount, j_itemType, j_itemId, j_cartType, j_receipt, j_store, j_signature, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, j_currency, amount, j_itemType, j_itemId, j_cartType, j_receipt, j_store, j_signature, j_fields, mergeFields);
                     env->DeleteLocalRef(j_currency);
                     env->DeleteLocalRef(j_itemType);
                     env->DeleteLocalRef(j_itemId);
@@ -498,7 +498,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addResourceEvent(int flowType, const char *currency, float amount, const char *itemType, const char *itemId, const char *fields)
+        void jni_addResourceEvent(int flowType, const char *currency, float amount, const char *itemType, const char *itemId, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -506,7 +506,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;FLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;FLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V");
 
                 if(jMethod)
                 {
@@ -514,7 +514,7 @@ namespace gameanalytics {
                     jstring j_itemType = env->NewStringUTF(itemType);
                     jstring j_itemId = env->NewStringUTF(itemId);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, flowType, j_currency, amount, j_itemType, j_itemId, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, flowType, j_currency, amount, j_itemType, j_itemId, j_fields, mergeFields);
                     env->DeleteLocalRef(j_currency);
                     env->DeleteLocalRef(j_itemType);
                     env->DeleteLocalRef(j_itemId);
@@ -533,7 +533,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addProgressionEvent(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, const char *fields)
+        void jni_addProgressionEvent(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -541,7 +541,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V");
 
                 if(jMethod)
                 {
@@ -549,7 +549,7 @@ namespace gameanalytics {
                     jstring j_progression02 = env->NewStringUTF(progression02);
                     jstring j_progression03 = env->NewStringUTF(progression03);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, progressionStatus, j_progression01, j_progression02, j_progression03, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, progressionStatus, j_progression01, j_progression02, j_progression03, j_fields, mergeFields);
                     env->DeleteLocalRef(j_progression01);
                     env->DeleteLocalRef(j_progression02);
                     env->DeleteLocalRef(j_progression03);
@@ -568,7 +568,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addProgressionEventWithScore(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const char *fields)
+        void jni_addProgressionEventWithScore(int progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -576,7 +576,7 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;DLjava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;DLjava/lang/String;Z)V");
 
                 if(jMethod)
                 {
@@ -584,7 +584,7 @@ namespace gameanalytics {
                     jstring j_progression02 = env->NewStringUTF(progression02);
                     jstring j_progression03 = env->NewStringUTF(progression03);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, progressionStatus, j_progression01, j_progression02, j_progression03, (double)score, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, progressionStatus, j_progression01, j_progression02, j_progression03, (double)score, j_fields, mergeFields);
                     env->DeleteLocalRef(j_progression01);
                     env->DeleteLocalRef(j_progression02);
                     env->DeleteLocalRef(j_progression03);
@@ -603,7 +603,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addDesignEvent(const char *eventId, const char *fields)
+        void jni_addDesignEvent(const char *eventId, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -611,13 +611,13 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;Ljava/lang/String;Z)V");
 
                 if(jMethod)
                 {
                     jstring j_eventId = env->NewStringUTF(eventId);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, j_eventId, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, j_eventId, j_fields, mergeFields);
                     env->DeleteLocalRef(j_eventId);
                     env->DeleteLocalRef(j_fields);
                 }
@@ -634,7 +634,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addDesignEventWithValue(const char *eventId, float value, const char *fields)
+        void jni_addDesignEventWithValue(const char *eventId, float value, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -642,13 +642,13 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;DLjava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(Ljava/lang/String;DLjava/lang/String;Z)V");
 
                 if(jMethod)
                 {
                     jstring j_eventId = env->NewStringUTF(eventId);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, j_eventId, value, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, j_eventId, value, j_fields, mergeFields);
                     env->DeleteLocalRef(j_eventId);
                     env->DeleteLocalRef(j_fields);
                 }
@@ -665,7 +665,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addErrorEvent(int severity, const char *message, const char *fields)
+        void jni_addErrorEvent(int severity, const char *message, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -673,13 +673,13 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(ILjava/lang/String;Ljava/lang/String;Z)V");
 
                 if(jMethod)
                 {
                     jstring j_message = env->NewStringUTF(message);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, severity, j_message, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, severity, j_message, j_fields, mergeFields);
                     env->DeleteLocalRef(j_message);
                     env->DeleteLocalRef(j_fields);
                 }
@@ -696,7 +696,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields)
+        void jni_addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -704,14 +704,14 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V");
 
                 if(jMethod)
                 {
                     jstring j_adSdkName = env->NewStringUTF(adSdkName);
                     jstring j_adPlacement = env->NewStringUTF(adPlacement);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, action, adType, j_adSdkName, j_adPlacement, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, action, adType, j_adSdkName, j_adPlacement, j_fields, mergeFields);
                     env->DeleteLocalRef(j_adSdkName);
                     env->DeleteLocalRef(j_adPlacement);
                     env->DeleteLocalRef(j_fields);
@@ -729,7 +729,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields)
+        void jni_addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -737,14 +737,14 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(IILjava/lang/String;Ljava/lang/String;JLjava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(IILjava/lang/String;Ljava/lang/String;JLjava/lang/String;Z)V");
 
                 if(jMethod)
                 {
                     jstring j_adSdkName = env->NewStringUTF(adSdkName);
                     jstring j_adPlacement = env->NewStringUTF(adPlacement);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, action, adType, j_adSdkName, j_adPlacement, duration, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, action, adType, j_adSdkName, j_adPlacement, duration, j_fields, mergeFields);
                     env->DeleteLocalRef(j_adSdkName);
                     env->DeleteLocalRef(j_adPlacement);
                     env->DeleteLocalRef(j_fields);
@@ -762,7 +762,7 @@ namespace gameanalytics {
             }
         }
 
-        void jni_addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields)
+        void jni_addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields, bool mergeFields)
         {
             JNIEnv* env = FAndroidApplication::GetJavaEnv();
             jclass jClass = FAndroidApplication::FindJavaClass(GAMEANALYTICS_CLASS_NAME);
@@ -770,14 +770,14 @@ namespace gameanalytics {
 
             if(jClass)
             {
-                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(IILjava/lang/String;Ljava/lang/String;ILjava/lang/String;)V");
+                jmethodID jMethod = env->GetStaticMethodID(jClass, strMethod, "(IILjava/lang/String;Ljava/lang/String;ILjava/lang/String;Z)V");
 
                 if(jMethod)
                 {
                     jstring j_adSdkName = env->NewStringUTF(adSdkName);
                     jstring j_adPlacement = env->NewStringUTF(adPlacement);
                     jstring j_fields = env->NewStringUTF(fields);
-                    env->CallStaticVoidMethod(jClass, jMethod, action, adType, j_adSdkName, j_adPlacement, noAdReason, j_fields);
+                    env->CallStaticVoidMethod(jClass, jMethod, action, adType, j_adSdkName, j_adPlacement, noAdReason, j_fields, mergeFields);
                     env->DeleteLocalRef(j_adSdkName);
                     env->DeleteLocalRef(j_adPlacement);
                     env->DeleteLocalRef(j_fields);

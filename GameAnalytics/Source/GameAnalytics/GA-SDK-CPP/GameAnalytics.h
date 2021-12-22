@@ -129,24 +129,31 @@ namespace gameanalytics
          // add events
          static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType);
          static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *customFields);
+         static void addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *customFields, bool mergeFields);
 
          static void addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId);
          static void addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId, const char *customFields);
+         static void addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId, const char *customFields, bool mergeFields);
 
          static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03);
          static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, const char *customFields);
+         static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, const char *customFields, bool mergeFields);
 
          static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score);
          static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const char *customFields);
+         static void addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const char *customFields, bool mergeFields);
 
          static void addDesignEvent(const char *eventId);
          static void addDesignEvent(const char *eventId, const char *customFields);
+         static void addDesignEvent(const char *eventId, const char *customFields, bool mergeFields);
 
          static void addDesignEvent(const char *eventId, double value);
          static void addDesignEvent(const char *eventId, double value, const char *customFields);
+         static void addDesignEvent(const char *eventId, double value, const char *customFields, bool mergeFields);
 
          static void addErrorEvent(EGAErrorSeverity severity, const char *message);
          static void addErrorEvent(EGAErrorSeverity severity, const char *message, const char *customFields);
+         static void addErrorEvent(EGAErrorSeverity severity, const char *message, const char *customFields, bool mergeFields);
 
          // set calls can be changed at any time (pre- and post-initialize)
          // some calls only work after a configure is called (setCustomDimension)
