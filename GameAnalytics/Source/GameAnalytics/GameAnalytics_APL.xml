@@ -23,15 +23,11 @@ repositories {
 }
  dependencies {
      implementation('com.gameanalytics.sdk:gameanalytics-android:6.2.9')
-     implementation('com.google.android.gms:play-services-appset:16.0.2')
+     implementation('com.google.android.gms:play-services-appset:16.0.1')
+     implementation('com.google.android.gms:play-services-games:22.0.1')
  }
         </insert>
     </buildGradleAdditions>
-
-    <!-- optional files or directories to copy to Intermediate/Android/APK -->
-    <resourceCopies>
-        <copyFile src="$S(PluginDir)/GA-SDK-ANDROID/lib/gameanalytics.jar" dst="$S(BuildDir)/libs/gameanalytics.jar" />
-    </resourceCopies>
 
     <!-- optional updates applied to AndroidManifest.xml -->
     <androidManifestUpdates>
