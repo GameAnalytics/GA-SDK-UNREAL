@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**5.2.0**
+* added support for unreal 5
+
 **5.1.14**
 * fixed crash on android
 

@@ -6,7 +6,7 @@
 #include "CoreMinimal.h"
 #include "Misc/Paths.h"
 #include "Runtime/Launch/Resources/Version.h"
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 15
+#if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 15) || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
 #include "Modules/ModuleManager.h"
 #endif
 
@@ -45,8 +45,7 @@ public:
      * Creates the analytics provider given a configuration delegate.
      * The keys required exactly match the field names in the Config object.
      */
-
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 13
+#if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 13) || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
     virtual TSharedPtr<IAnalyticsProvider> CreateAnalyticsProvider(const FAnalyticsProviderConfigurationDelegate& GetConfigValue) const override;
 #else
     virtual TSharedPtr<IAnalyticsProvider> CreateAnalyticsProvider(const FAnalytics::FProviderConfigurationDelegate& GetConfigValue) const override;

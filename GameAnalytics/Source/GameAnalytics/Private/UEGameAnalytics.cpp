@@ -31,7 +31,7 @@ void FAnalyticsGameAnalytics::ShutdownModule()
     }
 }
 
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 13
+#if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 13) || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
 TSharedPtr<IAnalyticsProvider> FAnalyticsGameAnalytics::CreateAnalyticsProvider(const FAnalyticsProviderConfigurationDelegate& GetConfigValue) const
 {
     return GameAnalyticsProvider;
@@ -194,12 +194,12 @@ FAnalyticsProviderGameAnalytics::FAnalyticsProviderGameAnalytics() :
     bHasWrittenFirstEvent(false),
     Age(0)
 {
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+#if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18) || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
     AnalyticsFilePath = FPaths::ProjectSavedDir() + TEXT("Analytics/");
 #else
     AnalyticsFilePath = FPaths::GameSavedDir() + TEXT("Analytics/");
 #endif
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 15
+#if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 15) || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
     UserId = FPlatformMisc::GetDeviceId();
 #else
     UserId = FPlatformMisc::GetUniqueDeviceId();
@@ -219,7 +219,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 
 #if WITH_EDITOR
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+#if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18) || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
         gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_UTF8(*FPaths::ProjectSavedDir()));
 #else
         gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_UTF8(*FPaths::GameSavedDir()));

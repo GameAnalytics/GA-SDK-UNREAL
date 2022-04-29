@@ -24,12 +24,12 @@ namespace UnrealBuildTool.Rules
                 PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "Sqlite.lib"));
                 PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
             }
-            else if(Target.Platform == UnrealTargetPlatform.Win32)
+            /*else if(Target.Platform == UnrealTargetPlatform.Win32)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
                 PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "Sqlite.lib"));
                 PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
-            }
+            }*/
             else if(Target.Platform == UnrealTargetPlatform.Android)
             {
                 PrivateDependencyModuleNames.Add("Launch");

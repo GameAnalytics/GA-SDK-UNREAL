@@ -66,8 +66,8 @@ public:
         {
             return EnumType(0);
         }
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 16
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18
+#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 16  || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
+#if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18)  || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
         return (EnumType)Enum->GetIndexByName(FName(*String), EGetByNameFlags::CaseSensitive);
 #else
         return (EnumType)Enum->GetIndexByName(FName(*String), true);
