@@ -18,6 +18,13 @@
 
 #define LOCTEXT_NAMESPACE "GameAnalyticsTargetSettingsCustomization"
 
+#if ENGINE_MAJOR_VERSION < 5
+  #define UE UE4
+#endif
+#if (ENGINE_MAJOR_VERSION < 5 || (ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION < 1))
+  #define FAppStyle FEditorStyle
+#endif
+
 static void OnBrowserLinkClicked(const FSlateHyperlinkRun::FMetadata& Metadata)
 {
 	const FString* URL = Metadata.Find(TEXT("href"));
@@ -114,8 +121,8 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 				[
 					SNew(SRichTextBlock)
 					.Text(LOCTEXT("DocumentationInfoMessage", "<a id=\"browser\" href=\"http://support.gameanalytics.com\" style=\"HoverOnlyHyperlink\">View the GameAnalytics Unreal documentation here.</> Please login to your GameAnalytics account to automatically retrieve game and secret keys. If you don?t have an account yet, <a id=\"browser\" href=\"https://go.gameanalytics.com/signup\" style=\"HoverOnlyHyperlink\">please sign up to create your account.</>"))
-					.TextStyle(FEditorStyle::Get(), "MessageLog")
-					.DecoratorStyleSet(&FEditorStyle::Get())
+					.TextStyle(FAppStyle::Get(), "MessageLog")
+					.DecoratorStyleSet(&FAppStyle::Get())
 					.AutoWrapText(true)
 					+ SRichTextBlock::HyperlinkDecorator(TEXT("browser"), FSlateHyperlinkRun::FOnClick::CreateStatic(&OnBrowserLinkClicked))
 				]
@@ -1059,7 +1066,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedIos(FGameAn
 	UE_LOG(LogTemp, Warning, TEXT("Platform selected: iOS, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameIos.GameKey));
 	UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
 
-	GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+	GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE::LCPF_None, NULL);
 
 	SavedLayoutBuilder->ForceRefreshDetails();
 }
@@ -1095,7 +1102,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedAndroid(FGa
 	UE_LOG(LogTemp, Warning, TEXT("Platform selected: Android, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameAndroid.GameKey));
 	UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
 
-	GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+	GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE::LCPF_None, NULL);
 
 	SavedLayoutBuilder->ForceRefreshDetails();
 }
@@ -1131,7 +1138,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedMac(FGameAn
     UE_LOG(LogTemp, Warning, TEXT("Platform selected: Mac, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameMac.GameKey));
     UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
 
-    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE::LCPF_None, NULL);
 
     SavedLayoutBuilder->ForceRefreshDetails();
 }
@@ -1167,7 +1174,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedWindows(FGa
     UE_LOG(LogTemp, Warning, TEXT("Platform selected: Windows, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameWindows.GameKey));
     UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
 
-    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE::LCPF_None, NULL);
 
     SavedLayoutBuilder->ForceRefreshDetails();
 }
@@ -1203,7 +1210,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedLinux(FGame
     UE_LOG(LogTemp, Warning, TEXT("Platform selected: Linux, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameLinux.GameKey));
     UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
 
-    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE::LCPF_None, NULL);
 
     SavedLayoutBuilder->ForceRefreshDetails();
 }
@@ -1239,7 +1246,7 @@ void FGameAnalyticsTargetSettingsCustomization::OnGameMenuItemClickedHtml5(FGame
     UE_LOG(LogTemp, Warning, TEXT("Platform selected: Html5, Game Key Saved: %s"), *(FGameAnalyticsTargetSettingsCustomization::getInstance().SelectedGameHtml5.GameKey));
     UE_LOG(LogTemp, Warning, TEXT("Saved at: %s"), *GetIniName());
 
-    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+    GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE::LCPF_None, NULL);
 
     SavedLayoutBuilder->ForceRefreshDetails();
 }
@@ -1621,7 +1628,7 @@ void FGameAnalyticsTargetSettingsCustomization::UsernameEntered(const FText& New
 
             GConfig->Flush(false, GetIniName());
 
-            GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE4::LCPF_None, NULL);
+            GameAnalyticsProjectSettings->ReloadConfig(NULL, *GetIniName(), UE::LCPF_None, NULL);
 		}
 	}
 }
@@ -1914,5 +1921,12 @@ void HttpCaller::OnGetUserDataResponseReceived(FHttpRequestPtr Request, FHttpRes
 }
 
 //////////////////////////////////////////////////////////////////////////
+
+#if ENGINE_MAJOR_VERSION < 5
+  #undef UE
+#endif
+#if (ENGINE_MAJOR_VERSION < 5 || (ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION < 1))
+  #undef FAppStyle
+#endif
 
 #undef LOCTEXT_NAMESPACE

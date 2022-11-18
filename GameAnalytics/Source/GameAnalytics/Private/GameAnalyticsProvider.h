@@ -61,7 +61,11 @@ public:
     template <typename EnumType>
     static FORCEINLINE EnumType GetEnumValueFromString(const FString& EnumName, const FString& String)
     {
+#if ENGINE_MAJOR_VERSION > 5 || ENGINE_MINOR_VERSION >= 1
+        UEnum* Enum = FindObject<UEnum>(nullptr, *(TEXT("/Script/GameAnalytics/") + EnumName), true);
+#else
         UEnum* Enum = FindObject<UEnum>(ANY_PACKAGE, *EnumName, true);
+#endif
         if(!Enum)
         {
             return EnumType(0);
