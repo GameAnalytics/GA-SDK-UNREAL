@@ -29,7 +29,7 @@ namespace UnrealBuildTool.Rules
                     "SharedSettingsWidgets",
                     "SourceControl",
                     "UnrealEd",
-                    "Http",
+                    "HTTP",
                     "Json",
                     "JsonUtilities",
                     "InputCore"
