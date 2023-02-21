@@ -34,9 +34,6 @@ Changelog
 **5.3.0**
 * updated plugin to UE5 5.1
 
-**1.0**
-* test
-
 **5.2.0**
 * added support for unreal 5
 
