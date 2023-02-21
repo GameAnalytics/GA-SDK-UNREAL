@@ -32,7 +32,7 @@ Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
 **5.3.0**
-* updated plugin to UE5 5.1
+* updated plugin for unreal 5.1
 
 **5.2.0**
 * added support for unreal 5
