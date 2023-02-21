@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/Package.h"
 #include "Interfaces/IAnalyticsProviderModule.h"
+#include "UObject/UObjectGlobals.h"
 
 class FAnalyticsProviderGameAnalytics :
     public IAnalyticsProvider
@@ -57,23 +58,4 @@ public:
     virtual void RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy);
     virtual void RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes);
     virtual void RecordProgress(const FString& ProgressType, const TArray<FString>& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes);
-
-    template <typename EnumType>
-    static FORCEINLINE EnumType GetEnumValueFromString(const FString& EnumName, const FString& String)
-    {
-        UEnum* Enum = FindObject<UEnum>(ANY_PACKAGE, *EnumName, true);
-        if(!Enum)
-        {
-            return EnumType(0);
-        }
-#if ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 16  || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
-#if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18)  || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
-        return (EnumType)Enum->GetIndexByName(FName(*String), EGetByNameFlags::CaseSensitive);
-#else
-        return (EnumType)Enum->GetIndexByName(FName(*String), true);
-#endif
-#else
-        return (EnumType)Enum->FindEnumIndex(FName(*String));
-#endif
-    }
 };

@@ -14,6 +14,13 @@
 
 IMPLEMENT_MODULE( FAnalyticsGameAnalytics, GameAnalytics )
 
+static const TMap<FString, EGAProgressionStatus> k_ProgressionStrings =
+{
+    {TEXT("start"),    EGAProgressionStatus::start},
+    {TEXT("complete"), EGAProgressionStatus::complete},
+    {TEXT("fail"),     EGAProgressionStatus::fail}
+};
+
 void FAnalyticsGameAnalytics::StartupModule()
 {
     UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("FAnalyticsGameAnalytics Constructor"));
@@ -499,13 +506,23 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error)
 
 void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TArray<FAnalyticsEventAttribute>& Attributes)
 {
-    EGAErrorSeverity ErrorSeverity = GetEnumValueFromString<EGAErrorSeverity>("EGAErrorSeverity", Error.ToLower());
-
-    if (ErrorSeverity == EGAErrorSeverity(0))
+    static const TMap<FString, EGAErrorSeverity> k_SeverityStrings =
+    {
+        {TEXT("debug"),    EGAErrorSeverity::debug},
+        {TEXT("info"),     EGAErrorSeverity::info},
+        {TEXT("warning"),  EGAErrorSeverity::warning},
+        {TEXT("error"),    EGAErrorSeverity::error},
+        {TEXT("critical"), EGAErrorSeverity::critical}
+    };
+    
+    FString const Key = Error.ToLower();
+    if (!k_SeverityStrings.Contains(Key))
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordError: Error value must be either debug, info, warning, error, critical. Error=%s"), *Error);
         return;
     }
+    
+    EGAErrorSeverity ErrorSeverity = k_SeverityStrings[Key];
 
     const int32 AttrCount = Attributes.Num();
     if (AttrCount > 0)
@@ -526,26 +543,30 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TA
 
 void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy)
 {
-    EGAProgressionStatus ProgressionStatus = GetEnumValueFromString<EGAProgressionStatus>("EGAProgressionStatus", ProgressType.ToLower());
-
-    if (ProgressionStatus == EGAProgressionStatus(0))
+    FString const Key = ProgressType.ToLower();
+    
+    if (!k_ProgressionStrings.Contains(Key))
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: ProgressType value must be either start, complete or fail. ProgressType=%s"), *ProgressType);
         return;
     }
+    
+    EGAProgressionStatus ProgressionStatus = k_ProgressionStrings[Key];
 
     UGameAnalytics::addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*ProgressHierarchy));
 }
 
 void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType, const FString& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes)
 {
-    EGAProgressionStatus ProgressionStatus = GetEnumValueFromString<EGAProgressionStatus>("EGAProgressionStatus", ProgressType.ToLower());
-
-    if (ProgressionStatus == EGAProgressionStatus(0))
+    FString const Key = ProgressType.ToLower();
+    
+    if (!k_ProgressionStrings.Contains(Key))
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: ProgressType value must be either start, complete or fail. ProgressType=%s"), *ProgressType);
         return;
     }
+    
+    EGAProgressionStatus ProgressionStatus = k_ProgressionStrings[Key];
 
     bool useValue = false;
 
@@ -569,13 +590,15 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
 
 void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType, const TArray<FString>& ProgressHierarchy, const TArray<FAnalyticsEventAttribute>& Attributes)
 {
-    EGAProgressionStatus ProgressionStatus = GetEnumValueFromString<EGAProgressionStatus>("EGAProgressionStatus", ProgressType.ToLower());
-
-    if (ProgressionStatus == EGAProgressionStatus(0))
+    FString const Key = ProgressType.ToLower();
+    
+    if (!k_ProgressionStrings.Contains(Key))
     {
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordProgress: ProgressType value must be either start, complete or fail. ProgressType=%s"), *ProgressType);
         return;
     }
+    
+    EGAProgressionStatus ProgressionStatus = k_ProgressionStrings[Key];
 
     const int32 ProgressHierarchyCount = ProgressHierarchy.Num();
     if(ProgressHierarchyCount > 0)
@@ -641,6 +664,11 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
 
 void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, int ItemQuantity, const TArray<FAnalyticsEventAttribute>& Attributes)
 {
+    static const TMap<FString, EGAResourceFlowType> k_FlowTypes = {
+        {TEXT("sink"), EGAResourceFlowType::sink},
+        {TEXT("source"), EGAResourceFlowType::source},
+    };
+    
     EGAResourceFlowType FlowType = EGAResourceFlowType::source;
     FString Currency;
     FString ItemType;
@@ -652,13 +680,14 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
         {
             if (Attr.GetName() == TEXT("flowType"))
             {
-                FlowType = GetEnumValueFromString<EGAResourceFlowType>("EGAResourceFlowType", Attr.GetValue().ToLower());
-
-                if (FlowType == EGAResourceFlowType(0))
+                FString const Key = Attr.GetValue().ToLower();
+                if (!k_FlowTypes.Contains(Key))
                 {
                     UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("RecordItemPurchaseError: FlowType value must be either sink or source. flowType=%s"), *Attr.GetValue());
                     return;
                 }
+                
+                FlowType = k_FlowTypes[Key];
             }
             else if (Attr.GetName() == TEXT("currency"))
             {

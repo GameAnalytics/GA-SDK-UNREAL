@@ -22,7 +22,7 @@ repositories {
     maven { url 'https://maven.google.com' }
 }
  dependencies {
-     implementation('com.gameanalytics.sdk:gameanalytics-android:6.2.9')
+     implementation('com.gameanalytics.sdk:gameanalytics-android:6.3.4')
      implementation('com.google.android.gms:play-services-appset:16.0.1')
      implementation('com.google.android.gms:play-services-games:22.0.1')
  }
