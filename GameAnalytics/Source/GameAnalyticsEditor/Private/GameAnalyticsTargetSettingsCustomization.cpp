@@ -113,12 +113,21 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 				.Padding(FMargin(10, 10, 10, 10))
 				.FillWidth(1.0f)
 				[
-					SNew(SRichTextBlock)
+#if (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 1)
+SNew(SRichTextBlock)
+					.Text(LOCTEXT("DocumentationInfoMessage", "<a id=\"browser\" href=\"http://support.gameanalytics.com\" style=\"HoverOnlyHyperlink\">View the GameAnalytics Unreal documentation here.</> Please login to your GameAnalytics account to automatically retrieve game and secret keys. If you don?t have an account yet, <a id=\"browser\" href=\"https://go.gameanalytics.com/signup\" style=\"HoverOnlyHyperlink\">please sign up to create your account.</>"))
+					.TextStyle(FAppStyle::Get(), "MessageLog")
+					.DecoratorStyleSet(&FAppStyle::Get())
+					.AutoWrapText(true)
+					+ SRichTextBlock::HyperlinkDecorator(TEXT("browser"), FSlateHyperlinkRun::FOnClick::CreateStatic(&OnBrowserLinkClicked))
+#else
+    	            SNew(SRichTextBlock)
 					.Text(LOCTEXT("DocumentationInfoMessage", "<a id=\"browser\" href=\"http://support.gameanalytics.com\" style=\"HoverOnlyHyperlink\">View the GameAnalytics Unreal documentation here.</> Please login to your GameAnalytics account to automatically retrieve game and secret keys. If you don?t have an account yet, <a id=\"browser\" href=\"https://go.gameanalytics.com/signup\" style=\"HoverOnlyHyperlink\">please sign up to create your account.</>"))
 					.TextStyle(FEditorStyle::Get(), "MessageLog")
 					.DecoratorStyleSet(&FEditorStyle::Get())
 					.AutoWrapText(true)
 					+ SRichTextBlock::HyperlinkDecorator(TEXT("browser"), FSlateHyperlinkRun::FOnClick::CreateStatic(&OnBrowserLinkClicked))
+#endif
 				]
 			]
 		];
