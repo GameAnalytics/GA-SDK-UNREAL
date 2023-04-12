@@ -575,19 +575,6 @@ namespace gameanalytics {
             }
         }
 
-        void jni_setGlobalCustomEventFields(const char *customFields)
-        {
-            JniMethodInfo methodInfo;
-            if (JniHelper::getStaticMethodInfo(methodInfo, GAMEANALYTICS_CLASS_NAME, "setGlobalCustomEventFields",
-                                               "(Ljava/lang/String;)V"))
-            {
-                jstring j_customFields = methodInfo.env->NewStringUTF(customFields);
-                methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, j_customFields);
-                methodInfo.env->DeleteLocalRef(j_customFields);
-                methodInfo.env->DeleteLocalRef(methodInfo.classID);
-            }
-        }
-
         void jni_startSession()
         {
             JniMethodInfo methodInfo;

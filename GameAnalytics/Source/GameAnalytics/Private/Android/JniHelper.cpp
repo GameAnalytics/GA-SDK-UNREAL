@@ -2,7 +2,7 @@
 #include <android/log.h>
 #include <pthread.h>
 
-#include "AndroidPlatform.h"
+#include "Android/AndroidPlatform.h"
 #include "Android/AndroidApplication.h"
 #include "Android/AndroidJNI.h"
 #include "Android/AndroidJava.h"

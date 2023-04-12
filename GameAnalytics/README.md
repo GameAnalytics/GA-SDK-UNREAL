@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**5.3.1**
+* fixed a compilation issue on android for ndk25
+
 **5.3.0**
 * updated plugin for unreal 5.1
 
