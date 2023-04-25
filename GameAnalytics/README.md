@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**5.4.0**
+* support for UE 5.2.0 preview
+
 **5.3.1**
 * fixed a compilation issue on android for ndk25
 
