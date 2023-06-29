@@ -31,6 +31,10 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**5.4.1**
+* fixed a bug where the android library would fail to load in some cases
+* implemented new method to retrieve the device name for win64
+
 **5.4.0**
 * support for UE 5.2.0 preview
 

@@ -27,7 +27,7 @@ namespace gameanalytics {
         static jobject classloader;
 
     private:
-        static JNIEnv* cacheEnv(JavaVM* jvm);
+        
         static bool getMethodInfo_DefaultClassLoader(JniMethodInfo &methodinfo, const char *className, const char *methodName, const char *paramCode);
         static JavaVM* _psJavaVM;
         static jobject _activity;

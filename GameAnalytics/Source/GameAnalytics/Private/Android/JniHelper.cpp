@@ -57,48 +57,21 @@ namespace gameanalytics {
         pthread_key_create(&g_key, _detachCurrentThread);
     }
 
-    JNIEnv* JniHelper::cacheEnv(JavaVM* jvm)
-    {
-        JNIEnv* _env = nullptr;
-        // get jni environment
-
-        LOGD("GA: getting the jni environment");
-        jint ret = jvm->GetEnv((void**)&_env, JNI_VERSION_1_6);
-
-        LOGD("GA: retrieved the jni environment");
-        switch (ret) {
-        case JNI_OK :
-            // Success!
-            pthread_setspecific(g_key, _env);
-            return _env;
-
-        case JNI_EDETACHED :
-            // Thread not attached
-            if (jvm->AttachCurrentThread(&_env, nullptr) < 0)
-                {
-                    LOGE("Failed to get the environment using AttachCurrentThread()");
-
-                    return nullptr;
-                } else {
-                // Success : Attached and obtained JNIEnv!
-                pthread_setspecific(g_key, _env);
-                return _env;
-            }
-
-        case JNI_EVERSION :
-            // Cannot recover from this error
-            LOGE("JNI interface version 1.6 not supported");
-        default :
-            LOGE("Failed to get the environment using GetEnv()");
-            return nullptr;
-        }
-    }
-
     JNIEnv* JniHelper::getEnv()
     {
-        JNIEnv *_env = FAndroidApplication::GetJavaEnv(true);
-        if (_env == nullptr)
-            _env = JniHelper::cacheEnv(_psJavaVM);
+        static JNIEnv *_env = nullptr;
+        if(!_env)
+        {
+            JNIEnv* env = FAndroidApplication::GetJavaEnv(true);
+            LOGE("here");
+
+            if(env)
+            {
+                JavaVM* jvm = nullptr;
+                env->GetJavaVM(&jvm);
+                jvm->AttachCurrentThread(&_env, NULL);
+            }
+        }
         return _env;
     }
 

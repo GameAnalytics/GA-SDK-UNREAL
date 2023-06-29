@@ -17,7 +17,7 @@
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
 
-#define GA_VERSION TEXT("5.4.0")
+#define GA_VERSION TEXT("5.4.1")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -756,7 +756,7 @@ void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adTy
 #elif PLATFORM_IOS
     GameAnalyticsCpp::addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, TCHAR_TO_UTF8(*fieldsString), mergeFields);
 #elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEventWithReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, TCHAR_TO_UTF8(*fieldsString), mergeFields);
+    gameanalytics::jni_addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, TCHAR_TO_UTF8(*fieldsString), mergeFields);
 #endif
 }
 #endif
@@ -976,7 +976,7 @@ bool UGameAnalytics::isRemoteConfigsReady()
 #elif PLATFORM_IOS
     return GameAnalyticsCpp::isRemoteConfigsReady();
 #elif PLATFORM_ANDROID
-    return gameanalytics::jni_isCommandCenterReady();
+    return gameanalytics::jni_isRemoteConfigsReady();
 #elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     return gameanalytics::GameAnalytics::isRemoteConfigsReady();
 // #elif PLATFORM_HTML5
