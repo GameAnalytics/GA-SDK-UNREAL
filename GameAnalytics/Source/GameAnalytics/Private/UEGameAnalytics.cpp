@@ -218,6 +218,25 @@ FAnalyticsProviderGameAnalytics::~FAnalyticsProviderGameAnalytics()
     UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("FAnalyticsGameAnalytics ~FAnalyticsProviderGameAnalytics"));
 }
 
+void FAnalyticsProviderGameAnalytics::SetDefaultEventAttributes(TArray<FAnalyticsEventAttribute>&& Attributes)
+{
+}
+
+TArray<FAnalyticsEventAttribute> FAnalyticsProviderGameAnalytics::GetDefaultEventAttributesSafe() const
+{
+    return {};
+}
+
+int32 FAnalyticsProviderGameAnalytics::GetDefaultEventAttributeCount() const
+{
+    return 0;
+}
+
+FAnalyticsEventAttribute FAnalyticsProviderGameAnalytics::GetDefaultEventAttribute(int AttributeIndex) const
+{
+    return FAnalyticsEventAttribute();
+}
+
 bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventAttribute>& Attributes)
 {
     if(!bHasSessionStarted)

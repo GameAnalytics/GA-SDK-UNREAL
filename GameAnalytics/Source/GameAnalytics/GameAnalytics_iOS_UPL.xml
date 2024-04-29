@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <init>
+        <copyFile src="$S(PluginDir)/GA-SDK-IOS/PrivacyInfo.xcprivacy" 
+                dst="$S(BuildDir)/PrivacyInfo.xcprivacy" />
+    </init>
+</root>

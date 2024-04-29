@@ -35,6 +35,11 @@ public:
     virtual void EndSession() override;
     virtual void FlushEvents() override;
 
+    virtual void SetDefaultEventAttributes(TArray<FAnalyticsEventAttribute>&& Attributes) override;
+    virtual TArray<FAnalyticsEventAttribute> GetDefaultEventAttributesSafe() const override;
+    virtual int32 GetDefaultEventAttributeCount() const override;
+    virtual FAnalyticsEventAttribute GetDefaultEventAttribute(int AttributeIndex) const override;
+
     virtual void SetUserID(const FString& InUserID) override;
     virtual FString GetUserID() const override;
 

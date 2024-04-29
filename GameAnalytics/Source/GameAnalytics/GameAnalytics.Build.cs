@@ -73,6 +73,9 @@ namespace UnrealBuildTool.Rules
                         "z",
                         "c++"
                 });
+
+                string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target.RelativeEnginePath);
+                AdditionalPropertiesForReceipt.Add("IOSPlugin", Path.Combine(PluginPath, "GameAnalytics_iOS_UPL.xml"));
             }
             /*else if(Target.Platform == UnrealTargetPlatform.HTML5)
             {
