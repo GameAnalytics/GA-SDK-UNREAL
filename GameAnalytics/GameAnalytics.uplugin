@@ -6,7 +6,7 @@
     "VersionName" : "5.4.4",
     "CreatedBy" : "GameAnalytics",
     "CreatedByURL" : "http://gameanalytics.com",
-    "EngineVersion" : "5.3.0",
+    "EngineVersion" : "5.4.0",
     "MarketplaceURL" : "com.epicgames.launcher://ue/marketplace/content/d070c3fab7b74c08bab3a89c9cbf4490",
     "Description" : "GameAnalytics is a free analytics platform that helps game developers understand their players' behaviour by delivering relevant insights.",
     "Category" : "Analytics",
