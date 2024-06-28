@@ -17,7 +17,7 @@
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
 
-#define GA_VERSION TEXT("5.4.4")
+#define GA_VERSION TEXT("5.4.5")
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -1839,4 +1839,75 @@ FString UGameAnalytics::GetABTestingId()
 FString UGameAnalytics::GetABTestingVariantId()
 {
     return getABTestingVariantId();
+}
+
+void UGameAnalytics::EnableSDKInitEvent(bool value)
+{
+    #if WITH_EDITOR
+        UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::EnableSDKInitEvent %s"), value ? TEXT("true") : TEXT("false"));
+    #elif PLATFORM_ANDROID
+        return gameanalytics::jni_enableSDKInitEvent(value);
+    #elif PLATFORM_IOS
+        return GameAnalyticsCpp::enableSDKInitEvent(value);
+    #else
+        (void)value;
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("Health event is not supported on this platform (editor builds are not supported)"));
+    #endif
+}
+
+void UGameAnalytics::EnableFpsHistogram(bool value)
+{
+    #ifdef GAMEANALYTICS_ENABLE_EXPERIMENTAL
+        #if WITH_EDITOR
+            UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::EnableFpsHistogram %s"), value ? TEXT("true") : TEXT("false"));
+        #elif PLATFORM_ANDROID
+            return gameanalytics::jni_enableFpsHistogram(value);
+        #elif PLATFORM_IOS
+            return GameAnalyticsCpp::enableFpsHistogram(value);
+        #else
+            (void)value;
+            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("Health event is not supported on this platform."));
+        #endif
+    #else
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("This feature is currently not fully supported for Unreal Engine builds."));
+    #endif
+}
+
+void UGameAnalytics::EnableMemoryHistogram(bool value)
+{
+    #if WITH_EDITOR
+        UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::EnableMemoryHistogram %s"), value ? TEXT("true") : TEXT("false"));
+    #elif PLATFORM_ANDROID
+        return gameanalytics::jni_enableMemoryHistogram(value);
+    #elif PLATFORM_IOS
+        return GameAnalyticsCpp::enableMemoryHistogram(value);
+    #else
+        (void)value;
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("Health event is not supported on this platform."));
+    #endif
+}
+
+void UGameAnalytics::EnableHealthHardwareInfo(bool value)
+{
+    #if WITH_EDITOR
+        UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::EnableHealthHardwareInfo %s"), value ? TEXT("true") : TEXT("false"));
+    #elif PLATFORM_ANDROID
+        return gameanalytics::jni_enableHealthHardwareInfo(value);
+    #elif PLATFORM_IOS
+        return GameAnalyticsCpp::enableHealthHardwareInfo(value);
+    #else
+        (void)value;
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("Health event is not supported on this platform"));
+    #endif
+}
+
+void UGameAnalytics::DisableAdvertisingId(bool value)
+{
+    #if PLATFORM_ANDROID
+        return gameanalytics::jni_setGAIDTracking(!value);
+    #elif PLATFORM_IOS
+        return GameAnalyticsCpp::useRandomizedId(value);
+    #else
+        (void)value;
+    #endif
 }

@@ -51,4 +51,10 @@ public:
 
     static void getABTestingId(char** out);
     static void getABTestingVariantId(char** out);
+
+    static void useRandomizedId(bool value);
+    static void enableSDKInitEvent(bool value);
+    static void enableFpsHistogram(bool value);
+    static void enableMemoryHistogram(bool value);
+    static void enableHealthHardwareInfo(bool value);
 };

@@ -386,4 +386,22 @@ public:
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void OnQuit();
 
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void DisableAdvertisingId(bool value);
+
+    ////////////////////////////////////////////////////////////
+    // HEALTH EVENT
+    ////////////////////////////////////////////////////////////
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void EnableSDKInitEvent(bool value);
+    
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void EnableFpsHistogram(bool value);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void EnableMemoryHistogram(bool value);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void EnableHealthHardwareInfo(bool value);
 };

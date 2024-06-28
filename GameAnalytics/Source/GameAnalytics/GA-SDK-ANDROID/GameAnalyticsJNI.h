@@ -52,5 +52,12 @@ namespace gameanalytics {
 
         extern void jni_getABTestingId(char** out);
         extern void jni_getABTestingVariantId(char** out);
+
+        extern void jni_setGAIDTracking(bool value);
+
+        extern void jni_enableSDKInitEvent(bool value);
+        extern void jni_enableFpsHistogram(bool value);
+        extern void jni_enableMemoryHistogram(bool value);
+        extern void jni_enableHealthHardwareInfo(bool value);
     }
 }

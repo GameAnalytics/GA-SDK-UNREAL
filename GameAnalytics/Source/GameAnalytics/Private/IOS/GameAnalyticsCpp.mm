@@ -361,3 +361,28 @@ void GameAnalyticsCpp::getABTestingVariantId(char** out) {
     snprintf(tmp, s.size() + 1, "%s", s.c_str());
     *out = tmp;
 }
+
+void GameAnalyticsCpp::useRandomizedId(bool value)
+{
+    [GameAnalytics useRandomizedId:value];
+}
+
+void GameAnalyticsCpp::enableSDKInitEvent(bool value)
+{
+    [GameAnalytics enableFpsHistogram:value];
+}
+
+void GameAnalyticsCpp::enableFpsHistogram(bool value)
+{
+    [GameAnalytics enableFpsHistogram:value];
+}
+
+void GameAnalyticsCpp::enableMemoryHistogram(bool value)
+{
+    [GameAnalytics enableMemoryHistogram:value];
+}
+
+void GameAnalyticsCpp::enableHealthHardwareInfo(bool value)
+{
+    [GameAnalytics enableHealthHardwareInfo:value];
+}
