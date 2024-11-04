@@ -32,7 +32,9 @@ Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
 **5.5.0**
-* updated the C++ SDK dependency:updated user api routes for login:added partial health feature support for windows/macos/linux
+* updated the C++ SDK dependency
+* updated user api routes for login
+* added partial health feature support for windows/macos/linux
 
 **5.4.5**
 * fixed documentation links
