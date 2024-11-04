@@ -15,6 +15,12 @@
 #include "Dom/JsonObject.h"
 #include "GameAnalytics.generated.h"
 
+#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    #define GA_USE_CPP_SDK 1
+#else
+    #define GA_USE_CPP_SDK 0
+#endif
+
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
 UENUM()
@@ -161,6 +167,7 @@ public:
     static void addErrorEvent(EGAErrorSeverity severity, const char *message);
     static void addErrorEvent(EGAErrorSeverity severity, const char *message, const TSharedRef<FJsonObject> &customFields);
     static void addErrorEvent(EGAErrorSeverity severity, const char *message, const TSharedRef<FJsonObject> &customFields, bool mergeFields);
+
 #if PLATFORM_IOS || PLATFORM_ANDROID
     static void addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement);
     static void addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, const TSharedRef<FJsonObject> &customFields);

@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**5.5.0**
+* updated the C++ SDK dependency:updated user api routes for login:added partial health feature support for windows/macos/linux
+
 **5.4.5**
 * fixed documentation links
 * added experimental health feature

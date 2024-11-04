@@ -28,6 +28,7 @@ class FAnalyticsProviderGameAnalytics :
     FAnalyticsGameAnalytics::FGameAnalyticsProjectSettings ProjectSettings;
 
 public:
+
     FAnalyticsProviderGameAnalytics();
     virtual ~FAnalyticsProviderGameAnalytics();
 

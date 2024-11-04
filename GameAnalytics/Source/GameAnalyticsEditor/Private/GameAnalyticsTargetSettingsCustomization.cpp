@@ -1682,10 +1682,10 @@ void HttpCaller::LoginHttp(FName Email, FName Password)
     UE_LOG(LogTemp, Display, TEXT("%s"), *content);
 
 	Request->SetVerb("POST");
-	Request->SetURL("https://userapi.gameanalytics.com/ext/v1/token");
+	Request->SetURL("https://platform.gameanalytics.com/ext/v1/token");
 	Request->SetContentAsString(content);
 	Request->SetHeader("User-Agent", "GameAnalyticsLinkClient/1.0");
-	Request->SetHeader("Content-Type", "application/x-www-form-urlencoded");
+	Request->SetHeader("Content-Type", "application/json");
 	Request->SetHeader("X-Caller", "UnrealEditor");
 	Request->SetHeader("X-Caller-Version", "1.0.0"); // Todo : get unreal editor version
 	Request->SetHeader("X-Caller-Platform", "Windows"); // Todo: get development platform
@@ -1805,9 +1805,9 @@ void HttpCaller::GetUserDataHttp(FString Token)
 	//~~~~~~~~~~~~~~~
 
 	Request->SetVerb("GET");
-	Request->SetURL("https://userapi.gameanalytics.com/ext/v1/user");
+	Request->SetURL("https://platform.gameanalytics.com/ext/v1/user");
 	Request->SetHeader("User-Agent", "GameAnalyticsLinkClient/1.0");
-	Request->SetHeader("Content-Type", "application/x-www-form-urlencoded");
+	Request->SetHeader("Content-Type", "application/json");
 	Request->SetHeader("X-Authorization", Token);
 	Request->SetHeader("X-Caller", "UnrealEditor");
 	Request->SetHeader("X-Caller-Version", "1.0.0"); // Todo : get unreal editor version
