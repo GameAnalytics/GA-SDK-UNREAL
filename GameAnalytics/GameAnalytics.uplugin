@@ -9,6 +9,7 @@
     "MarketplaceURL" : "com.epicgames.launcher://ue/marketplace/content/d070c3fab7b74c08bab3a89c9cbf4490",
     "Description" : "GameAnalytics is a free analytics platform that helps game developers understand their players' behaviour by delivering relevant insights.",
     "Category" : "Analytics",
+    "EngineVersion" : "5.4.4",
 
     "Modules" :
     [
