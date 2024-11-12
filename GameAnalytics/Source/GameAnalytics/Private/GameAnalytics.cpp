@@ -10,7 +10,9 @@
         #include "Json.h"
     #endif
 
+    PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
     #include "../GA-SDK-CPP/GameAnalytics/GameAnalytics.h"
+    PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 // #elif PLATFORM_HTML5
 // #include "Json.h"
