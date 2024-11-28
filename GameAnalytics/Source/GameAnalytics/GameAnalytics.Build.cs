@@ -48,7 +48,7 @@ namespace UnrealBuildTool.Rules
             }
             else if(Target.Platform == UnrealTargetPlatform.Linux)
             {
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "Linux-clang", "libGameAnalytics.a"));
+                PublicAdditionalLibraries.Add(Path.Combine(GA_SDK_CppPath, "Linux-clang", "libGameAnalytics.a"));
                 PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl" });
                 PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "GA-SDK-CPP")));
             }
