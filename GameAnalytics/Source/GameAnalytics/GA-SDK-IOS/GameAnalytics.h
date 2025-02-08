@@ -16,11 +16,11 @@
  @constant GAResourceFlowTypeSink
  Used when subtracting from a resource currency
  */
-typedef enum GAResourceFlowType : NSInteger
-{
-   GAResourceFlowTypeSource = 1,
-   GAResourceFlowTypeSink = 2
+typedef enum GAResourceFlowType : NSInteger {
+    GAResourceFlowTypeSource = 1,
+    GAResourceFlowTypeSink = 2
 } GAResourceFlowType;
+
 
 /*!
  @enum
@@ -33,12 +33,12 @@ typedef enum GAResourceFlowType : NSInteger
  @constant GAProgressionStatusFail
  User failed a progression
  */
-typedef enum GAProgressionStatus : NSInteger
-{
-   GAProgressionStatusStart = 1,
-   GAProgressionStatusComplete = 2,
-   GAProgressionStatusFail = 3
+typedef enum GAProgressionStatus : NSInteger {
+    GAProgressionStatusStart = 1,
+    GAProgressionStatusComplete = 2,
+    GAProgressionStatusFail = 3
 } GAProgressionStatus;
+
 
 /*!
  @enum
@@ -55,13 +55,12 @@ typedef enum GAProgressionStatus : NSInteger
  @constant GAErrorSeverityCritical
  Used for critical error level
  */
-typedef enum GAErrorSeverity : NSInteger
-{
-   GAErrorSeverityDebug = 1,
-   GAErrorSeverityInfo = 2,
-   GAErrorSeverityWarning = 3,
-   GAErrorSeverityError = 4,
-   GAErrorSeverityCritical = 5
+typedef enum GAErrorSeverity : NSInteger {
+    GAErrorSeverityDebug = 1,
+    GAErrorSeverityInfo = 2,
+    GAErrorSeverityWarning = 3,
+    GAErrorSeverityError = 4,
+    GAErrorSeverityCritical = 5
 } GAErrorSeverity;
 
 /*!
@@ -81,14 +80,13 @@ typedef enum GAErrorSeverity : NSInteger
  @constant GAAdActionLoaded
  Used for tracking ad loaded
  */
-typedef enum GAAdAction : NSInteger
-{
-   GAAdActionClicked = 1,
-   GAAdActionShow = 2,
-   GAAdActionFailedShow = 3,
-   GAAdActionRewardReceived = 4,
-   GAAdActionRequest = 5,
-   GAAdActionLoaded = 6
+typedef enum GAAdAction : NSInteger {
+    GAAdActionClicked = 1,
+    GAAdActionShow = 2,
+    GAAdActionFailedShow = 3,
+    GAAdActionRewardReceived = 4,
+    GAAdActionRequest = 5,
+    GAAdActionLoaded = 6
 } GAAdAction;
 
 /*!
@@ -108,14 +106,14 @@ typedef enum GAAdAction : NSInteger
  @constant GAAdTypeBanner
  Used for tracking banner ad type
  */
-typedef enum GAAdType : NSInteger
-{
-   GAAdTypeVideo = 1,
-   GAAdTypeRewardedVideo = 2,
-   GAAdTypePlayable = 3,
-   GAAdTypeInterstitial = 4,
-   GAAdTypeOfferWall = 5,
-   GAAdTypeBanner = 6
+typedef enum GAAdType : NSInteger {
+    GAAdTypeVideo = 1,
+    GAAdTypeRewardedVideo = 2,
+    GAAdTypePlayable = 3,
+    GAAdTypeInterstitial = 4,
+    GAAdTypeOfferWall = 5,
+    GAAdTypeBanner = 6,
+    GAAdTypeAppOpen = 7
 } GAAdType;
 
 /*!
@@ -135,21 +133,22 @@ typedef enum GAAdType : NSInteger
  @constant GAAdErrorUnableToPrecache
  Used for unable to precache error reason
  */
-typedef enum GAAdError : NSInteger
-{
-   GAAdErrorUnknown = 1,
-   GAAdErrorOffline = 2,
-   GAAdErrorNoFill = 3,
-   GAAdErrorInternalError = 4,
-   GAAdErrorInvalidRequest = 5,
-   GAAdErrorUnableToPrecache = 6
+typedef enum GAAdError : NSInteger {
+    GAAdErrorUnknown = 1,
+    GAAdErrorOffline = 2,
+    GAAdErrorNoFill = 3,
+    GAAdErrorInternalError = 4,
+    GAAdErrorInvalidRequest = 5,
+    GAAdErrorUnableToPrecache = 6
 } GAAdError;
 
 //Similar to IRemoteConfigsListener in the GameAnalytics Android library
 @protocol GARemoteConfigsDelegate <NSObject>
 @optional
-- (void)onRemoteConfigsUpdated; // Updated everytime when configurations are added
+- (void) onRemoteConfigsUpdated; // Updated everytime when configurations are added
 @end
+
+
 
 @class GameAnalytics;
 
@@ -286,6 +285,34 @@ typedef enum GAAdError : NSInteger
  */
 + (void)configureUserId:(NSString *)userId;
 
+/*!
+ @method
+
+ @abstract Set an additional optional user identifying the user. Will be added to every event.
+ This does not influence any GA configuration (unlike the user id) and can be set at any time
+
+ @discussion <i>Example usage:</i>
+ <pre><code>
+ [GameAnalytics configureExternalUserId:@"24566"];
+ </code></pre>
+
+ @param userId
+ (String max length=64)
+ */
++ (void)configureExternalUserId:(NSString *)userId;
+
+// returns the current user id if GameAnalytics has been initialized
++ (NSString*) getUserId;
+
+// returns the current external user id (if any)
++ (NSString*) getExternalUserId;
+
+/*
+ * set this as true if you do not want idfv to be used
+ * as an user id (a random id will be generated instead)
+ */
++ (void) useRandomizedId:(Boolean)value;
+
 /* @IF WRAPPER */
 
 /*
@@ -368,6 +395,8 @@ typedef enum GAAdError : NSInteger
 + (void)initializeWithGameKey:(NSString *)gameKey
                    gameSecret:(NSString *)gameSecret;
 
+
+
 /*!
  @method
 
@@ -382,6 +411,7 @@ typedef enum GAAdError : NSInteger
 
  */
 + (void)initializeWithConfiguredGameKeyAndGameSecret;
+
 
 /*!
  @method
@@ -404,11 +434,11 @@ typedef enum GAAdError : NSInteger
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addBusinessEventWithCurrency:(NSString *)currency
-                              amount:(NSInteger)amount
-                            itemType:(NSString *)itemType
-                              itemId:(NSString *)itemId
-                            cartType:(NSString *)cartType
-                             receipt:(NSString *)receipt;
+                           amount:(NSInteger)amount
+                         itemType:(NSString *)itemType
+                           itemId:(NSString *)itemId
+                         cartType:(NSString *)cartType
+                          receipt:(NSString *)receipt;
 
 /*!
  @method
@@ -431,12 +461,12 @@ typedef enum GAAdError : NSInteger
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addBusinessEventWithCurrency:(NSString *)currency
-                              amount:(NSInteger)amount
-                            itemType:(NSString *)itemType
-                              itemId:(NSString *)itemId
-                            cartType:(NSString *)cartType
-                             receipt:(NSString *)receipt
-                        customFields:(NSDictionary *)customFields;
+                           amount:(NSInteger)amount
+                         itemType:(NSString *)itemType
+                           itemId:(NSString *)itemId
+                         cartType:(NSString *)cartType
+                          receipt:(NSString *)receipt
+                     customFields:(NSDictionary *)customFields;
 
 /*!
  @method
@@ -461,12 +491,12 @@ typedef enum GAAdError : NSInteger
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addBusinessEventWithCurrency:(NSString *)currency
-                              amount:(NSInteger)amount
-                            itemType:(NSString *)itemType
-                              itemId:(NSString *)itemId
-                            cartType:(NSString *)cartType
-                             receipt:(NSString *)receipt
-                        customFields:(NSDictionary *)customFields
+                           amount:(NSInteger)amount
+                         itemType:(NSString *)itemType
+                           itemId:(NSString *)itemId
+                         cartType:(NSString *)cartType
+                          receipt:(NSString *)receipt
+                     customFields:(NSDictionary *)customFields
                          mergeFields:(BOOL)mergeFields;
 
 /*!
@@ -900,6 +930,7 @@ typedef enum GAAdError : NSInteger
                      customFields:(NSDictionary *)customFields
                       mergeFields:(BOOL)mergeFields;
 
+
 /*!
  @method
 
@@ -956,9 +987,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new ad event
-
+ 
  @param action
  Action of ad (See. GAAdAction)
  @param adType
@@ -969,7 +1000,7 @@ typedef enum GAAdError : NSInteger
  Placement of ad (ad identifier)
  @param duration
  Duration the user watched ad video
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addAdEventWithAction:(GAAdAction)action
@@ -980,9 +1011,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new ad event
-
+ 
  @param action
  Action of ad (See. GAAdAction)
  @param adType
@@ -995,7 +1026,7 @@ typedef enum GAAdError : NSInteger
  Duration the user watched ad video
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addAdEventWithAction:(GAAdAction)action
@@ -1007,9 +1038,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new ad event
-
+ 
  @param action
  Action of ad (See. GAAdAction)
  @param adType
@@ -1024,7 +1055,7 @@ typedef enum GAAdError : NSInteger
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
  @param mergeFields
     If true merge specified fields with global fields
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addAdEventWithAction:(GAAdAction)action
@@ -1037,9 +1068,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new ad event
-
+ 
  @param action
  Action of ad (See. GAAdAction)
  @param adType
@@ -1050,20 +1081,20 @@ typedef enum GAAdError : NSInteger
  Placement of ad (ad identifier)
  @param noAdReason
  Error reason of ad
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addAdEventWithAction:(GAAdAction)action
                       adType:(GAAdType)adType
                    adSdkName:(NSString *)adSdkName
                  adPlacement:(NSString *)adPlacement
-                  noAdReason:(GAAdError)noAdReason;
+                    noAdReason:(GAAdError)noAdReason;
 
 /*!
  @method
-
+ 
  @abstract Add new ad event
-
+ 
  @param action
  Action of ad (See. GAAdAction)
  @param adType
@@ -1076,7 +1107,7 @@ typedef enum GAAdError : NSInteger
  Error reason of ad
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addAdEventWithAction:(GAAdAction)action
@@ -1088,9 +1119,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new ad event
-
+ 
  @param action
  Action of ad (See. GAAdAction)
  @param adType
@@ -1105,7 +1136,7 @@ typedef enum GAAdError : NSInteger
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
  @param mergeFields
     If true merge specified fields with global fields
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addAdEventWithAction:(GAAdAction)action
@@ -1118,9 +1149,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new ad event
-
+ 
  @param action
  Action of ad (See. GAAdAction)
  @param adType
@@ -1129,7 +1160,7 @@ typedef enum GAAdError : NSInteger
  Name of ad SDK
  @param adPlacement
  Placement of ad (ad identifier)
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addAdEventWithAction:(GAAdAction)action
@@ -1139,9 +1170,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new ad event
-
+ 
  @param action
  Action of ad (See. GAAdAction)
  @param adType
@@ -1152,7 +1183,7 @@ typedef enum GAAdError : NSInteger
  Placement of ad (ad identifier)
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addAdEventWithAction:(GAAdAction)action
@@ -1163,9 +1194,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new ad event
-
+ 
  @param action
  Action of ad (See. GAAdAction)
  @param adType
@@ -1178,7 +1209,7 @@ typedef enum GAAdError : NSInteger
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
  @param mergeFields
     If true merge specified fields with global fields
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addAdEventWithAction:(GAAdAction)action
@@ -1190,14 +1221,14 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new mopub impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionMopubEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1205,16 +1236,16 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new mopub impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionMopubEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1223,14 +1254,14 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new fyber impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionFyberEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1238,16 +1269,16 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new fyber impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionFyberEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1256,31 +1287,31 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new iron source impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionIronSourceEventWithAdNetworkVersion:(NSString *)adNetworkVersion
-                                          impressionData:(NSDictionary *)impressionData;
+                            impressionData:(NSDictionary *)impressionData;
 
 /*!
  @method
-
+ 
  @abstract Add new iron source impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionIronSourceEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1289,31 +1320,31 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new topon impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionTopOnEventWithAdNetworkVersion:(NSString *)adNetworkVersion
-                                     impressionData:(NSDictionary *)impressionData;
+                            impressionData:(NSDictionary *)impressionData;
 
 /*!
  @method
-
+ 
  @abstract Add new topon impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionTopOnEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1322,31 +1353,31 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new hyperbid impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionHyperBidEventWithAdNetworkVersion:(NSString *)adNetworkVersion
-                                        impressionData:(NSDictionary *)impressionData;
+                            impressionData:(NSDictionary *)impressionData;
 
 /*!
  @method
-
+ 
  @abstract Add new hyperbid impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionHyperBidEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1355,31 +1386,31 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new max impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionMaxEventWithAdNetworkVersion:(NSString *)adNetworkVersion
-                                   impressionData:(NSDictionary *)impressionData;
+                            impressionData:(NSDictionary *)impressionData;
 
 /*!
  @method
-
+ 
  @abstract Add new max impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionMaxEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1388,31 +1419,31 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new aequus impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionAequusEventWithAdNetworkVersion:(NSString *)adNetworkVersion
-                                      impressionData:(NSDictionary *)impressionData;
+                            impressionData:(NSDictionary *)impressionData;
 
 /*!
  @method
-
+ 
  @abstract Add new aequus impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionAequusEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1421,14 +1452,14 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new admob impression event
-
+ 
  @param adNetworkVersion
  Name of ad network version
  @param impressionData
  Impression data
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionAdMobEventWithAdNetworkVersion:(NSString *)adNetworkVersion
@@ -1436,34 +1467,35 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new admob impression event
-
+ 
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionAdMobEventWithAdNetworkVersion:(NSString *)adNetworkVersion
                                      impressionData:(NSDictionary *)impressionData
                                        customFields:(NSDictionary *)customFields;
 
+
 /*!
  @method
-
+ 
  @abstract Add new impression event
-
+ 
  @param adNetworkName
  Name of ad network
  @param adNetworkVersion
  Version of ad network
  @param impressionData
  Impression data
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionEventWithAdNetworkName:(NSString *)adNetworkName
@@ -1472,9 +1504,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new impression event
-
+ 
  @param adNetworkName
  Name of ad network
  @param adNetworkVersion
@@ -1483,7 +1515,7 @@ typedef enum GAAdError : NSInteger
  Impression data
  @param customFields
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionEventWithAdNetworkName:(NSString *)adNetworkName
@@ -1493,9 +1525,9 @@ typedef enum GAAdError : NSInteger
 
 /*!
  @method
-
+ 
  @abstract Add new impression event
-
+ 
  @param adNetworkName
  Name of ad network
  @param adNetworkVersion
@@ -1506,7 +1538,7 @@ typedef enum GAAdError : NSInteger
     Dictionary of key-value pairs to be added to the event. Custom fields will only be available for data export.
  @param mergeFields
     If true merge specified fields with global fields
-
+ 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
 + (void)addImpressionEventWithAdNetworkName:(NSString *)adNetworkName
@@ -1515,11 +1547,12 @@ typedef enum GAAdError : NSInteger
                                customFields:(NSDictionary *)customFields
                                 mergeFields:(BOOL)mergeFields;
 
+
 /*!
  @method
-
+ 
  @abstract Get remote configs value as string
-
+ 
  @param key
  The key declared in the webtool
 
@@ -1527,7 +1560,8 @@ typedef enum GAAdError : NSInteger
 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
-+ (NSString *)getRemoteConfigsValueAsString:(NSString *)key;
++ (NSString *)getRemoteConfigsValueAsString:(NSString*) key;
+
 
 /*!
  @method
@@ -1544,8 +1578,8 @@ typedef enum GAAdError : NSInteger
 
  @attribute Note! This method cannot be called before initialize method has been triggered
  */
-+ (NSString *)getRemoteConfigsValueAsString:(NSString *)key
-                               defaultValue:(NSString *)defaultValue;
++ (NSString *) getRemoteConfigsValueAsString:(NSString *) key
+                                defaultValue:(NSString *)defaultValue;
 
 /*!
  @method
@@ -1556,7 +1590,19 @@ typedef enum GAAdError : NSInteger
 
  @attribute For internal use.
  */
-+ (NSString *)getRemoteConfigsContentAsString;
++ (NSString *) getRemoteConfigsContentAsString;
+
+/*!
+ @method
+
+ @abstract Get remote configs configurations as a valid json
+
+ @availability Available since (TBD)
+
+ @attribute For internal use.
+ */
++ (NSString *) getRemoteConfigsContentAsJSON;
+
 
 /*!
  @method
@@ -1565,7 +1611,7 @@ typedef enum GAAdError : NSInteger
 
  @availability Available since (TBD)
  */
-+ (void)setRemoteConfigsDelegate:(id)newDelegate;
++ (void) setRemoteConfigsDelegate:(id)newDelegate;
 
 /*!
  @method
@@ -1576,7 +1622,7 @@ typedef enum GAAdError : NSInteger
 
  @attribute Note! This method should not be called before initialize method has been triggered
  */
-+ (BOOL)isRemoteConfigsReady;
++ (BOOL) isRemoteConfigsReady;
 
 /*!
  @method
@@ -1585,7 +1631,7 @@ typedef enum GAAdError : NSInteger
 
  @availability Available since (TBD)
  */
-+ (NSString *)getABTestingId;
++ (NSString *) getABTestingId;
 
 /*!
  @method
@@ -1594,7 +1640,7 @@ typedef enum GAAdError : NSInteger
 
  @availability Available since (TBD)
  */
-+ (NSString *)getABTestingVariantId;
++ (NSString *) getABTestingVariantId;
 
 /*!
  @method
@@ -1608,6 +1654,7 @@ typedef enum GAAdError : NSInteger
 
  */
 + (void)setEnabledInfoLog:(BOOL)flag;
+
 
 /*!
  @method
@@ -1634,6 +1681,7 @@ typedef enum GAAdError : NSInteger
 
  */
 + (void)setEnabledWarningLog:(BOOL)flag;
+
 
 /*!
  @method
@@ -1679,6 +1727,21 @@ typedef enum GAAdError : NSInteger
  */
 + (void)setEnabledEventSubmission:(BOOL)flag;
 
+
+/*!
+ @method
+
+ @abstract Enable/disable event submission.
+ When enabled this will allow events to be sent.
+
+ @param doCache enable event local caching if submission is disabled
+ Enable or disable event submission.
+ 
+ @param doSend send events to the server, if this flag is set, caching will also be set to true
+
+ */
++ (void)setEnabledEventSubmission:(BOOL)doSend doCacheLocally:(BOOL)doCache;
+
 /*!
  @method
 
@@ -1693,6 +1756,7 @@ typedef enum GAAdError : NSInteger
  */
 + (void)startSession;
 
+
 /*!
  @method
 
@@ -1705,6 +1769,7 @@ typedef enum GAAdError : NSInteger
 
  */
 + (void)endSession;
+
 
 /*!
  @method
@@ -1761,47 +1826,86 @@ typedef enum GAAdError : NSInteger
  */
 + (void)setGlobalCustomEventFields:(NSDictionary *)customFields;
 
+
 /*!
  @method
+ 
+ @abstract enable the SDK init event to automatically track the boot time (time from application launch to the GameAnalytics SDK initialization).
+ @param value enable the event
+ 
+ */
++(void)enableSDKInitEvent:(Boolean)value;
 
+/*!
+ @method
+ 
+ @abstract Enable FPS sampling across the entire session to ultimately send an FPS histogram via the Session Performance Event.
+ @param value enable fps data collection
+ 
+ */
++(void)enableFpsHistogram:(Boolean)value;
+
+/*!
+ @method
+ 
+ @abstract Enable memory usage sampling across the entire session to ultimately send a memory usage histogram via the Session Performance Event.
+ @param value enable memory data collection
+ */
++(void)enableMemoryHistogram:(Boolean)value;
+
+/*!
+ @method
+ 
+ @abstract (EXPERIMENTAL) enable discovery of device hardware information like,
+ cpu model, number of cpu cores, GPU model, chipset/hardware (if available).
+ these data points are added as properties to existing health
+ events (error, SDK init, session performance) if those are enabled.
+ 
+ @param value enable hardware info collection
+ */
++(void)enableHealthHardwareInfo:(Boolean)value;
+
+/*!
+ @method
+ 
  @abstract Start timer for specified key
-
+ 
  @param key
  Key to use to relate to the timer
-
+ 
  */
 + (void)startTimer:(NSString *)key;
 
 /*!
  @method
-
+ 
  @abstract Pause timer for specified key
-
+ 
  @param key
  Key to use to relate to the timer
-
+ 
  */
 + (void)pauseTimer:(NSString *)key;
 
 /*!
  @method
-
+ 
  @abstract Resume timer for specified key
-
+ 
  @param key
  Key to use to relate to the timer
-
+ 
  */
 + (void)resumeTimer:(NSString *)key;
 
 /*!
  @method
-
+ 
  @abstract Stop timer for specified key
-
+ 
  @param key
  Key to use to relate to the timer
-
+ 
  */
 + (NSInteger)stopTimer:(NSString *)key;
 

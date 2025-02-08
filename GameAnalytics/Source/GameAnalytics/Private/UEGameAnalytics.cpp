@@ -3,13 +3,16 @@
 #include "Interfaces/IAnalyticsProvider.h"
 #include "GameAnalyticsProvider.h"
 #include "GameAnalytics.h"
-#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
-#if PLATFORM_WINDOWS
-#include "Windows/AllowWindowsPlatformTypes.h"
-#endif
-#include "../GA-SDK-CPP/GameAnalytics.h"
-// #elif PLATFORM_HTML5
-// #include "../GA-SDK-HTML5/GameAnalytics.h"
+
+#if GA_USE_CPP_SDK
+    #if PLATFORM_WINDOWS
+        #include "Windows/AllowWindowsPlatformTypes.h"
+    #endif
+    
+    #include "GameAnalytics/GameAnalytics.h"
+
+// // #elif PLATFORM_HTML5
+    //#include "../GA-SDK-HTML5/GameAnalytics.h"
 #endif
 
 IMPLEMENT_MODULE( FAnalyticsGameAnalytics, GameAnalytics )
@@ -32,7 +35,7 @@ void FAnalyticsGameAnalytics::ShutdownModule()
     if (GameAnalyticsProvider.IsValid())
     {
         UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("FAnalyticsGameAnalytics Destructor"));
-#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+#if GA_USE_CPP_SDK
         UGameAnalytics::onQuit();
 #endif
     }
@@ -244,7 +247,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         ProjectSettings = FAnalyticsGameAnalytics::LoadProjectSettings();
 
 #if WITH_EDITOR
-#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+#elif GA_USE_CPP_SDK
 #if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 18) || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
         gameanalytics::GameAnalytics::configureWritablePath(TCHAR_TO_UTF8(*FPaths::ProjectSavedDir()));
 #else
@@ -283,7 +286,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
         UGameAnalytics::configureBuild(TCHAR_TO_UTF8(*ProjectSettings.WindowsBuild));
 #elif PLATFORM_LINUX
         UGameAnalytics::configureBuild(TCHAR_TO_UTF8(*ProjectSettings.LinuxBuild));
-// #elif PLATFORM_HTML5
+// // #elif PLATFORM_HTML5
 //         UGameAnalytics::configureBuild(TCHAR_TO_UTF8(*ProjectSettings.Html5Build));
 #endif
 
@@ -373,7 +376,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
                 {
                     secretKey = Attr.GetValue();
                 }
-// #elif PLATFORM_HTML5
+// // #elif PLATFORM_HTML5
 //                 if (Attr.GetName() == TEXT("html5_gameKey"))
 //                 {
 //                     gameKey = Attr.GetValue();
@@ -402,7 +405,7 @@ bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventA
 #elif PLATFORM_LINUX
             gameKey = ProjectSettings.LinuxGameKey;
             secretKey = ProjectSettings.LinuxSecretKey;
-// #elif PLATFORM_HTML5
+// // #elif PLATFORM_HTML5
 //             gameKey = ProjectSettings.Html5GameKey;
 //             secretKey = ProjectSettings.Html5SecretKey;
 #endif
@@ -429,9 +432,9 @@ void FAnalyticsProviderGameAnalytics::EndSession()
         else
         {
 #if WITH_EDITOR
-#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+#elif GA_USE_CPP_SDK
             gameanalytics::GameAnalytics::onSuspend();
-// #elif PLATFORM_HTML5
+// // #elif PLATFORM_HTML5
 //             js_onStop();
 #else
             UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::EndSession ignored."));
@@ -556,7 +559,8 @@ void FAnalyticsProviderGameAnalytics::RecordError(const FString& Error, const TA
     }
     else
     {
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordError wrong usage"));
+
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordError wrong usage, for correct usage see: https://docs.gameanalytics.com/integrations/sdk/unreal/event-tracking"));
     }
 }
 
@@ -672,7 +676,8 @@ void FAnalyticsProviderGameAnalytics::RecordProgress(const FString& ProgressType
     }
     else
     {
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordProgress wrong usage"));
+
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordProgress wrong usage, for correct usage see: https://docs.gameanalytics.com/integrations/sdk/unreal/event-tracking"));
     }
 }
 
@@ -724,12 +729,13 @@ void FAnalyticsProviderGameAnalytics::RecordItemPurchase(const FString& ItemId, 
         }
         else
         {
-            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordItemPurchase wrong usage"));
+
+            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordItemPurchase wrong usage, for correct usage see: https://docs.gameanalytics.com/integrations/sdk/unreal/event-tracking"));
         }
     }
     else
     {
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordItemPurchase wrong usage"));
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordItemPurchase wrong usage, for correct usage see: https://docs.gameanalytics.com/integrations/sdk/unreal/event-tracking"));
     }
 }
 
@@ -815,18 +821,18 @@ void FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase(const FString& Game
                     UGameAnalytics::addBusinessEvent(TCHAR_TO_UTF8(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
                 }
             }
-#elif PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+#elif GA_USE_CPP_SDK
             UGameAnalytics::addBusinessEvent(TCHAR_TO_UTF8(*GameCurrencyType), GameCurrencyAmount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
 #endif
         }
         else
         {
-            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase wrong usage"));
+            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase wrong usage, for correct usage see: https://docs.gameanalytics.com/integrations/sdk/unreal/event-tracking"));
         }
     }
     else
     {
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase wrong usage"));
+        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("FAnalyticsProviderGameAnalytics::RecordCurrencyPurchase wrong usage, for correct usage see: https://docs.gameanalytics.com/integrations/sdk/unreal/event-tracking"));
     }
 }
 

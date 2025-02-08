@@ -15,21 +15,16 @@ namespace UnrealBuildTool.Rules
         {
             PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-            var GameAnalyticsPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../ThirdParty/" ));
-            var libPath = Path.Combine(GameAnalyticsPath, "lib");
+            var ThirdPartyPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../ThirdParty/"));
+            var GA_SDK_CppPath = Path.GetFullPath(Path.Combine(ThirdPartyPath, "GA-SDK-CPP", "lib"));
+            var libPath = Path.Combine(ThirdPartyPath, "lib");
 
             if(Target.Platform == UnrealTargetPlatform.Win64)
             {
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "GameAnalytics.lib"));
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "win64", "Sqlite.lib"));
+                PublicAdditionalLibraries.Add(Path.Combine(GA_SDK_CppPath, "Win64", "GameAnalytics.lib"));
                 PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
+                PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "GA-SDK-CPP")));
             }
-            /*else if(Target.Platform == UnrealTargetPlatform.Win32)
-            {
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "GameAnalytics.lib"));
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "win32", "Sqlite.lib"));
-                PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
-            }*/
             else if(Target.Platform == UnrealTargetPlatform.Android)
             {
                 PrivateDependencyModuleNames.Add("Launch");
@@ -37,23 +32,25 @@ namespace UnrealBuildTool.Rules
             }
             else if(Target.Platform == UnrealTargetPlatform.Mac)
             {
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libGameAnalytics.a"));
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "osx", "libSqlite.a"));
-                PublicAdditionalLibraries.Add("curl");
+                PublicAdditionalLibraries.Add(Path.Combine(GA_SDK_CppPath, "Mac", "libGameAnalytics.a"));
+                
                 PublicFrameworks.AddRange(
                     new string[] {
                         "CoreFoundation",
                         "Foundation",
-                        "CoreServices"
+                        "CoreServices",
+                        "SystemConfiguration"
                     }
                 );
-                PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL" });
+                PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl" });
+
+                PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "GA-SDK-CPP")));
             }
             else if(Target.Platform == UnrealTargetPlatform.Linux)
             {
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libGameAnalytics.a"));
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "linux", "libSqlite.a"));
+                PublicAdditionalLibraries.Add(Path.Combine(GA_SDK_CppPath, "Linux-clang", "libGameAnalytics.a"));
                 PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl" });
+                PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "GA-SDK-CPP")));
             }
             else if(Target.Platform == UnrealTargetPlatform.IOS)
             {

@@ -16,9 +16,11 @@
  */
 #pragma once
 
+PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 #include <vector>
 #include <string>
 #include <jni.h>
+PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 namespace gameanalytics {
     extern "C"
@@ -72,5 +74,14 @@ namespace gameanalytics {
         extern void jni_getRemoteConfigsContentAsString(char** out);
         extern void jni_getABTestingId(char** out);
         extern void jni_getABTestingVariantId(char** out);
+
+        extern void jni_setGAIDTracking(bool value);
+
+        ////////////////////////////////////////////////////////////
+
+        extern void jni_enableSDKInitEvent(bool value);
+        extern void jni_enableFpsHistogram(bool value);
+        extern void jni_enableMemoryHistogram(bool value);
+        extern void jni_enableHealthHardwareInfo(bool value);
     }
 }

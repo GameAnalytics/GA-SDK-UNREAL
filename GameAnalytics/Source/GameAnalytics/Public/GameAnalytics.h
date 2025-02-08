@@ -7,13 +7,21 @@
 
 #pragma once
 
+PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 #include <string>
 #include <vector>
 #include <stdint.h>
+PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 #include "UObject/Object.h"
 #include "Dom/JsonObject.h"
 #include "GameAnalytics.generated.h"
+
+#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    #define GA_USE_CPP_SDK 1
+#else
+    #define GA_USE_CPP_SDK 0
+#endif
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
@@ -161,6 +169,7 @@ public:
     static void addErrorEvent(EGAErrorSeverity severity, const char *message);
     static void addErrorEvent(EGAErrorSeverity severity, const char *message, const TSharedRef<FJsonObject> &customFields);
     static void addErrorEvent(EGAErrorSeverity severity, const char *message, const TSharedRef<FJsonObject> &customFields, bool mergeFields);
+
 #if PLATFORM_IOS || PLATFORM_ANDROID
     static void addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement);
     static void addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, const TSharedRef<FJsonObject> &customFields);
@@ -386,4 +395,22 @@ public:
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void OnQuit();
 
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void DisableAdvertisingId(bool value);
+
+    ////////////////////////////////////////////////////////////
+    // HEALTH EVENT
+    ////////////////////////////////////////////////////////////
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void EnableSDKInitEvent(bool value);
+    
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void EnableFpsHistogram(bool value);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void EnableMemoryHistogram(bool value);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void EnableHealthHardwareInfo(bool value);
 };
