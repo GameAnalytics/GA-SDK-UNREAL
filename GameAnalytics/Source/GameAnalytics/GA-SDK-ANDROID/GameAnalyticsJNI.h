@@ -1,10 +1,10 @@
 #pragma once
 
-PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
+
 #include <vector>
 #include <string>
 #include <stdint.h>
-PRAGMA_POP_PLATFORM_DEFAULT_PACKING
+
 
 namespace gameanalytics {
     extern "C"

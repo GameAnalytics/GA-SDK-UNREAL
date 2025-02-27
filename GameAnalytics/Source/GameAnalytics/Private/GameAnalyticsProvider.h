@@ -36,10 +36,13 @@ public:
     virtual void EndSession() override;
     virtual void FlushEvents() override;
 
+#if (ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 4)
     virtual void SetDefaultEventAttributes(TArray<FAnalyticsEventAttribute>&& Attributes) override;
     virtual TArray<FAnalyticsEventAttribute> GetDefaultEventAttributesSafe() const override;
     virtual int32 GetDefaultEventAttributeCount() const override;
     virtual FAnalyticsEventAttribute GetDefaultEventAttribute(int AttributeIndex) const override;
+#endif
+
 
     virtual void SetUserID(const FString& InUserID) override;
     virtual FString GetUserID() const override;

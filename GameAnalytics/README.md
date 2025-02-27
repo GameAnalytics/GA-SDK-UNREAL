@@ -31,6 +31,13 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**5.6.0**
+- fixed UE 5.4 or later compilation issues
+- **Boot Time in Milliseconds**: Boot time now reported in milliseconds for precise performance metrics.
+- **Design Event Values**: Improved the consistency of design event value handling, ensuring more accurate data delivery.
+- **Local Cache Path**: Refined the local cache path configuration to automatically use the default writable path, streamlining setup by making `configureWritablePath` optional.
+- **Verbose Logging**: more logs are not visible when verbose logging is enabled.
+
 **5.5.0**
 * updated the C++ SDK dependency
 * updated user api routes for login

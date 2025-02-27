@@ -220,7 +220,7 @@ FAnalyticsProviderGameAnalytics::~FAnalyticsProviderGameAnalytics()
 {
     UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("FAnalyticsGameAnalytics ~FAnalyticsProviderGameAnalytics"));
 }
-
+#if (ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 4)
 void FAnalyticsProviderGameAnalytics::SetDefaultEventAttributes(TArray<FAnalyticsEventAttribute>&& Attributes)
 {
 }
@@ -239,6 +239,7 @@ FAnalyticsEventAttribute FAnalyticsProviderGameAnalytics::GetDefaultEventAttribu
 {
     return FAnalyticsEventAttribute();
 }
+#endif
 
 bool FAnalyticsProviderGameAnalytics::StartSession(const TArray<FAnalyticsEventAttribute>& Attributes)
 {
