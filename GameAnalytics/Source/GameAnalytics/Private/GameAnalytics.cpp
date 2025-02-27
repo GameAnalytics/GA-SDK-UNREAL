@@ -10,9 +10,7 @@
         #include "Json.h"
     #endif
 
-    PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
     #include "../GA-SDK-CPP/GameAnalytics/GameAnalytics.h"
-    PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 // #elif PLATFORM_HTML5
 // #include "Json.h"
@@ -24,7 +22,32 @@
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
 
-#define GA_VERSION TEXT("5.5.0")
+#define GA_VERSION TEXT("5.6.0")
+
+std::string ToStdString(const FString& str)
+{
+    std::string s = TCHAR_TO_UTF8(*str);
+    return s;
+}
+
+std::vector<std::string> ToStringVector(const TArray<FString>& arr)
+{
+    std::vector<std::string> v;
+    v.reserve(arr.Num());
+
+    for (const FString& item : arr)
+    {
+        v.push_back(ToStdString(item));
+    }
+
+    return v;
+}
+
+void PrintList(FString const& msg, const TArray<FString>& list)
+{
+    FString s = FString::Join(list, TEXT(","));
+    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("%s(%s)"), *msg, *s);
+}
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -72,29 +95,16 @@ void UGameAnalytics::configureAvailableCustomDimensions01(const TArray<FString>&
 
 void UGameAnalytics::configureAvailableCustomDimensions02(const TArray<FString>& list)
 {
+    std::vector<std::string> v = ToStringVector(list);
+
 #if WITH_EDITOR
     FString s = FString::Join(list, TEXT(","));
     UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableCustomDimensions02(%s)"), *s);
 #elif PLATFORM_IOS
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
     GameAnalyticsCpp::configureAvailableCustomDimensions02(v);
 #elif PLATFORM_ANDROID
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
     gameanalytics::jni_configureAvailableCustomDimensions02(v);
 #elif GA_USE_CPP_SDK
-    gameanalytics::StringVector v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
     gameanalytics::GameAnalytics::configureAvailableCustomDimensions02(v);
 // // #elif PLATFORM_HTML5
 //     TArray<TSharedPtr<FJsonValue>> array;
@@ -352,11 +362,13 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
     FString fieldsString;
     TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
     FJsonSerializer::Serialize(fields, Writer);
+
 #if !WITH_EDITOR
     GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, TCHAR_TO_UTF8(*fieldsString), mergeFields);
 #else
     UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), UTF8_TO_TCHAR(receipt), *fieldsString);
 #endif
+
 }
 
 void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType)
@@ -420,8 +432,9 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
 void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const TSharedRef<FJsonObject> &fields, bool mergeFields)
 {
     FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&fieldsString);
     FJsonSerializer::Serialize(fields, Writer);
+
 #if WITH_EDITOR
     UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), *fieldsString);
 #elif PLATFORM_IOS
@@ -433,6 +446,7 @@ void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const ch
 // #elif PLATFORM_HTML5
 //     js_addBusinessEvent(currency, amount, itemType, itemId, cartType, "");
 #endif
+
 }
 
 void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId)
@@ -617,8 +631,9 @@ void UGameAnalytics::addDesignEvent(const char *eventId, const TSharedRef<FJsonO
 void UGameAnalytics::addDesignEvent(const char *eventId, const TSharedRef<FJsonObject> &fields, bool mergeFields)
 {
     FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
+    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&fieldsString);
     FJsonSerializer::Serialize(fields, Writer);
+
 #if WITH_EDITOR
     UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addDesignEvent(%s, %s)"), UTF8_TO_TCHAR(eventId), *fieldsString);
 #elif PLATFORM_IOS
@@ -630,6 +645,7 @@ void UGameAnalytics::addDesignEvent(const char *eventId, const TSharedRef<FJsonO
 // #elif PLATFORM_HTML5
 //     js_addDesignEvent(eventId, "");
 #endif
+
 }
 
 void UGameAnalytics::addDesignEvent(const char *eventId, float value)
@@ -1121,7 +1137,7 @@ void UGameAnalytics::AddBusinessEventAndAutoFetchReceipt(const FString& Currency
 void UGameAnalytics::AddBusinessEventAndAutoFetchReceiptWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
     TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    for (auto& item : CustomFields)
     {
         if (item.Value.IsNumeric())
         {
@@ -1354,7 +1370,7 @@ void UGameAnalytics::AddProgressionEventWithOneScoreAndFields(EGAProgressionStat
 void UGameAnalytics::AddProgressionEventWithOneScoreAndMergeFields(EGAProgressionStatus ProgressionStatus, const FString &Progression01, int Score, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
 {
     TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    for (auto& item : CustomFields)
     {
         if (item.Value.IsNumeric())
         {
@@ -1377,7 +1393,7 @@ void UGameAnalytics::AddProgressionEventWithOneAndTwo(EGAProgressionStatus Progr
 void UGameAnalytics::AddProgressionEventWithOneTwoAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
     TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    for (auto& item : CustomFields)
     {
         if (item.Value.IsNumeric())
         {
@@ -1418,7 +1434,7 @@ void UGameAnalytics::AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus 
 void UGameAnalytics::AddProgressionEventWithOneTwoScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
 {
     TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    for (auto& item : CustomFields)
     {
         if (item.Value.IsNumeric())
         {
@@ -1436,7 +1452,7 @@ void UGameAnalytics::AddProgressionEventWithOneTwoScoreAndFields(EGAProgressionS
 void UGameAnalytics::AddProgressionEventWithOneTwoScoreAndMergeFields(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, int Score, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
 {
     TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    for (auto& item : CustomFields)
     {
         if (item.Value.IsNumeric())
         {

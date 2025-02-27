@@ -7,11 +7,11 @@
 
 #pragma once
 
-PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
+
 #include <string>
 #include <vector>
 #include <stdint.h>
-PRAGMA_POP_PLATFORM_DEFAULT_PACKING
+
 
 #include "UObject/Object.h"
 #include "Dom/JsonObject.h"

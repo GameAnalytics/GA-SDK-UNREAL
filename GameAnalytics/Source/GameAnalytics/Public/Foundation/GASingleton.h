@@ -1,9 +1,9 @@
 #pragma once
 
-PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
+
 #include <memory>
 #include <mutex>
-PRAGMA_POP_PLATFORM_DEFAULT_PACKING
+
 
 /*!
 	Template class, that implements the sharedInstance/setSharedInstance idom.
