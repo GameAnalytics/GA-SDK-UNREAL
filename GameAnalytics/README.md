@@ -31,6 +31,10 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**5.6.1**
+* fixed iOS compilation issues
+* fixed linux broken paths for static cpp ga sdk lib
+
 **5.6.0**
 - fixed UE 5.4 or later compilation issues
 - **Boot Time in Milliseconds**: Boot time now reported in milliseconds for precise performance metrics.
