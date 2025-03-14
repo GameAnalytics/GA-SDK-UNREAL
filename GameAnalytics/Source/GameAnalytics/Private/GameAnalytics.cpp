@@ -22,7 +22,7 @@
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
 
-#define GA_VERSION TEXT("5.6.0")
+#define GA_VERSION TEXT("5.6.1")
 
 std::string ToStdString(const FString& str)
 {
@@ -1922,7 +1922,7 @@ void UGameAnalytics::EnableHealthHardwareInfo(bool value)
     #elif PLATFORM_ANDROID
         return gameanalytics::jni_enableHealthHardwareInfo(value);
     #elif PLATFORM_IOS
-        return gameanalytics::GameAnalyticsCpp::enableHealthHardwareInfo(value);
+        return GameAnalyticsCpp::enableHealthHardwareInfo(value);
     #else
         (void)value;
         UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("Health event is not supported on this platform"));
@@ -1934,7 +1934,7 @@ void UGameAnalytics::DisableAdvertisingId(bool value)
     #if PLATFORM_ANDROID
         return gameanalytics::jni_setGAIDTracking(!value);
     #elif PLATFORM_IOS
-        return gameanalytics::GameAnalyticsCpp::useRandomizedId(value);
+        return GameAnalyticsCpp::useRandomizedId(value);
     #else
         (void)value;
     #endif
