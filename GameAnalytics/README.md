@@ -31,6 +31,9 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**6.0.0**
+* removed
+
 **5.6.1**
 * fixed iOS compilation issues
 * fixed linux broken paths for static cpp ga sdk lib

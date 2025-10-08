@@ -3,19 +3,21 @@
 #pragma once
 
 #include "Interfaces/IAnalyticsProviderModule.h"
+#include "Interfaces/IAnalyticsProvider.h"
 #include "CoreMinimal.h"
 #include "Misc/Paths.h"
 #include "Runtime/Launch/Resources/Version.h"
+
+#include "GameAnalytics.h"
+
 #if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 15) || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
 #include "Modules/ModuleManager.h"
 #endif
 
-class IAnalyticsProvider;
-
 /**
  * The public interface to this module
  */
-class FAnalyticsGameAnalytics :
+class FGameAnalyticsModule :
     public IAnalyticsProviderModule
 {
     /** Singleton for analytics */
@@ -31,9 +33,14 @@ public:
      *
      * @return Returns singleton instance, loading the module on demand if needed
      */
-    static inline FAnalyticsGameAnalytics& Get()
+    static inline FGameAnalyticsModule& Get()
     {
-        return FModuleManager::LoadModuleChecked< FAnalyticsGameAnalytics >( "GameAnalytics" );
+        return FModuleManager::LoadModuleChecked< FGameAnalyticsModule >( "GameAnalytics" );
+    }
+
+    inline UGameAnalytics* GetInstance()
+    {
+        return GameAnalytics;
     }
 
     //--------------------------------------------------------------------------
@@ -46,36 +53,34 @@ public:
      * The keys required exactly match the field names in the Config object.
      */
 #if (ENGINE_MAJOR_VERSION >= 4 && ENGINE_MINOR_VERSION >= 13) || (ENGINE_MAJOR_VERSION >= 5 && ENGINE_MINOR_VERSION >= 0)
-    virtual TSharedPtr<IAnalyticsProvider> CreateAnalyticsProvider(const FAnalyticsProviderConfigurationDelegate& GetConfigValue) const override;
+    using Delegate = FAnalyticsProviderConfigurationDelegate;
 #else
-    virtual TSharedPtr<IAnalyticsProvider> CreateAnalyticsProvider(const FAnalytics::FProviderConfigurationDelegate& GetConfigValue) const override;
+    using Delegate = FAnalytics::FProviderConfigurationDelegate;
 #endif
+
+    virtual TSharedPtr<IAnalyticsProvider> CreateAnalyticsProvider(const Delegate& GetConfigValue) const override;
 
     struct FGameAnalyticsProjectSettings
     {
-        FString IosGameKey;
-        FString IosSecretKey;
-        FString IosBuild;
-        FString AndroidGameKey;
-        FString AndroidSecretKey;
-        FString AndroidBuild;
-        FString MacGameKey;
-        FString MacSecretKey;
-        FString MacBuild;
-        FString WindowsGameKey;
-        FString WindowsSecretKey;
-        FString WindowsBuild;
-        FString LinuxGameKey;
-        FString LinuxSecretKey;
-        FString LinuxBuild;
-        FString Html5GameKey;
-        FString Html5SecretKey;
-        FString Html5Build;
+        struct PlatformInfo
+        {
+            FString GameKey;
+            FString SecretKey;
+            FString Build;
+        };
+        
+        PlatformInfo iOS;
+        PlatformInfo Android;
+        PlatformInfo Mac;
+        PlatformInfo Windows;
+        PlatformInfo Linux;
+        
         TArray<FString> CustomDimensions01;
         TArray<FString> CustomDimensions02;
         TArray<FString> CustomDimensions03;
         TArray<FString> ResourceCurrencies;
         TArray<FString> ResourceItemTypes;
+        
         bool UseManualSessionHandling;
 		bool AutoDetectAppVersion;
         bool DisableDeviceInfo;
@@ -86,12 +91,16 @@ public:
         bool InfoLogEditor;
         bool InfoLogBuild;
         bool VerboseLogBuild;
+        
+        PlatformInfo GetActivePlatform() const;
     };
 
     static FGameAnalyticsProjectSettings LoadProjectSettings();
 
-
 private:
+
+    UGameAnalytics* GameAnalytics{nullptr};
+
     virtual void StartupModule() override;
     virtual void ShutdownModule() override;
 

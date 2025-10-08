@@ -1,32 +1,35 @@
 #include "GameAnalytics.h"
 
-#if PLATFORM_IOS
-#include "../GA-SDK-IOS/GameAnalyticsCpp.h"
-#elif PLATFORM_ANDROID
-#include "../GA-SDK-ANDROID/GameAnalyticsJNI.h"
-#elif GA_USE_CPP_SDK
-
-    #if PLATFORM_LINUX
-        #include "Json.h"
-    #endif
-
-    #include "../GA-SDK-CPP/GameAnalytics/GameAnalytics.h"
-
-// #elif PLATFORM_HTML5
-// #include "Json.h"
-//#include "../GA-SDK-HTML5/GameAnalytics.h"
-#endif
-
 #include "Misc/EngineVersion.h"
 #include "AnalyticsEventAttribute.h"
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
 
-#define GA_VERSION TEXT("5.6.1")
+#include "GameAnalyticsPerformance.h"
+
+#define GA_VERSION TEXT("6.0.0")
+
+#if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
+    #define GA_USE_CPP_SDK 1
+    #include "Desktop/GAWrapperCpp.h"
+#else
+    #define GA_USE_CPP_SDK 0
+    #if PLATFORM_IOS
+        #include "IOS/GAWrapperIOS.h"
+    #elif PLATFORM_ANDROID
+        #include "Android/GAWrapperAndroid.h"
+    #endif
+#endif
 
 std::string ToStdString(const FString& str)
 {
     std::string s = TCHAR_TO_UTF8(*str);
+    return s;
+}
+
+FString ToFString(std::string const& str)
+{
+    FString s = UTF8_TO_TCHAR(str.c_str());
     return s;
 }
 
@@ -43,1899 +46,805 @@ std::vector<std::string> ToStringVector(const TArray<FString>& arr)
     return v;
 }
 
-void PrintList(FString const& msg, const TArray<FString>& list)
+inline constexpr auto BoolToStr(bool flag)
 {
-    FString s = FString::Join(list, TEXT(","));
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("%s(%s)"), *msg, *s);
+    return flag ? TEXT("TRUE") : TEXT("FALSE");
+}
+
+void PrintImplWarning(const char* funcName)
+{
+    UE_LOG(LogGameAnalytics, Display, TEXT("UGameAnalytics::%hs(): This platform is not supported (please note GameAnalytics will not work inside the editor!)"), funcName);
+}
+
+#define GA_NOT_SUPPORTED_WARNING() PrintImplWarning(__FUNCTION__)
+
+void FGACustomFields::Set(FString const& key, double value)
+{
+    FGACustomValue v = {};
+
+    v.Key = key;
+    v.ValueNumber = value;
+    v.ValueType = EGAValueType::value_number;
+
+    Values.Push(std::move(v));
+}
+
+void FGACustomFields::Set(FString const& key, FString const& value)
+{
+    FGACustomValue v = {};
+    
+    v.Key = key;
+    v.ValueString = value;
+    v.ValueType = EGAValueType::value_string;
+
+    Values.Push(std::move(v));
+}
+
+void FGACustomFields::Set(FString const& key, bool value)
+{
+    FGACustomValue v = {};
+
+    v.Key = key;
+    v.ValueBool = value;
+    v.ValueType = EGAValueType::value_bool;
+
+    Values.Push(std::move(v));
+}
+
+bool FGACustomFields::IsEmpty() const
+{
+    return Values.Num() == 0;
+}
+
+TSharedRef<FJsonObject> FGACustomFields::ToJson() const
+{
+    TSharedRef<FJsonObject> Json = MakeShared<FJsonObject>();
+    for(auto& V : Values)
+    {
+        if(V.Key.IsEmpty())
+        {
+            UE_LOG(LogGameAnalytics, Display, TEXT("Custom field key cannot be empty!"));
+            continue;
+        }
+        
+        switch(V.ValueType)
+        {
+            case EGAValueType::value_string:
+            {
+                Json->SetStringField(V.Key, V.ValueString);
+                break;
+            }
+
+            case EGAValueType::value_bool:
+            {
+                Json->SetBoolField(V.Key, V.ValueBool);
+                break;
+            }
+                
+            case EGAValueType::value_number:
+            default:
+            {
+                Json->SetNumberField(V.Key, V.ValueNumber);
+            }
+        }
+    }
+
+    return Json;
+}
+
+FString FGACustomFields::ToString() const
+{
+    if(IsEmpty())
+    {
+        return TEXT("");
+    }
+
+    TSharedRef<FJsonObject> Json = ToJson();
+
+    FString FieldsString;
+    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&FieldsString);
+    FJsonSerializer::Serialize(Json, Writer);
+
+    return FieldsString;
 }
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-}
-
-void UGameAnalytics::configureAvailableCustomDimensions01(const TArray<FString>& list)
-{
-#if WITH_EDITOR
-    FString s = FString::Join(list, TEXT(","));
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableCustomDimensions01(%s)"), *s);
-#elif PLATFORM_IOS
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    GameAnalyticsCpp::configureAvailableCustomDimensions01(v);
-#elif PLATFORM_ANDROID
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    gameanalytics::jni_configureAvailableCustomDimensions01(v);
-#elif GA_USE_CPP_SDK
-    gameanalytics::StringVector v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    gameanalytics::GameAnalytics::configureAvailableCustomDimensions01(v);
-// #elif PLATFORM_HTML5
-//     TArray<TSharedPtr<FJsonValue>> array;
-//     for (const FString& s : list)
-//     {
-//         TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
-//         array.Add(JsonValueString);
-//     }
-//     FString arrayString;
-//     TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-//     FJsonSerializer::Serialize(array, Writer);
-//     js_configureAvailableCustomDimensions01(TCHAR_TO_UTF8(*arrayString));
-#endif
-}
-
-void UGameAnalytics::configureAvailableCustomDimensions02(const TArray<FString>& list)
-{
-    std::vector<std::string> v = ToStringVector(list);
-
-#if WITH_EDITOR
-    FString s = FString::Join(list, TEXT(","));
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableCustomDimensions02(%s)"), *s);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::configureAvailableCustomDimensions02(v);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_configureAvailableCustomDimensions02(v);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::configureAvailableCustomDimensions02(v);
-// // #elif PLATFORM_HTML5
-//     TArray<TSharedPtr<FJsonValue>> array;
-//     for (const FString& s : list)
-//     {
-//         TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
-//         array.Add(JsonValueString);
-//     }
-//     FString arrayString;
-//     TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-//     FJsonSerializer::Serialize(array, Writer);
-//     js_configureAvailableCustomDimensions02(TCHAR_TO_UTF8(*arrayString));
-#endif
-}
-
-void UGameAnalytics::configureAvailableCustomDimensions03(const TArray<FString>& list)
-{
-#if WITH_EDITOR
-    FString s = FString::Join(list, TEXT(","));
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableCustomDimensions03(%s)"), *s);
-#elif PLATFORM_IOS
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    GameAnalyticsCpp::configureAvailableCustomDimensions03(v);
-#elif PLATFORM_ANDROID
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    gameanalytics::jni_configureAvailableCustomDimensions03(v);
-#elif GA_USE_CPP_SDK
-    gameanalytics::StringVector v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    gameanalytics::GameAnalytics::configureAvailableCustomDimensions03(v);
-// #elif PLATFORM_HTML5
-//     TArray<TSharedPtr<FJsonValue>> array;
-//     for (const FString& s : list)
-//     {
-//         TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
-//         array.Add(JsonValueString);
-//     }
-//     FString arrayString;
-//     TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-//     FJsonSerializer::Serialize(array, Writer);
-//     js_configureAvailableCustomDimensions03(TCHAR_TO_UTF8(*arrayString));
-#endif
-}
-
-void UGameAnalytics::configureAvailableResourceCurrencies(const TArray<FString>& list)
-{
-#if WITH_EDITOR
-    FString s = FString::Join(list, TEXT(","));
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableResourceCurrencies(%s)"), *s);
-#elif PLATFORM_IOS
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    GameAnalyticsCpp::configureAvailableResourceCurrencies(v);
-#elif PLATFORM_ANDROID
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    gameanalytics::jni_configureAvailableResourceCurrencies(v);
-#elif GA_USE_CPP_SDK
-    gameanalytics::StringVector v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    gameanalytics::GameAnalytics::configureAvailableResourceCurrencies(v);
-// #elif PLATFORM_HTML5
-//     TArray<TSharedPtr<FJsonValue>> array;
-//     for (const FString& s : list)
-//     {
-//         TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
-//         array.Add(JsonValueString);
-//     }
-//     FString arrayString;
-//     TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-//     FJsonSerializer::Serialize(array, Writer);
-//     js_configureAvailableResourceCurrencies(TCHAR_TO_UTF8(*arrayString));
-#endif
-}
-
-void UGameAnalytics::configureAvailableResourceItemTypes(const TArray<FString>& list)
-{
-#if WITH_EDITOR
-    FString s = FString::Join(list, TEXT(","));
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAvailableResourceItemTypes(%s)"), *s);
-#elif PLATFORM_IOS
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    GameAnalyticsCpp::configureAvailableResourceItemTypes(v);
-#elif PLATFORM_ANDROID
-    std::vector<std::string> v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    gameanalytics::jni_configureAvailableResourceItemTypes(v);
-#elif GA_USE_CPP_SDK
-    gameanalytics::StringVector v;
-    for (const FString& item : list)
-    {
-        v.push_back(TCHAR_TO_UTF8(*item));
-    }
-    gameanalytics::GameAnalytics::configureAvailableResourceItemTypes(v);
-// #elif PLATFORM_HTML5
-//     TArray<TSharedPtr<FJsonValue>> array;
-//     for (const FString& s : list)
-//     {
-//         TSharedRef<FJsonValueString> JsonValueString = MakeShareable(new FJsonValueString(s));
-//         array.Add(JsonValueString);
-//     }
-//     FString arrayString;
-//     TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&arrayString);
-//     FJsonSerializer::Serialize(array, Writer);
-//     js_configureAvailableResourceItemTypes(TCHAR_TO_UTF8(*arrayString));
-#endif
-}
-
-void UGameAnalytics::configureBuild(const char *build)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureBuild(%s)"), UTF8_TO_TCHAR(build));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::configureBuild(build);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_configureBuild(build);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::configureBuild(build);
-// #elif PLATFORM_HTML5
-//     js_configureBuild(build);
-#endif
-}
-
-void UGameAnalytics::configureAutoDetectAppVersion(bool flag)
-{
     #if WITH_EDITOR
-        UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureAutoDetectAppVersion(%s)"), flag ? TEXT("true") : TEXT("false"));
+        _impl.Reset(nullptr);
     #elif PLATFORM_IOS
-        GameAnalyticsCpp::configureAutoDetectAppVersion(flag);
+        _impl.Reset(new gameanalytics::GAWrapperIOS);
     #elif PLATFORM_ANDROID
-        gameanalytics::jni_configureAutoDetectAppVersion(flag);
-    #endif
-}
-
-void UGameAnalytics::disableDeviceInfo()
-{
-    #if WITH_EDITOR
-        UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::disableDeviceInfo()"));
-    #elif PLATFORM_IOS
-    #elif PLATFORM_ANDROID
+        _impl.Reset(new gameanalytics::GAWrapperAndroid);
     #elif GA_USE_CPP_SDK
-        gameanalytics::GameAnalytics::disableDeviceInfo();
-    // #elif PLATFORM_HTML5
+        _impl.Reset(new gameanalytics::GAWrapperCpp);
     #endif
 }
 
-void UGameAnalytics::configureUserId(const char *userId)
+void UGameAnalytics::BeginDestroy()
 {
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureUserId(%s)"), UTF8_TO_TCHAR(userId));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::configureUserId(userId);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_configureUserId(userId);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::configureUserId(userId);
-// #elif PLATFORM_HTML5
-//     js_configureUserId(userId);
-#endif
-}
+    OnQuit();
 
-void UGameAnalytics::configureSdkGameEngineVersion(const char *gameEngineSdkVersion)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureSdkGameEngineVersion(%s)"), UTF8_TO_TCHAR(gameEngineSdkVersion));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::configureSdkGameEngineVersion(gameEngineSdkVersion);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_configureSdkGameEngineVersion(gameEngineSdkVersion);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::configureSdkGameEngineVersion(gameEngineSdkVersion);
-// #elif PLATFORM_HTML5
-//     js_configureSdkGameEngineVersion(gameEngineSdkVersion);
-#endif
-}
-
-void UGameAnalytics::configureGameEngineVersion(const char *gameEngineVersion)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::configureGameEngineVersion(%s)"), UTF8_TO_TCHAR(gameEngineVersion));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::configureGameEngineVersion(gameEngineVersion);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_configureGameEngineVersion(gameEngineVersion);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::configureGameEngineVersion(gameEngineVersion);
-// #elif PLATFORM_HTML5
-//     js_configureGameEngineVersion(gameEngineVersion);
-#endif
-}
-
-void UGameAnalytics::initialize(const char *gameKey, const char *gameSecret)
-{
-    ////// Configure engine version
-    FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
-    UGameAnalytics::configureGameEngineVersion(TCHAR_TO_UTF8(*EngineVersionString));
-    FString SdkVersionString = FString::Printf(TEXT("unreal %s"), GA_VERSION);
-    UGameAnalytics::configureSdkGameEngineVersion(TCHAR_TO_UTF8(*SdkVersionString));
-
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::initialize(%s, %s)"), UTF8_TO_TCHAR(gameKey), UTF8_TO_TCHAR(gameSecret));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::initialize(gameKey, gameSecret);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_initialize(gameKey, gameSecret);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::initialize(gameKey, gameSecret);
-// #elif PLATFORM_HTML5
-//     js_initialize(gameKey, gameSecret);
-#endif
-}
-
-#if PLATFORM_IOS
-
-void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, fields);
-}
-
-void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const TSharedRef<FJsonObject> &fields)
-{
-    addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, fields, false);
-}
-
-void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-
-#if !WITH_EDITOR
-    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#else
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), UTF8_TO_TCHAR(receipt), *fieldsString);
-#endif
-
-}
-
-void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType, fields);
-}
-
-void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const TSharedRef<FJsonObject> &fields)
-{
-    addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType, fields, false);
-}
-
-void UGameAnalytics::addBusinessEventAndAutoFetchReceipt(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-#if !WITH_EDITOR
-    GameAnalyticsCpp::addBusinessEventAndAutoFetchReceipt(currency, amount, itemType, itemId, cartType, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#else
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEventAndAutoFetchReceipt(%s, %d, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), *fieldsString);
-#endif
-}
-#elif PLATFORM_ANDROID
-void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, signature, fields);
-}
-
-void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature, const TSharedRef<FJsonObject> &fields)
-{
-    addBusinessEvent(currency, amount, itemType, itemId, cartType, receipt, signature, fields, false);
-}
-
-void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const char *receipt, const char *signature, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-#if !WITH_EDITOR
-    gameanalytics::jni_addBusinessEventWithReceipt(currency, amount, itemType, itemId, cartType, receipt, "google_play", signature, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#else
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), UTF8_TO_TCHAR(receipt), UTF8_TO_TCHAR(signature), *fieldsString);
-#endif
-}
-#endif
-
-void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addBusinessEvent(currency, amount, itemType, itemId, cartType, fields);
-}
-
-void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const TSharedRef<FJsonObject> &fields)
-{
-    addBusinessEvent(currency, amount, itemType, itemId, cartType, fields, false);
-}
-
-void UGameAnalytics::addBusinessEvent(const char *currency, int amount, const char *itemType, const char *itemId, const char *cartType, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addBusinessEvent(%s, %d, %s, %s, %s, %s)"), UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), UTF8_TO_TCHAR(cartType), *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addBusinessEvent(currency, amount, itemType, itemId, cartType, NULL, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addBusinessEvent(currency, amount, itemType, itemId, cartType, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::addBusinessEvent(currency, amount, itemType, itemId, cartType, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-// #elif PLATFORM_HTML5
-//     js_addBusinessEvent(currency, amount, itemType, itemId, cartType, "");
-#endif
-
-}
-
-void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addResourceEvent(flowType, currency, amount, itemType, itemId, fields);
-}
-
-void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId, const TSharedRef<FJsonObject> &fields)
-{
-    addResourceEvent(flowType, currency, amount, itemType, itemId, fields, false);
-}
-
-void UGameAnalytics::addResourceEvent(EGAResourceFlowType flowType, const char *currency, float amount, const char *itemType, const char *itemId, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addResourceEvent(%d, %s, %f, %s, %s, %s)"), (int)flowType, UTF8_TO_TCHAR(currency), amount, UTF8_TO_TCHAR(itemType), UTF8_TO_TCHAR(itemId), *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addResourceEvent((int)flowType, currency, amount, itemType, itemId, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addResourceEvent((int)flowType, currency, amount, itemType, itemId, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::addResourceEvent((gameanalytics::EGAResourceFlowType)((int)flowType), currency, amount, itemType, itemId, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-// #elif PLATFORM_HTML5
-//     js_addResourceEvent((int)flowType, currency, amount, itemType, itemId, "");
-#endif
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addProgressionEvent(progressionStatus, progression01, fields);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const TSharedRef<FJsonObject> &fields)
-{
-    addProgressionEvent(progressionStatus, progression01, fields, false);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-#if PLATFORM_IOS
-    addProgressionEvent(progressionStatus, progression01, (const char *)NULL, (const char *)NULL, fields, mergeFields);
-#else
-    addProgressionEvent(progressionStatus, progression01, "", "", fields, mergeFields);
-#endif
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, int score)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addProgressionEvent(progressionStatus, progression01, score, fields);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, int score, const TSharedRef<FJsonObject> &fields)
-{
-    addProgressionEvent(progressionStatus, progression01, score, fields, false);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, int score, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-#if PLATFORM_IOS
-    addProgressionEvent(progressionStatus, progression01, (const char *)NULL, (const char *)NULL, score, fields, mergeFields);
-#else
-    addProgressionEvent(progressionStatus, progression01, "", "", score, fields, mergeFields);
-#endif
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addProgressionEvent(progressionStatus, progression01, progression02, fields);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const TSharedRef<FJsonObject> &fields)
-{
-    addProgressionEvent(progressionStatus, progression01, progression02, fields, false);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-#if PLATFORM_IOS
-    addProgressionEvent(progressionStatus, progression01, progression02, (const char *)NULL, fields, mergeFields);
-#else
-    addProgressionEvent(progressionStatus, progression01, progression02, "", fields, mergeFields);
-#endif
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, int score)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addProgressionEvent(progressionStatus, progression01, progression02, score, fields);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, int score, const TSharedRef<FJsonObject> &fields)
-{
-    addProgressionEvent(progressionStatus, progression01, progression02, score, fields, false);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, int score, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-#if PLATFORM_IOS
-    addProgressionEvent(progressionStatus, progression01, progression02, (const char *)NULL, score, fields, mergeFields);
-#else
-    addProgressionEvent(progressionStatus, progression01, progression02, "", score, fields, mergeFields);
-#endif
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addProgressionEvent(progressionStatus, progression01, progression02, progression03, fields);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, const TSharedRef<FJsonObject> &fields)
-{
-    addProgressionEvent(progressionStatus, progression01, progression02, progression03, fields, false);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addProgressionEvent(%d, %s, %s, %s, %s)"), (int)progressionStatus, UTF8_TO_TCHAR(progression01), UTF8_TO_TCHAR(progression02), UTF8_TO_TCHAR(progression03), *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), progression01, progression02, progression03, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-// #elif PLATFORM_HTML5
-//     js_addProgressionEvent((int)progressionStatus, progression01, progression02, progression03, "");
-#endif
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addProgressionEvent(progressionStatus, progression01, progression02, progression03, score, fields);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const TSharedRef<FJsonObject> &fields)
-{
-    addProgressionEvent(progressionStatus, progression01, progression02, progression03, score, fields, false);
-}
-
-void UGameAnalytics::addProgressionEvent(EGAProgressionStatus progressionStatus, const char *progression01, const char *progression02, const char *progression03, int score, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addProgressionEvent(%d, %s, %s, %s, %d, %s)"), (int)progressionStatus, UTF8_TO_TCHAR(progression01), UTF8_TO_TCHAR(progression02), UTF8_TO_TCHAR(progression03), score, *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::addProgressionEvent((gameanalytics::EGAProgressionStatus)((int)progressionStatus), score, progression01, progression02, progression03, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-// #elif PLATFORM_HTML5
-//     js_addProgressionEventWithScore((int)progressionStatus, progression01, progression02, progression03, score, "");
-#endif
-}
-
-void UGameAnalytics::addDesignEvent(const char *eventId)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addDesignEvent(eventId, fields);
-}
-
-void UGameAnalytics::addDesignEvent(const char *eventId, const TSharedRef<FJsonObject> &fields)
-{
-    addDesignEvent(eventId, fields, false);
-}
-
-void UGameAnalytics::addDesignEvent(const char *eventId, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addDesignEvent(%s, %s)"), UTF8_TO_TCHAR(eventId), *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addDesignEvent(eventId, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addDesignEvent(eventId, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::addDesignEvent(eventId, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-// #elif PLATFORM_HTML5
-//     js_addDesignEvent(eventId, "");
-#endif
-
-}
-
-void UGameAnalytics::addDesignEvent(const char *eventId, float value)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addDesignEvent(eventId, value, fields);
-}
-
-void UGameAnalytics::addDesignEvent(const char *eventId, float value, const TSharedRef<FJsonObject> &fields)
-{
-    addDesignEvent(eventId, value, fields, false);
-}
-
-void UGameAnalytics::addDesignEvent(const char *eventId, float value, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addDesignEvent(%s, %f, %s)"), UTF8_TO_TCHAR(eventId), value, *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addDesignEventWithValue(eventId, value, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addDesignEventWithValue(eventId, value, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::addDesignEvent(eventId, value, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-// #elif PLATFORM_HTML5
-//     js_addDesignEventWithValue(eventId, value, "");
-#endif
-}
-
-void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *message)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addErrorEvent(severity, message, fields);
-}
-
-void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *message, const TSharedRef<FJsonObject> &fields)
-{
-    addErrorEvent(severity, message, fields, false);
-}
-
-void UGameAnalytics::addErrorEvent(EGAErrorSeverity severity, const char *message, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addErrorEvent(%d, %s, %s)"), (int)severity, UTF8_TO_TCHAR(message), *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addErrorEvent((int)severity, message, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addErrorEvent((int)severity, message, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::addErrorEvent((gameanalytics::EGAErrorSeverity)((int)severity), message, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-// #elif PLATFORM_HTML5
-//     js_addErrorEvent((int)severity, message, "");
-#endif
-}
-
-#if PLATFORM_IOS || PLATFORM_ANDROID
-void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addAdEvent(action, adType, adSdkName, adPlacement, fields);
-}
-
-void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, const TSharedRef<FJsonObject> &fields)
-{
-    addAdEvent(action, adType, adSdkName, adPlacement, fields, false);
-}
-
-void UGameAnalytics::addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEvent(%d, %d, %s, %s, %s)"), (int)action, (int)adType, UTF8_TO_TCHAR(adSdkName), UTF8_TO_TCHAR(adPlacement), *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addAdEvent((int)action, (int)action, adSdkName, adPlacement, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEvent((int)action, (int)action, adSdkName, adPlacement, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#endif
-}
-
-void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addAdEventWithDuration(action, adType, adSdkName, adPlacement, duration, fields);
-}
-
-void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration, const TSharedRef<FJsonObject> &fields)
-{
-    addAdEventWithDuration(action, adType, adSdkName, adPlacement, duration, fields, false);
-}
-
-void UGameAnalytics::addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEventWithDuration(%d, %d, %s, %s, %d, %s)"), (int)action, (int)adType, UTF8_TO_TCHAR(adSdkName), UTF8_TO_TCHAR(adPlacement), duration, *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEventWithDuration((int)action, (int)action, adSdkName, adPlacement, duration, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#endif
-}
-
-void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    addAdEventWithNoAdReason(action, adType, adSdkName, adPlacement, noAdReason, fields);
-}
-
-void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason, const TSharedRef<FJsonObject> &fields)
-{
-    addAdEventWithNoAdReason(action, adType, adSdkName, adPlacement, noAdReason, fields, false);
-}
-
-void UGameAnalytics::addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason, const TSharedRef<FJsonObject> &fields, bool mergeFields)
-{
-    FString fieldsString;
-    TSharedRef<TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&fieldsString);
-    FJsonSerializer::Serialize(fields, Writer);
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::addAdEventWithNoAdReason(%d, %d, %s, %s, %d, %s)"), (int)action, (int)adType, UTF8_TO_TCHAR(adSdkName), UTF8_TO_TCHAR(adPlacement), (int)noAdReason, *fieldsString);
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_addAdEventWithNoAdReason((int)action, (int)action, adSdkName, adPlacement, (int)noAdReason, TCHAR_TO_UTF8(*fieldsString), mergeFields);
-#endif
-}
-#endif
-
-void UGameAnalytics::setEnabledInfoLog(bool flag)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledInfoLog(%s)"), flag ? TEXT("true") : TEXT("false"));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setEnabledInfoLog(flag);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setEnabledInfoLog(flag);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::setEnabledInfoLog(flag);
-// // #elif PLATFORM_HTML5
-//     js_setEnabledInfoLog(flag);
-#endif
-}
-
-void UGameAnalytics::setEnabledVerboseLog(bool flag)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledVerboseLog(%s)"), flag ? TEXT("true") : TEXT("false"));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setEnabledVerboseLog(flag);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setEnabledVerboseLog(flag);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::setEnabledVerboseLog(flag);
-// // #elif PLATFORM_HTML5
-//     js_setEnabledVerboseLog(flag);
-#endif
-}
-
-void UGameAnalytics::setEnabledManualSessionHandling(bool flag)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledManualSessionHandling(%s)"), flag ? TEXT("true") : TEXT("false"));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setEnabledManualSessionHandling(flag);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setEnabledManualSessionHandling(flag);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::setEnabledManualSessionHandling(flag);
-// #elif PLATFORM_HTML5
-//     js_setManualSessionHandling(flag);
-#endif
-}
-
-void UGameAnalytics::setEnabledErrorReporting(bool flag)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledErrorReporting(%s)"), flag ? TEXT("true") : TEXT("false"));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setEnabledErrorReporting(flag);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setEnabledErrorReporting(flag);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::setEnabledErrorReporting(flag);
-// #elif PLATFORM_HTML5
-//     js_setEnabledErrorReporting(flag);
-#endif
-}
-
-void UGameAnalytics::setEnabledEventSubmission(bool flag)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setEnabledEventSubmission(%s)"), flag ? TEXT("true") : TEXT("false"));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setEnabledEventSubmission(flag);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setEnabledEventSubmission(flag);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::setEnabledEventSubmission(flag);
-// #elif PLATFORM_HTML5
-//     js_setEventSubmission(flag);
-#endif
-}
-
-void UGameAnalytics::setCustomDimension01(const char *customDimension)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setCustomDimension01(%s)"), UTF8_TO_TCHAR(customDimension));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setCustomDimension01(customDimension);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setCustomDimension01(customDimension);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::setCustomDimension01(customDimension);
-// // #elif PLATFORM_HTML5
-//     js_setCustomDimension01(customDimension);
-#endif
-}
-
-void UGameAnalytics::setCustomDimension02(const char *customDimension)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setCustomDimension02(%s)"), UTF8_TO_TCHAR(customDimension));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setCustomDimension02(customDimension);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setCustomDimension02(customDimension);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::setCustomDimension02(customDimension);
-// // #elif PLATFORM_HTML5
-//     js_setCustomDimension02(customDimension);
-#endif
-}
-
-void UGameAnalytics::setCustomDimension03(const char *customDimension)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::setCustomDimension03(%s)"), UTF8_TO_TCHAR(customDimension));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::setCustomDimension03(customDimension);
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_setCustomDimension03(customDimension);
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::setCustomDimension03(customDimension);
-// // #elif PLATFORM_HTML5
-//     js_setCustomDimension03(customDimension);
-#endif
-}
-
-void UGameAnalytics::startSession()
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::startSession()"));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::startSession();
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_startSession();
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::startSession();
-// // #elif PLATFORM_HTML5
-//     js_startSession();
-#endif
-}
-
-void UGameAnalytics::endSession()
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::endSession()"));
-#elif PLATFORM_IOS
-    GameAnalyticsCpp::endSession();
-#elif PLATFORM_ANDROID
-    gameanalytics::jni_endSession();
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::endSession();
-// // #elif PLATFORM_HTML5
-//     js_endSession();
-#endif
-}
-
-void UGameAnalytics::onQuit()
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::onQuit()"));
-#elif GA_USE_CPP_SDK
-    gameanalytics::GameAnalytics::onQuit();
-#endif
-}
-
-FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getRemoteConfigsValueAsString(%s)"), UTF8_TO_TCHAR(key));
-    return "";
-#elif PLATFORM_IOS
-	char* out = NULL;
-	GameAnalyticsCpp::getRemoteConfigsValueAsString(key, &out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif PLATFORM_ANDROID
-	char* out = NULL;
-	gameanalytics::jni_getRemoteConfigsValueAsString(key, &out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif GA_USE_CPP_SDK
-	return FString(gameanalytics::GameAnalytics::getRemoteConfigsValueAsString(key).data());
-// #elif PLATFORM_HTML5
-//     return FString(js_getRemoteConfigsValueAsString(key));
-#endif
-}
-
-FString UGameAnalytics::getRemoteConfigsValueAsString(const char *key, const char *defaultValue)
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getRemoteConfigsValueAsString(%s, %s)"), UTF8_TO_TCHAR(key), UTF8_TO_TCHAR(defaultValue));
-    return "";
-#elif PLATFORM_IOS
-	char* out = NULL;
-    GameAnalyticsCpp::getRemoteConfigsValueAsString(key, defaultValue, &out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif PLATFORM_ANDROID
-	char* out = NULL;
-    gameanalytics::jni_getRemoteConfigsValueAsStringWithDefaultValue(key, defaultValue, &out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif GA_USE_CPP_SDK
-	return FString(gameanalytics::GameAnalytics::getRemoteConfigsValueAsString(key, defaultValue).data());
-// #elif PLATFORM_HTML5
-//     return FString(js_getRemoteConfigsValueAsStringWithDefaultValue(key, defaultValue));
-#endif
-}
-
-bool UGameAnalytics::isRemoteConfigsReady()
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::isRemoteConfigsReady()"));
-    return false;
-#elif PLATFORM_IOS
-    return GameAnalyticsCpp::isRemoteConfigsReady();
-#elif PLATFORM_ANDROID
-    return gameanalytics::jni_isRemoteConfigsReady();
-#elif GA_USE_CPP_SDK
-    return gameanalytics::GameAnalytics::isRemoteConfigsReady();
-// #elif PLATFORM_HTML5
-//     return js_isRemoteConfigsReady();
-#endif
-}
-
-FString UGameAnalytics::getRemoteConfigsContentAsString()
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getRemoteConfigsContentAsString()"));
-    return "";
-#elif PLATFORM_IOS
-	char* out = NULL;
-    GameAnalyticsCpp::getRemoteConfigsContentAsString(&out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif PLATFORM_ANDROID
-	char* out = NULL;
-    gameanalytics::jni_getRemoteConfigsContentAsString(&out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif GA_USE_CPP_SDK
-    return FString(gameanalytics::GameAnalytics::getRemoteConfigsContentAsString().data());
-// #elif PLATFORM_HTML5
-//     return FString(js_getRemoteConfigsContentAsString());
-#endif
-}
-
-FString UGameAnalytics::getABTestingId()
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getABTestingId()"));
-    return "";
-#elif PLATFORM_IOS
-	char* out = NULL;
-    GameAnalyticsCpp::getABTestingId(&out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif PLATFORM_ANDROID
-	char* out = NULL;
-    gameanalytics::jni_getABTestingId(&out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif GA_USE_CPP_SDK
-    return FString(gameanalytics::GameAnalytics::getABTestingId().data());
-// #elif PLATFORM_HTML5
-//     return FString(js_getABTestingId());
-#endif
-}
-
-FString UGameAnalytics::getABTestingVariantId()
-{
-#if WITH_EDITOR
-    UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::getABTestingVariantId()"));
-    return "";
-#elif PLATFORM_IOS
-	char* out = NULL;
-    GameAnalyticsCpp::getABTestingVariantId(&out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif PLATFORM_ANDROID
-	char* out = NULL;
-    gameanalytics::jni_getABTestingVariantId(&out);
-	FString result(out);
-	delete[] out;
-	return result;
-#elif GA_USE_CPP_SDK
-    return FString(gameanalytics::GameAnalytics::getABTestingVariantId().data());
-// #elif PLATFORM_HTML5
-//     return FString(js_getABTestingVariantId());
-#endif
-}
-
-// Blueprint functions
-
-void UGameAnalytics::AddBusinessEventIOS(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt)
-{
-#if PLATFORM_IOS
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt));
-#endif
-}
-
-void UGameAnalytics::AddBusinessEventIOSWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if(IsValid(_performanceTracker))
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _performanceTracker->RemoveFromRoot();
     }
-#if PLATFORM_IOS
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), fields);
-#endif
+
+    Super::BeginDestroy();
 }
 
-void UGameAnalytics::AddBusinessEventIOSWithMergeFields(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType, const FString &Receipt, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureAvailableCustomDimensions01(const TArray<FString>& list)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        std::vector<std::string> v = ToStringVector(list);
+        _impl->SetAvailableCustomDimensions01(v);
     }
-#if PLATFORM_IOS
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), fields, true);
-#endif
-}
-
-void UGameAnalytics::AddBusinessEventAndAutoFetchReceipt(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType)
-{
-#if PLATFORM_IOS
-    addBusinessEventAndAutoFetchReceipt(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
-#endif
-}
-
-void UGameAnalytics::AddBusinessEventAndAutoFetchReceiptWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-#if PLATFORM_IOS
-    addBusinessEventAndAutoFetchReceipt(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), fields);
-#endif
 }
 
-void UGameAnalytics::AddBusinessEventAndAutoFetchReceiptWithMergeFields(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureAvailableCustomDimensions02(const TArray<FString>& list)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        std::vector<std::string> v = ToStringVector(list);
+        _impl->SetAvailableCustomDimensions02(v);
     }
-#if PLATFORM_IOS
-    addBusinessEventAndAutoFetchReceipt(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), fields, true);
-#endif
-}
-
-void UGameAnalytics::AddBusinessEventAndroid(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature)
-{
-#if PLATFORM_ANDROID
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), TCHAR_TO_UTF8(*Signature));
-#endif
-}
-
-void UGameAnalytics::AddBusinessEventAndroidWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const FString& Receipt, const FString& Signature, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-#if PLATFORM_ANDROID
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), TCHAR_TO_UTF8(*Signature), fields);
-#endif
 }
 
-void UGameAnalytics::AddBusinessEventAndroidWithMergeFields(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType, const FString &Receipt, const FString &Signature, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureAvailableCustomDimensions03(const TArray<FString>& list)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        std::vector<std::string> v = ToStringVector(list);
+        _impl->SetAvailableCustomDimensions03(v);
     }
-#if PLATFORM_ANDROID
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), TCHAR_TO_UTF8(*Receipt), TCHAR_TO_UTF8(*Signature), fields, true);
-#endif
-}
-
-void UGameAnalytics::AddBusinessEvent(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType)
-{
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType));
-}
-
-void UGameAnalytics::AddBusinessEventWithFields(const FString& Currency, int Amount, const FString& ItemType, const FString& ItemId, const FString& CartType, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), fields);
 }
 
-void UGameAnalytics::AddBusinessEventWithMergeFields(const FString &Currency, int Amount, const FString &ItemType, const FString &ItemId, const FString &CartType, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureAvailableResourceCurrencies(const TArray<FString>& list)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        std::vector<std::string> v = ToStringVector(list);
+        _impl->SetAvailableResourceCurrencies(v);
     }
-    addBusinessEvent(TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), TCHAR_TO_UTF8(*CartType), fields, true);
-}
-
-void UGameAnalytics::AddResourceEvent(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId)
-{
-    addResourceEvent(FlowType, TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId));
-}
-
-void UGameAnalytics::AddResourceEventWithFields(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addResourceEvent(FlowType, TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), fields);
 }
 
-void UGameAnalytics::AddResourceEventWithMergeFields(EGAResourceFlowType FlowType, const FString &Currency, float Amount, const FString &ItemType, const FString &ItemId, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureAvailableResourceItemTypes(const TArray<FString>& list)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        std::vector<std::string> v = ToStringVector(list);
+        _impl->SetAvailableResourceItemTypes(v);
     }
-    addResourceEvent(FlowType, TCHAR_TO_UTF8(*Currency), Amount, TCHAR_TO_UTF8(*ItemType), TCHAR_TO_UTF8(*ItemId), fields, true);
-}
-
-void UGameAnalytics::AddProgressionEventWithOne(EGAProgressionStatus ProgressionStatus, const FString& Progression01)
-{
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01));
-}
-
-void UGameAnalytics::AddProgressionEventWithOneAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), fields);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneAndMergeFields(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureBuild(FString const& build)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->SetBuild(ToStdString(build));
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), fields, true);
-}
-
-void UGameAnalytics::AddProgressionEventWithOneAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score)
-{
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), Score);
-}
-
-void UGameAnalytics::AddProgressionEventWithOneScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), Score, fields);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneScoreAndMergeFields(EGAProgressionStatus ProgressionStatus, const FString &Progression01, int Score, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureAutoDetectAppVersion(bool flag)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->SetAutoDetectAppVersion(flag);
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), Score, fields, true);
-}
-
-void UGameAnalytics::AddProgressionEventWithOneAndTwo(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02)
-{
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02));
-}
-
-void UGameAnalytics::AddProgressionEventWithOneTwoAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), fields);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoAndMergeFields(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::DisableDeviceInfo()
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        //_impl->DisableDeviceInfo(flag);
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), fields, true);
-}
-
-void UGameAnalytics::AddProgressionEventWithOneTwoAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score)
-{
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), Score);
-}
-
-void UGameAnalytics::AddProgressionEventWithOneTwoScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), Score, fields);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoScoreAndMergeFields(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, int Score, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureUserId(FString const& UserId)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->SetCustomUserId(ToStdString(UserId));
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), Score, fields, true);
-}
-
-void UGameAnalytics::AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03)
-{
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03));
-}
-
-void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), fields);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndMergeFields(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, const FString &Progression03, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureExternalUserId(FString const& UserId)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if (_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->SetExternalUserId(ToStdString(UserId));
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), fields, true);
-}
-
-void UGameAnalytics::AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score)
-{
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), Score);
-}
-
-void UGameAnalytics::AddProgressionEventWithOneTwoThreeScoreAndFields(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), Score, fields);
 }
 
-void UGameAnalytics::AddProgressionEventWithOneTwoThreeScoreAndMergeFields(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, const FString &Progression03, int Score, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureSdkGameEngineVersion(FString const& gameEngineSdkVersion)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->SetSDKVersion(ToStdString(gameEngineSdkVersion));
     }
-    addProgressionEvent(ProgressionStatus, TCHAR_TO_UTF8(*Progression01), TCHAR_TO_UTF8(*Progression02), TCHAR_TO_UTF8(*Progression03), Score, fields, true);
-}
-
-void UGameAnalytics::AddDesignEvent(const FString& EventId)
-{
-    addDesignEvent(TCHAR_TO_UTF8(*EventId));
-}
-
-void UGameAnalytics::AddDesignEventWithFields(const FString& EventId, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addDesignEvent(TCHAR_TO_UTF8(*EventId), fields);
 }
 
-void UGameAnalytics::AddDesignEventWithMergeFields(const FString &EventId, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::ConfigureGameEngineVersion(FString const& gameEngineVersion)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->SetSDKVersion(ToStdString(gameEngineVersion));
     }
-    addDesignEvent(TCHAR_TO_UTF8(*EventId), fields, true);
-}
-
-void UGameAnalytics::AddDesignEventWithValue(const FString& EventId, float Value)
-{
-    addDesignEvent(TCHAR_TO_UTF8(*EventId), Value);
-}
-
-void UGameAnalytics::AddDesignEventWithValueAndFields(const FString& EventId, float Value, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addDesignEvent(TCHAR_TO_UTF8(*EventId), Value, fields);
 }
 
-void UGameAnalytics::AddDesignEventWithValueAndMergeFields(const FString &EventId, float Value, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::Initialize(FString const& gameKey, FString const& gameSecret)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        // Configure engine version
+        FString EngineVersionString = FString::Printf(TEXT("unreal %d.%d.%d"), FEngineVersion::Current().GetMajor(), FEngineVersion::Current().GetMinor(), FEngineVersion::Current().GetPatch());
+        ConfigureGameEngineVersion(EngineVersionString);
+    
+        // Configure sdk version
+        FString SdkVersionString = FString::Printf(TEXT("unreal %s"), GA_VERSION);
+        ConfigureSdkGameEngineVersion(SdkVersionString);
+
+        _impl->Initialize(ToStdString(gameKey), ToStdString(gameSecret));
     }
-    addDesignEvent(TCHAR_TO_UTF8(*EventId), Value, fields, true);
-}
-
-void UGameAnalytics::AddErrorEvent(EGAErrorSeverity Severity, const FString& Message)
-{
-    addErrorEvent(Severity, TCHAR_TO_UTF8(*Message));
-}
-
-void UGameAnalytics::AddErrorEventWithFields(EGAErrorSeverity Severity, const FString& Message, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-    addErrorEvent(Severity, TCHAR_TO_UTF8(*Message), fields);
 }
 
-void UGameAnalytics::AddErrorEventWithMergeFields(EGAErrorSeverity Severity, const FString &Message, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::AddBusinessEvent(FString const& Currency, int Amount, FString const& ItemType, FString const& ItemId, FString const& CartType, FString const& Receipt, const FGACustomFields CustomFields, bool MergeFields)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->AddBusinessEvent(ToStdString(Currency), Amount, ToStdString(ItemType), ToStdString(ItemId), ToStdString(CartType), ToStdString(Receipt), ToStdString(CustomFields.ToString()), MergeFields);
     }
-    addErrorEvent(Severity, TCHAR_TO_UTF8(*Message), fields, true);
-}
-
-void UGameAnalytics::AddAdEvent(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement)
-{
-#if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEvent(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement));
-#endif
-}
-
-void UGameAnalytics::AddAdEventWithFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-#if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEvent(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), fields);
-#endif
 }
 
-void UGameAnalytics::AddAdEventWithMergeFields(EGAAdAction action, EGAAdType adType, const FString &adSdkName, const FString &adPlacement, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::AddBusinessEventAndAutoFetchReceipt(FString const& currency, int amount, FString const& itemType, FString const& itemId, FString const& cartType, const FGACustomFields CustomFields, bool mergeFields)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->AddBusinessEventAndAutoFetchReceipt(ToStdString(currency), amount, ToStdString(itemType), ToStdString(itemId), ToStdString(cartType), ToStdString(CustomFields.ToString()), mergeFields);
     }
-#if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEvent(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), fields, true);
-#endif
-}
-
-void UGameAnalytics::AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration)
-{
-#if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEventWithDuration(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), duration);
-#endif
-}
-
-void UGameAnalytics::AddAdEventWithDurationAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-#if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEventWithDuration(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), duration, fields);
-#endif
 }
 
-void UGameAnalytics::AddAdEventWithDurationAndMergeFields(EGAAdAction action, EGAAdType adType, const FString &adSdkName, const FString &adPlacement, int64 duration, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::AddBusinessEventWithReceipt(FString const& Currency, int Amount, FString const& ItemType, FString const& ItemId, FString const& CartType, FString const& Receipt, FString const& Store, FString const& Signature, const FGACustomFields CustomFields, bool MergeFields)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->AddBusinessEventWithReceipt(ToStdString(Currency), Amount, ToStdString(ItemType), ToStdString(ItemId), ToStdString(CartType), ToStdString(Receipt), ToStdString(Store), ToStdString(Signature), ToStdString(CustomFields.ToString()), MergeFields);
     }
-#if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEventWithDuration(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), duration, fields, true);
-#endif
-}
-
-void UGameAnalytics::AddAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason)
-{
-#if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEventWithNoAdReason(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), noAdReason);
-#endif
-}
-
-void UGameAnalytics::AddAdEventWithNoAdReasonAndFields(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason, const TArray<FGameAnalyticsCustomEventField>& CustomFields)
-{
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    else
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        GA_NOT_SUPPORTED_WARNING();
     }
-#if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEventWithNoAdReason(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), noAdReason, fields);
-#endif
 }
 
-void UGameAnalytics::AddAdEventWithNoAdReasonAndMergeFields(EGAAdAction action, EGAAdType adType, const FString &adSdkName, const FString &adPlacement, EGAAdError noAdReason, const TArray<FGameAnalyticsCustomEventField> &CustomFields)
+void UGameAnalytics::AddProgressionEvent(EGAProgressionStatus ProgressionStatus, const FString &Progression01, const FString &Progression02, const FString &Progression03, const FGACustomFields CustomFields, bool MergeFields)
 {
-    TSharedRef<FJsonObject> fields = MakeShareable(new FJsonObject());
-    for (auto& item : CustomFields)
+    if(_impl)
     {
-        if (item.Value.IsNumeric())
-        {
-            double n = FCString::Atod(*item.Value);
-            fields->SetNumberField(item.Key, n);
-        }
-        else
-        {
-            fields->SetStringField(item.Key, item.Value);
-        }
+        _impl->AddProgressionEvent(ProgressionStatus, ToStdString(Progression01), ToStdString(Progression02), ToStdString(Progression03), ToStdString(CustomFields.ToString()), MergeFields);
     }
-#if PLATFORM_IOS || PLATFORM_ANDROID
-    addAdEventWithNoAdReason(action, adType, TCHAR_TO_UTF8(*adSdkName), TCHAR_TO_UTF8(*adPlacement), noAdReason, fields, true);
-#endif
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
 
-void UGameAnalytics::SetCustomDimension01(const FString& CustomDimension)
+void UGameAnalytics::AddProgressionEventWithScore(EGAProgressionStatus ProgressionStatus, int Score, const FString &Progression01, const FString &Progression02, const FString &Progression03, const FGACustomFields CustomFields, bool MergeFields)
 {
-    setCustomDimension01(TCHAR_TO_UTF8(*CustomDimension));
+    if(_impl)
+    {
+        _impl->AddProgressionEventWithScore(ProgressionStatus, ToStdString(Progression01), ToStdString(Progression02), ToStdString(Progression03), Score, ToStdString(CustomFields.ToString()), MergeFields);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
 
-void UGameAnalytics::SetCustomDimension02(const FString& CustomDimension)
+void UGameAnalytics::AddDesignEvent(FString const& eventId, const FGACustomFields CustomFields, bool mergeFields)
 {
-    setCustomDimension02(TCHAR_TO_UTF8(*CustomDimension));
+    if(_impl)
+    {
+        _impl->AddDesignEvent(ToStdString(eventId), ToStdString(CustomFields.ToString()), mergeFields);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
 
-void UGameAnalytics::SetCustomDimension03(const FString& CustomDimension)
+void UGameAnalytics::AddDesignEventWithValue(FString const& eventId, float value, const FGACustomFields CustomFields, bool mergeFields)
 {
-    setCustomDimension03(TCHAR_TO_UTF8(*CustomDimension));
+    if(_impl)
+    {
+        _impl->AddDesignEventWithValue(ToStdString(eventId), value, ToStdString(CustomFields.ToString()), mergeFields);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::AddErrorEvent(EGAErrorSeverity severity, FString const& message, const FGACustomFields CustomFields, bool mergeFields)
+{
+    if(_impl)
+    {
+        _impl->AddErrorEvent(severity, ToStdString(message), ToStdString(CustomFields.ToString()), mergeFields);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::AddResourceEvent(EGAResourceFlowType FlowType, const FString& Currency, float Amount, const FString& ItemType, const FString& ItemId, const FGACustomFields CustomFields, bool MergeFields)
+{
+    if(_impl)
+    {
+        _impl->AddResourceEvent(FlowType, ToStdString(Currency), Amount, ToStdString(ItemType), ToStdString(ItemId), ToStdString(CustomFields.ToString()), MergeFields);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::AddAdEvent(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, const FGACustomFields CustomFields, bool mergeFields)
+{
+    if(_impl)
+    {
+        _impl->AddAdEvent(action, adType, ToStdString(adSdkName), ToStdString(adPlacement), ToStdString(CustomFields.ToString()), mergeFields);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::AddAdEventWithDuration(EGAAdAction Action, EGAAdType AdType, const FString& AdSdkName, const FString& AdPlacement, int64 Duration, const FGACustomFields CustomFields, bool MergeFields)
+{
+    if(_impl)
+    {
+        _impl->AddAdEventWithDuration(Action, AdType, ToStdString(AdSdkName), ToStdString(AdPlacement), Duration, ToStdString(CustomFields.ToString()), MergeFields);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::AddAdEventWithReason(EGAAdAction Action, EGAAdType AdType, const FString& AdSdkName, const FString& AdPlacement, EGAAdError Reason, const FGACustomFields CustomFields, bool MergeFields)
+{
+    if(_impl)
+    {
+        _impl->AddAdEventWithReason(Action, AdType, ToStdString(AdSdkName), ToStdString(AdPlacement), Reason, ToStdString(CustomFields.ToString()), MergeFields);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::SetEnabledInfoLog(bool flag)
+{
+    if(_impl)
+    {
+        _impl->SetInfoLog(flag);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::SetEnabledVerboseLog(bool flag)
+{
+    if(_impl)
+    {
+        _impl->SetVerboseLog(flag);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::SetEnabledManualSessionHandling(bool flag)
+{
+    if(_impl)
+    {
+        _impl->SetEnabledManualSessionHandling(flag);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::SetEnabledErrorReporting(bool flag)
+{
+    if(_impl)
+    {
+        _impl->SetEnabledErrorReporting(flag);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::SetEnabledEventSubmission(bool flag)
+{
+    if(_impl)
+    {
+        _impl->SetEnabledEventSubmission(flag, false);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::SetCustomDimension01(FString const& customDimension)
+{
+    if(_impl)
+    {
+        _impl->SetCustomDimension01(ToStdString(customDimension));
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::SetCustomDimension02(FString const& customDimension)
+{
+    if(_impl)
+    {
+        _impl->SetCustomDimension02(ToStdString(customDimension));
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::SetCustomDimension03(FString const& customDimension)
+{
+    if(_impl)
+    {
+        _impl->SetCustomDimension03(ToStdString(customDimension));
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+FString UGameAnalytics::GetUserId()
+{
+    if (_impl)
+    {
+        FString uid = ToFString(_impl->GetUserId());
+        return uid;
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+        return TEXT("");
+    }
+}
+
+FString UGameAnalytics::GetExternalUserId()
+{
+    if (_impl)
+    {
+        FString uid = ToFString(_impl->GetExternalUserId());
+        return uid;
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+        return TEXT("");
+    }
+}
+
+void UGameAnalytics::StartSession()
+{
+    if(_impl)
+    {
+        _impl->StartSession();
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::EndSession()
+{
+    if(_impl)
+    {
+        _impl->EndSession();
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
 
 void UGameAnalytics::OnQuit()
 {
-    onQuit();
+    if(_impl)
+    {
+        _impl->OnQuit();
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
 
-FString UGameAnalytics::GetRemoteConfigsValueAsString(const FString& Key)
+FString UGameAnalytics::GetRemoteConfigsValueAsString(FString const& key, FString const& defaultValue)
 {
-    return getRemoteConfigsValueAsString(TCHAR_TO_UTF8(*Key));
+    if(_impl)
+    {
+        std::string val = _impl->GetRemoteConfigsValueAsString(ToStdString(key), ToStdString(defaultValue));
+        return ToFString(val);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+        return defaultValue;
+    }
 }
 
-FString UGameAnalytics::GetRemoteConfigsValueAsStringWithDefaultValue(const FString& Key, const FString& DefaultValue)
+TSharedPtr<FJsonObject> UGameAnalytics::GetRemoteConfigsValueAsJSON(FString const& key)
 {
-    return getRemoteConfigsValueAsString(TCHAR_TO_UTF8(*Key), TCHAR_TO_UTF8(*DefaultValue));
+    TSharedPtr<FJsonObject> Json(new FJsonObject);
+
+    if(_impl)
+    {
+        FString JsonString = GetRemoteConfigsValueAsString(key);
+        TSharedRef<TJsonReader<>> Reader = FJsonStringReader::Create(JsonString);
+        FJsonSerializer::Deserialize(Reader, Json);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+
+    return Json;
 }
+
 
 bool UGameAnalytics::IsRemoteConfigsReady()
 {
-    return isRemoteConfigsReady();
+    if(_impl)
+    {
+        return _impl->IsRemoteConfigsReady();
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+        return false;
+    }
 }
 
 FString UGameAnalytics::GetRemoteConfigsContentAsString()
 {
-    return getRemoteConfigsContentAsString();
+    if(_impl)
+    {
+        std::string remoteConfigs = _impl->GetRemoteConfigsContentAsString();
+        return ToFString(remoteConfigs);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+        return TEXT("");
+    }
 }
 
 FString UGameAnalytics::GetABTestingId()
 {
-    return getABTestingId();
+    if(_impl)
+    {
+        std::string abTestingId = _impl->GetABTestingId();
+        return ToFString(abTestingId);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+        return TEXT("");
+    }
 }
 
 FString UGameAnalytics::GetABTestingVariantId()
 {
-    return getABTestingVariantId();
+    if(_impl)
+    {
+        std::string abTestingVarId = _impl->GetABTestingVariantId();
+        return ToFString(abTestingVarId);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+        return TEXT("");
+    }
 }
 
 void UGameAnalytics::EnableSDKInitEvent(bool value)
 {
-    #if WITH_EDITOR
-        UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::EnableSDKInitEvent %s"), value ? TEXT("true") : TEXT("false"));
-    #elif PLATFORM_ANDROID
-        return gameanalytics::jni_enableSDKInitEvent(value);
-    #elif PLATFORM_IOS
-        return GameAnalyticsCpp::enableSDKInitEvent(value);
-    #elif GA_USE_CPP_SDK
-        return gameanalytics::GameAnalytics::enableSDKInitEvent(value);
-    #else
-        (void)value;
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("Health event is not supported on this platform (editor builds are not supported)"));
-    #endif
+    if(_impl)
+    {
+        _impl->EnableSDKInitEvent(value);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
 
 void UGameAnalytics::EnableFpsHistogram(bool value)
 {
-    #ifdef GAMEANALYTICS_ENABLE_EXPERIMENTAL
-        #if WITH_EDITOR
-            UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::EnableFpsHistogram %s"), value ? TEXT("true") : TEXT("false"));
-        #elif PLATFORM_ANDROID
-            return gameanalytics::jni_enableFpsHistogram(value);
-        #elif PLATFORM_IOS
-            return GameAnalyticsCpp::enableFpsHistogram(value);
-        #elif GA_USE_CPP_SDK
-            return gameanalytics::GameAnalytics::enableFpsHistogram(value);
-        #else
-            (void)value;
-            UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("Health event is not supported on this platform."));
-        #endif
-    #else
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("This feature is currently not fully supported for Unreal Engine builds."));
-    #endif
+    if(_impl)
+    {
+        if(value && !_performanceTracker)
+        {
+            _performanceTracker = NewObject<UGameAnalyticsPerformance>();
+            _performanceTracker->AddToRoot();
+        }
+        
+        if(_performanceTracker)
+        {
+            _performanceTracker->EnableFPSTracking = value;
+        }
+
+        gameanalytics::FPSTracker tracker = [this]() -> float
+        {
+            return _performanceTracker->GetAvgFps();
+        };
+
+        _impl->EnableFpsHistogram(tracker, value);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
 
 void UGameAnalytics::EnableMemoryHistogram(bool value)
 {
-    #if WITH_EDITOR
-        UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::EnableMemoryHistogram %s"), value ? TEXT("true") : TEXT("false"));
-    #elif PLATFORM_ANDROID
-        return gameanalytics::jni_enableMemoryHistogram(value);
-    #elif PLATFORM_IOS
-        return GameAnalyticsCpp::enableMemoryHistogram(value);
-    #elif GA_USE_CPP_SDK
-            return gameanalytics::GameAnalytics::enableMemoryHistogram(value);
-    #else
-        (void)value;
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("Health event is not supported on this platform."));
-    #endif
+    if(_impl)
+    {
+        _impl->EnableMemoryHistogram(value);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
 
 void UGameAnalytics::EnableHealthHardwareInfo(bool value)
 {
-    #if WITH_EDITOR
-        UE_LOG(LogGameAnalyticsAnalytics, Display, TEXT("UGameAnalytics::EnableHealthHardwareInfo %s"), value ? TEXT("true") : TEXT("false"));
-    #elif PLATFORM_ANDROID
-        return gameanalytics::jni_enableHealthHardwareInfo(value);
-    #elif PLATFORM_IOS
-        return GameAnalyticsCpp::enableHealthHardwareInfo(value);
-    #else
-        (void)value;
-        UE_LOG(LogGameAnalyticsAnalytics, Warning, TEXT("Health event is not supported on this platform"));
-    #endif
+    if(_impl)
+    {
+        _impl->EnableHealthHardwareInfo(value);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
 
-void UGameAnalytics::DisableAdvertisingId(bool value)
+void UGameAnalytics::EnableAdvertisingId(bool value)
 {
-    #if PLATFORM_ANDROID
-        return gameanalytics::jni_setGAIDTracking(!value);
-    #elif PLATFORM_IOS
-        return GameAnalyticsCpp::useRandomizedId(value);
-    #else
-        (void)value;
-    #endif
+    if(_impl)
+    {
+        _impl->EnableAdvertisingId(value);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
 }
+
+int64 UGameAnalytics::GetElapsedSessionTime()
+{
+    if (_impl)
+    {
+        return _impl->GetElapsedSessionTime();
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+        return 0;
+    }
+}
+
+int64 UGameAnalytics::GetElapsedTimeFromAllSessions()
+{
+    if (_impl)
+    {
+        return _impl->GetElapsedTimeFromAllSessions();
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+        return 0;
+    }
+}
+
+void UGameAnalytics::SetWritablePath(FString const& path)
+{
+    if(_impl)
+    {
+        _impl->SetWritablePath(ToStdString(path));
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+

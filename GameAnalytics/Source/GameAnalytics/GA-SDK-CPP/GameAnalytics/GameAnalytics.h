@@ -102,17 +102,24 @@ namespace gameanalytics
          static void startSession();
          static void endSession();
 
-         static std::string getRemoteConfigsValueAsString(std::string const& key, std::string const& defaultValue="");
+         static std::string getRemoteConfigsValueAsString(std::string const& key, std::string const& defaultValue = "");
+         static std::string getRemoteConfigsValueAsJson(std::string const& key);
+
 
          static bool        isRemoteConfigsReady();
          static void        addRemoteConfigsListener(const std::shared_ptr<IRemoteConfigsListener> &listener);
          static void        removeRemoteConfigsListener(const std::shared_ptr<IRemoteConfigsListener> &listener);
          
          static std::string getRemoteConfigsContentAsString();
-         static std::string getRemoteConfigsContentAsJson();
+
+         static std::string getUserId();
+         static std::string getExternalUserId();
 
          static std::string getABTestingId();
          static std::string getABTestingVariantId();
+
+         static int64_t getElapsedSessionTime();
+         static int64_t getElapsedTimeFromAllSessions();
 
          // game state changes
          // will affect how session is started / ended
@@ -123,10 +130,9 @@ namespace gameanalytics
          static bool isThreadEnding();
 
      private:
-         static bool _endThread;
 
-        static bool isSdkReady(bool needsInitialized);
-        static bool isSdkReady(bool needsInitialized, bool warn);
-        static bool isSdkReady(bool needsInitialized, bool warn, std::string const& message);
+        static bool _endThread;
+        static bool isSdkReady(bool needsInitialized, bool warn = true, std::string const& message = "");
     };
+
 } // namespace gameanalytics
