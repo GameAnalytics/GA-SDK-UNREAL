@@ -14,7 +14,7 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 > * **iOS:** iOS 10+ &nbsp;
 > * **Android:** Android API Level 21 &nbsp;
 > * **Windows:** Minimum specs for UE5 &nbsp;
-> * **Mac:** Minimum specs for UE5 &nbsp;
+> * **Mac:** Minimum specs for UE5 &nbsp;    
 >   
    
 Changelog
