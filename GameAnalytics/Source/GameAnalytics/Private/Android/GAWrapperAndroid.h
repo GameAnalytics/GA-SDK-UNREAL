@@ -1,8 +1,6 @@
 #pragma once
 
-PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 #include <jni.h>
-PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 #include "GAWrapper.h"
 

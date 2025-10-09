@@ -1,11 +1,9 @@
 #pragma once
 
-PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 #include <string>
 #include <vector>
 #include <cinttypes>
 #include <functional>
-PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 #include "GAEnums.h"
 

@@ -39,7 +39,9 @@ namespace UnrealBuildTool.Rules
                         "CoreFoundation",
                         "Foundation",
                         "CoreServices",
-                        "SystemConfiguration"
+                        "SystemConfiguration",
+                        "Metal",
+                        "MetalKit"
                     }
                 );
                 PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl", "nghttp2" });
