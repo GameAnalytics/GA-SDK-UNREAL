@@ -120,6 +120,7 @@ namespace gameanalytics
 
          static int64_t getElapsedSessionTime();
          static int64_t getElapsedTimeFromAllSessions();
+         static int64_t getElapsedTimeForPreviousSession();
 
          // game state changes
          // will affect how session is started / ended
