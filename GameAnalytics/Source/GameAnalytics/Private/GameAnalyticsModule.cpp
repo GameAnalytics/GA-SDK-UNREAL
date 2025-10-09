@@ -1,6 +1,7 @@
 #include "GameAnalyticsModule.h"
 #include "GameAnalytics.h"
 #include "GameAnalyticsProvider.h"
+#include "Misc/ConfigCacheIni.h"
 
 #define GA_PROJECT_SETTINGS TEXT("/Script/GameAnalyticsEditor.GameAnalyticsProjectSettings")
 
