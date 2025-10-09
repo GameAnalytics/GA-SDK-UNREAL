@@ -22,7 +22,7 @@ namespace UnrealBuildTool.Rules
             if(Target.Platform == UnrealTargetPlatform.Win64)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(GA_SDK_CppPath, "Win64", "GameAnalytics.lib"));
-                PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl" });
+                PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl", "nghttp2", "zlib" });
                 PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "GA-SDK-CPP")));
             }
             else if(Target.Platform == UnrealTargetPlatform.Android)
@@ -49,7 +49,7 @@ namespace UnrealBuildTool.Rules
             else if(Target.Platform == UnrealTargetPlatform.Linux)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(libPath, "Linux-clang", "libGameAnalytics.a"));
-                PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl" });
+                PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl", "nghttp2" });
                 PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "GA-SDK-CPP")));
             }
             else if(Target.Platform == UnrealTargetPlatform.IOS)
