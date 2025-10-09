@@ -39,8 +39,6 @@ namespace gameanalytics
         virtual std::string GetUserId() override;
         virtual std::string GetExternalUserId() override;
 
-        virtual void UseRandomizedId(bool value) override;
-
         virtual void SetAutoDetectAppVersion(bool flag) override;
 
         virtual void Initialize(std::string const& gamekey, std::string const& gamesecret) override;
@@ -108,6 +106,8 @@ namespace gameanalytics
         ////////////////////////////////////////////////////////
 
         virtual int64_t GetElapsedSessionTime() override;
+
+        virtual int64_t GetElapsedTimeForPreviousSession() override;
         
         virtual int64_t GetElapsedTimeFromAllSessions() override;
 

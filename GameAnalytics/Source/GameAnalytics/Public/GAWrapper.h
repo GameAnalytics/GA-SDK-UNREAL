@@ -37,8 +37,6 @@ namespace gameanalytics
         virtual std::string GetUserId() = 0;
         virtual std::string GetExternalUserId() = 0;
 
-        virtual void UseRandomizedId(bool value) = 0;
-
         virtual void SetAutoDetectAppVersion(bool flag) = 0;
 
         virtual void Initialize(std::string const& gamekey, std::string const& gamesecret) = 0;
@@ -105,6 +103,8 @@ namespace gameanalytics
         //////////////////////////////////////////////////
 
         virtual int64_t GetElapsedSessionTime() = 0;
+
+        virtual int64_t GetElapsedTimeForPreviousSession() = 0;
         
         virtual int64_t GetElapsedTimeFromAllSessions() = 0;
 

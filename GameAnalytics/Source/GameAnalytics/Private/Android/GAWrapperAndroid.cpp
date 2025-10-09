@@ -1031,12 +1031,6 @@ namespace gameanalytics
             }
         }
 
-        void GAWrapperAndroid::UseRandomizedId(bool flag)
-        {
-            // android will always use a randomized id by default (for new users)
-            (void)flag;
-        }
-
         void GAWrapperAndroid::SetGlobalCustomEventFields(std::string const& fields)
         {
             constexpr const char* methodName = "setGlobalCustomEventFields";
@@ -1570,6 +1564,12 @@ namespace gameanalytics
 
             return 0;
         }   
+
+        int64_t GAWrapperAndroid::GetElapsedTimeForPreviousSession()
+        {
+            //TODO: implement when GA android sdk supports it
+            return 0;   
+        }
         
         int64_t GAWrapperAndroid::GetElapsedTimeFromAllSessions() 
         {

@@ -21,6 +21,11 @@ void UGameAnalyticsPerformance::Tick(float DeltaTime)
 
 float UGameAnalyticsPerformance::GetAvgFps() const
 {
+    if (_avgFps > kMaxFpsValue)
+    {
+        return kMaxFpsValue;
+    }
+    
     return _avgFps;
 }
 

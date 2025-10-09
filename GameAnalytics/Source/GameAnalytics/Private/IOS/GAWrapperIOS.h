@@ -94,14 +94,14 @@ namespace gameanalytics
             /////////////////////////////////////////////////////////////
 
             virtual int64_t GetElapsedSessionTime() override;
-        
+
+            virtual int64_t GetElapsedTimeForPreviousSession() override;
+
             virtual int64_t GetElapsedTimeFromAllSessions() override;
 
             ////////////////////////////////////////////////////////
 
             virtual void EnableAdvertisingId(bool value) override;
-
-            virtual void UseRandomizedId(bool value) override;
 
             virtual void OnQuit() override;
 

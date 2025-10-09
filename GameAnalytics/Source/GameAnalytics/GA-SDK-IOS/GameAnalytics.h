@@ -142,13 +142,17 @@ typedef enum GAAdError : NSInteger {
     GAAdErrorUnableToPrecache = 6
 } GAAdError;
 
-//Similar to IRemoteConfigsListener in the GameAnalytics Android library
 @protocol GARemoteConfigsDelegate <NSObject>
 @optional
 - (void) onRemoteConfigsUpdated; // Updated everytime when configurations are added
 @end
 
-
+/// Optional hooks for supplying real-time health metrics (FPS, memory, etc.).
+@protocol GAHealthMetricsDelegate <NSObject>
+@optional
+/// Called before sending an event; return current FPS.
+- (double)provideCurrentFPS;
+@end
 
 @class GameAnalytics;
 
@@ -306,12 +310,6 @@ typedef enum GAAdError : NSInteger {
 
 // returns the current external user id (if any)
 + (NSString*) getExternalUserId;
-
-/*
- * set this as true if you do not want idfv to be used
- * as an user id (a random id will be generated instead)
- */
-+ (void) useRandomizedId:(Boolean)value;
 
 /* @IF WRAPPER */
 
@@ -1611,7 +1609,16 @@ typedef enum GAAdError : NSInteger {
 
  @availability Available since (TBD)
  */
-+ (void) setRemoteConfigsDelegate:(id)newDelegate;
++ (void) setRemoteConfigsDelegate:(id<GARemoteConfigsDelegate>)newDelegate;
+
+/*!
+ @method
+
+ @abstract Use this to set the delegate for the Health Metrics to retreive information about the status of health metrics
+
+ @availability Available since v5.0.0
+ */
++ (void) setHealthMetricsDelegate:(id<GAHealthMetricsDelegate>)newDelegate;
 
 /*!
  @method
@@ -1908,5 +1915,32 @@ typedef enum GAAdError : NSInteger {
  
  */
 + (NSInteger)stopTimer:(NSString *)key;
+
+#pragma mark - Playtime Metrics
+
+/*!
+ @method
+
+ @abstract Elapsed time (in seconds) of the current session.
+
+ */
++ (NSTimeInterval)getElapsedSessionTime;
+
+/*!
+ @method
+
+ @abstract Duration (in seconds) of the previous session.
+
+ */
++ (NSTimeInterval)getElapsedTimeForPreviousSession;
+
+/*!
+ @method
+
+ @abstract Total accumulated playtime (in seconds) across all sessions.
+
+ */
++ (NSTimeInterval)getElapsedTimeFromAllSessions;
+
 
 @end

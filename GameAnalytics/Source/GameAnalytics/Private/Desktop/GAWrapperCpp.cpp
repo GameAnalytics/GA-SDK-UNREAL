@@ -209,16 +209,18 @@ namespace gameanalytics
         return GameAnalytics::getUserId();
     }
 
-    void GAWrapperCpp::UseRandomizedId(bool value) {
-        (void)value; // the cpp SDK will always use a randomized id
-    }
-
     void GAWrapperCpp::SetGlobalCustomEventFields(const std::string &customFields) {
         GameAnalytics::setGlobalCustomEventFields(customFields);
     }
 
     int64_t GAWrapperCpp::GetElapsedSessionTime() {
         return GameAnalytics::getElapsedSessionTime();
+    }
+
+    int64_t GAWrapperCpp::GetElapsedTimeForPreviousSession() {
+        
+        // TODO: implement when supported in cpp SDK
+        return 0;
     }
         
     int64_t GAWrapperCpp::GetElapsedTimeFromAllSessions() {
