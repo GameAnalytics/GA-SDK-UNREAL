@@ -79,7 +79,6 @@ GameAnalytics->AddBusinessEvent(TEXT("USD"), 1000, TEXT("premium_gold_bundle"), 
 
 // send an error event
 GameAnalytics->AddErrorEvent(EGAErrorSeverity::warning, TEXT("error message"));
-
 ```
 
 ### Using Custom Fields
@@ -96,10 +95,10 @@ The following types are supported:
 FGACustomFields Fields;
 
 Fields.Set(TEXT("my_bool"), true);
-Fields.Set(TEXT("my_number"), 1000.f);
+Fields.Set(TEXT("my_number"), 1000.0);
 fields.Set(TEXT("my_string"), FString(TEXT("halloween_event")));
 
-GameAnalytics->AddDesignEventWithValue(TEXT("MyEvent"), 200, fields);
+GameAnalytics->AddDesignEventWithValue(TEXT("MyEvent"), 200, Fields);
 ```
 
 ### Performance Tracker
@@ -122,7 +121,7 @@ GameAnalytics->EnableMemoryHistogram(true);
 
 ### Using IAnalyticsProvider
 
-GameAnalytics also proivdes a `IAnalyticsProvider` implementation for seamless integration inside the Unreal ecosystem. 
+GameAnalytics also proivdes a `IAnalyticsProvider` implementation for seamless integration inside the Unreal ecosystem.
 
 The `IAnalyticsProvider` interface will retrieve its configuration from `Project Settings -> Plugins -> GameAnalytics` (e.g: game keys, resources, info/verbose log).
 
@@ -141,6 +140,12 @@ AnalyticsProvider->RecordError(TEXT("error message"), MakeAnalyticsEventAttribut
 
 // equivalent to GameAnalytics->AddProgressionEventWithScore(EGAProgressionStatus::complete, 100, TEXT("progression1"), TEXT("progression2"), TEXT("progression3"))
 AnalyticsProvider->RecordProgress(TEXT("complete"), {TEXT("progression1"), TEXT("progression2"), TEXT("progression3")}, MakeAnalyticsEventAttributeArray(TEXT("value"), 100));
+
+// equivalent to GameAnalytics->AddBusinessEvent(TEXT("USD"), 1000, TEXT("premium_gold_bundle"), TEXT("gold_pack_5000"), TEXT("end_level_shop"))
+AnalyticsProvider->RecordCurrencyPurchase(TEXT("USD"), 1000, MakeAnalyticsEventAttributeArray(TEXT("itemType"), TEXT("premium_gold_bundle"), TEXT("itemId"), TEXT("gold_pack_5000"), TEXT("cartType"), TEXT("end_level_shop")));
+
+// equivalent to GameAnalytics->AddResourceEvent(EGAResourceFlowType::sink, TEXT("gold"), 200, TEXT("weapon"), TEXT("fire_sword"));
+AnalyticsProvider->RecordItemPurchase(TEXT("fire_sword"), 200, MakeAnalyticsEventAttributeArray(TEXT("currency"), TEXT("gold"), TEXT("flowType"), TEXT("sink"), TEXT("itemType"), TEXT("weapon")));
 ```
 
 ## Blueprints
