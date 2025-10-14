@@ -1,0 +1,465 @@
+Changelog
+---------
+<!--(CHANGELOG_TOP)-->
+**6.0.0**
+* removed static functions, UGameAnalytics is now an object
+* added instance of UGameAnalytics inside UGameAnalyticsModule
+* refactored the codebase, added GAWrapper to handle different platforms
+* removed all duplicate functions inside UGameAnalytics
+* exposed all functions to blueprints
+* introduced a new performance tracker, improved FPS reporting
+* added FPS reporting for desktop platforms
+* updated GameAnalytics dependencies to GA SDK C++ v5.0.0, GA iOS v5.0.0 and GA Android v7.0.0
+* added playtime metrics tracking and public functions: GetElapsedSessionTime/GetElapsedTimeFromAllSessions
+* added support for Remote Configs v2 with json support: GetRemoteConfigsValueAsJSON 
+* various improvements and bug-fixes
+
+**5.6.1**
+* fixed iOS compilation issues
+* fixed linux broken paths for static cpp ga sdk lib
+
+**5.6.0**
+- fixed UE 5.4 or later compilation issues
+- **Boot Time in Milliseconds**: Boot time now reported in milliseconds for precise performance metrics.
+- **Design Event Values**: Improved the consistency of design event value handling, ensuring more accurate data delivery.
+- **Local Cache Path**: Refined the local cache path configuration to automatically use the default writable path, streamlining setup by making `configureWritablePath` optional.
+- **Verbose Logging**: more logs are not visible when verbose logging is enabled.
+
+**5.5.0**
+* updated the C++ SDK dependency
+* updated user api routes for login
+* added partial health feature support for windows/macos/linux
+
+**5.4.5**
+* fixed documentation links
+* added experimental health feature
+
+**5.4.5**
+* fixed documentation links
+* added experimental health feature
+
+**5.4.4**
+* support for Unreal 5.4
+* added iOS privacy manifest
+
+**5.4.3**
+* updated plugin for UE 5.3
+
+**5.4.2**
+* fixed compilation warnings for android (fix for builds using -werror flag)
+
+**5.4.1**
+* fixed a bug where the android library would fail to load in some cases
+* implemented new method to retrieve the device name for win64
+
+**5.4.0**
+* support for UE 5.2.0 preview
+
+**5.3.1**
+* fixed a compilation issue on android for ndk25
+
+**5.3.0**
+* updated plugin for unreal 5.1
+
+**5.2.0**
+* added support for unreal 5
+
+**5.1.14**
+* fixed crash on android
+
+**5.1.13**
+* fixed bug in internal error reporting
+
+**5.1.12**
+* small corrections
+
+**5.1.11**
+* restructured location of files
+
+**5.1.10**
+* added event uuid for events sent
+
+**5.1.9**
+* fixed progression tries bug for desktop platforms
+
+**5.1.8**
+* removed imei identifiers and other alternative identifiers from user identifier logic (android)
+
+**5.1.7**
+* added error events to be sent for invalid custom event fields used
+* added optional mergeFields argument to event methods to merge with global custom fields instead of overwrite them
+
+**5.1.6**
+* more build error fixes
+
+**5.1.5**
+* fix build errors
+
+**5.1.4**
+* fixed missing custom event fields for when trying to fix missing session end events
+
+**5.1.3**
+* added error reporting option to settings
+
+**5.1.2**
+* added functionality to force a new user in a/b testing without having to uninstall app first, simply use custom user id function to set a new user id which hasn't been used yet
+
+**5.1.1**
+* small compile fix
+
+**5.1.0**
+* added custom event fields feature
+
+**5.0.1**
+* small correct to support unreal engine 4.27
+
+**5.0.0**
+* Changed user identifier logic in preparation for Google changes to GAID. User id for a new install is now a randomised GUID. Existing installs that update SDK will continue using previous identifier logic. It is recommended to update as soon as possible to reduce impact on calculated metrics.
+* added support for unreal engine 4.27
+
+**4.3.15**
+* it should now be possible to not show idfa consent dialog if you don't have any third party code that needs to use idfa (ios)
+* prepared for google advertising identifier changes (will not use google advertising identifier when user has opted out) (android)
+
+**4.3.14**
+* added idfa consent status field to events (ios)
+
+**4.3.13**
+* added disable device info to settings
+
+**4.3.12**
+* updated client ts validator
+
+**4.3.11**
+* fixed dependencies for iOS (min. XCode 12 required)
+
+**4.3.10**
+* fixed return values for remote configs and ab testing functions
+
+**4.3.9**
+* added support for unreal engine 4.26
+
+**4.3.8**
+* corrected ad event annotation
+
+**4.3.7**
+* added ARM64 architecture to mac libs
+
+**4.3.6**
+* fixed build errors for linux
+
+**4.3.5**
+* fixed log messages output to console in editor
+
+**4.3.4**
+* added editor logs when calling functions in editor play mode
+
+**4.3.3**
+* improved user identifer flow for ios (ios)
+
+**4.3.2**
+* fix to the seperation of sqlite code for some platforms
+
+**4.3.1**
+* seperated sqlite code into its own library (osx, windows, linux)
+
+**4.3.0**
+* updated user identifier flow to prepare for iOS 14 IDFA changes (ios)
+
+**4.2.1**
+* fixed progression event with scores (android)
+
+**4.2.0**
+* exposed functions to get AB testing id and variant id
+
+**4.1.5**
+* fixed link errors for ios
+
+**4.1.4**
+* added support for unreal engine 4.25
+
+**4.1.3**
+* fixed compile errors
+
+**4.1.2**
+* compile error fix for int64
+
+**4.1.1**
+* compile error fixes
+
+**4.1.0**
+* added ad event (ios, android)
+* organizations added to games key list
+
+**4.0.13**
+* logo updated
+
+**4.0.12**
+* uplugin fix
+
+**4.0.11**
+* compile fixes
+
+**4.0.10**
+* removed facebook, gender and birthyear methods
+* added auto detect app version for build field option (only android, ios)
+
+**4.0.9**
+* changed editor module type from 'Developer' to 'DeveloperTool'
+
+**4.0.8**
+* removed html5 related code
+
+**4.0.7**
+* A/B testing fixes
+
+**4.0.6**
+* removed compile warnings
+
+**4.0.5**
+* added support for Unreal Engine 4.24
+
+**4.0.4**
+* fixed getRemoteConfigsValueAsString (ios)
+
+**4.0.3**
+* remote configs fixes
+
+**4.0.2**
+* corrected naming of function
+
+**4.0.1**
+* small fixes
+
+**4.0.0**
+* Remote Config calls have been updated and the old calls have deprecated. Please see GA documentation for the new SDK calls and migration guide
+* A/B testing support added
+
+**3.1.13**
+* compile error fixes for html5
+
+**3.1.12**
+* compile error fixes for html5
+
+**3.1.11**
+* fixes android builds
+
+**3.1.10**
+* fixed build errors
+
+**3.1.9**
+* fixed command center bugs
+
+**3.1.8**
+* added support for unreal engine 4.23
+
+**3.1.7**
+* added check if log files and database can't be created (desktop platforms)
+
+**3.1.6**
+* fixed progression event for desktop platforms
+* fixed hanging background thread when closing application down for desktop platforms
+
+**3.1.5**
+* fixes to warnings and errors
+
+**3.1.4**
+* fixed build errors for html5
+
+**3.1.3**
+* fixed initialize method to be able to be called from code
+
+**3.1.2**
+* added support for unreal engine v4.22
+
+**3.1.1**
+* html5 build fix
+* various other bug fixes
+
+**3.1.0**
+* added enable/disable event submission function
+
+**3.0.6**
+* fixed business event validation
+
+**3.0.5**
+* updated to support unreal engine 4.21
+
+**3.0.4**
+* android bug fixes
+
+**3.0.3**
+* fixed shutdown bugs for desktop platforms
+
+**3.0.2**
+* fixed thread hanging on shutdown for desktop platforms
+
+**3.0.1**
+* fixed compile errors
+
+**3.0.0**
+* added command center functionality
+* added gameanalytics blueprint functions
+
+**2.6.28**
+* fixed more compile errors for mac
+
+**2.6.27**
+* fixed android crash
+
+**2.6.26**
+* fixed compile errors
+
+**2.6.19**
+* compile fixes for android (android)
+* updated to be compatible with unreal engine v4.20
+
+**2.6.18**
+* various bug fixes
+
+**2.6.17**
+* fixes building for linux (linux)
+
+**2.6.16**
+* added custom dimensions to design error events
+* added option to startsession with gamekey and secretkey instead of getting keys from settings object
+
+**2.6.15**
+* fixed session length bug
+* fixed not allowing to add events when session is not started
+
+**2.6.14**
+* fixed crash bug for closing down sdk for desktop platforms (windows, mac, linux)
+
+**2.6.13**
+* iOS support temporarily removed until Epic fixes some issues the iOS toolchain causes in Unreal Engine 4.19
+
+**2.6.12**
+* added compatability for Unreal Engine v4.19
+
+**2.6.11**
+* log library has been replaced which caused some problems on machine with certain locales set (mac, windows, linux)
+
+**2.6.10**
+* bug fix to progression event crashes
+
+**2.6.9**
+* additional fixes to Unreal Engine 4.18 compatability
+
+**2.6.8**
+* fixes to Unreal Engine 4.18 compatability
+
+**2.6.7**
+* fixed javascript library (html5)
+
+**2.6.6**
+* updated to be compatible with Unreal Engine 4.18
+
+**2.6.5**
+* bug fix to android JNI memory leak (android)
+
+**2.6.4**
+* made compatible with Unreal Engine 4.17
+
+**2.6.3**
+* jni bug fix for progression events with scores (android)
+
+**2.6.2**
+* switched to use third party OpenSSL and libCurl libraries bundled with Unreal Engine
+
+**2.6.1**
+* editor UI bug fix when running game in editor viewport with GameAnalytics plugin enabled
+
+**2.6.0**
+* changed the behaviour of using IMEI with the 'READ_PHONE_STATE' permission to guarantee precise analytics for certain regions (android)
+
+**2.5.5**
+* fixed compile warnings
+
+**2.5.4**
+* fixed html5 wrapper to use correct namespace (html5)
+
+**2.5.3**
+* bug fix for end session when using manual session handling
+
+**2.5.2**
+* session length precision improvement
+
+**2.5.1**
+* custom user id bug fix
+
+**2.5.0**
+* added support for linux
+
+**2.4.0**
+* added support for html5
+
+**2.2.13**
+* corrected win32 library (win32)
+
+**2.2.12**
+* bug fix for progression event with score in Android builds (android)
+
+**2.2.11**
+* proguard fix when making distribution build (android)
+
+**2.2.10**
+* possible to set custom dimensions and demographics before initialise
+
+**2.2.9**
+* fixed missing namespace for JNI function calls (android)
+
+**2.2.8**
+* fix for using plugin directly from C++ code in your project
+
+**2.2.7**
+* fix for empty user_id bug (windows, mac)
+
+**2.2.6**
+* added support for both Unreal Engine 4.12 and 4.13
+
+**2.2.5**
+* bug fix to error when cooking and packaging build
+
+**2.2.4**
+* fixed user_id tracking for iOS 10 (ios)
+* small fix related to manual session handling (android)
+
+**2.2.3**
+* fix for empty user id in events (mac, windows)
+
+**2.2.2**
+* Updated to be compatible with Unreal 4.13
+* Updated Google Play Services libraries to use latest version (android)
+
+**2.2.1**
+* wrong platform in events bug fix (windows, mac)
+* crash bug fix (windows, mac)
+
+**2.2.0**
+* added manual session handling
+
+**2.1.2**
+* fixed default GameAnalytics settings values
+
+**2.1.1**
+* bug fix for missing configureUsedId in native iOS lib (ios)
+
+**2.1.0**
+* Windows and Mac support added (windows and mac)
+
+**2.0.0**
+* various Blueprint event bug fixes
+* Android support added (android)
+
+**0.1.3**
+* fixed third party include path
+
+**0.1.2**
+* fixed compile warnings for Unreal Engine 4.11
+
+**0.1.1**
+* minor fixes
+
+**0.1.0**
+* initial version (iOS)
