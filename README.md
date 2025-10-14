@@ -33,12 +33,16 @@ If you are using the `IAnalyticsInterface`, but desire to enable advanced featur
 
 ### Initialization
 
-The `UGameAnalytics` class provides all plugin functionality. The GameAnalytics module will hold a
+The `UGameAnalytics` class provides all plugin functionality. The GameAnalytics module will hold an instance of `UGameAnalytics*`.
+
+Add the headers to your project:
 
 ```c++
 #include "GameAnalytics.h"
 #include "GameAnalyticsModule.h"
 ```
+
+Setup and initialize the SDK:
 
 ```c++
 UGameAnalytics* GameAnalytics = FGameAnalyticsModule::Get().GetInstance();
