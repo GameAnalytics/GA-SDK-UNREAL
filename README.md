@@ -14,15 +14,26 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 > * **iOS:** iOS 10+ &nbsp;
 > * **Android:** Android API Level 21 &nbsp;
 > * **Windows:** Minimum specs for UE5 &nbsp;
-> * **Mac:** Minimum specs for UE5 &nbsp;    
+> * **Mac:** Minimum specs for UE5 &nbsp;
 
 ## Usage
 
 ## C++ Code
 
-There are multiple 
+There are two ways of using the GameAnalytics plugin inside your C++ code:
 
-## Initialization
+- directly using an instance of an `UGameAnalytics` object
+- using the `IAnalyticsProvider` interface
+
+The former will provide all the plugin features, including remote configurations and performance tracking. The `IAnalyticsProvider` will provide an easier integration inside Unreal, but will only expose limited features.
+
+Due to the inner workings of the module the `IAnalyticsProvider` will retrieve its settings from `Project Settings -> Plugins -> GameAnalytics`. While using `UGameAnalytics` directly will require you to manually call the setup functions (either from C++ or Blueprints).
+
+If you are using the `IAnalyticsInterface`, but desire to enable advanced features of the SDK, you can safely mix calls from both `IAnalyticsInterface` and `UGameAnalytics` as both are using the same instance inside the module (provided you initialize the SDK only once).
+
+### Initialization
+
+The `UGameAnalytics` class provides all plugin functionality. The GameAnalytics module will hold a
 
 ```c++
 #include "GameAnalytics.h"
@@ -107,7 +118,7 @@ GameAnalytics->EnableMemoryHistogram(true);
 
 ### Using IAnalyticsProvider
 
-GameAnalytics also proivdes a `IAnalyticsProvider` implementation for seamless integration inside the Unreal ecosystem.
+GameAnalytics also proivdes a `IAnalyticsProvider` implementation for seamless integration inside the Unreal ecosystem. 
 
 The `IAnalyticsProvider` interface will retrieve its configuration from `Project Settings -> Plugins -> GameAnalytics` (e.g: game keys, resources, info/verbose log).
 
