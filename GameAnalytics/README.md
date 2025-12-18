@@ -20,6 +20,10 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**6.1.0**
+* support for unreal 5.7:updated ga-cpp-sdk to v5.1.0:exposed internal GameAnalytics instance to blueprints via `GameAnalytics
+* GetInstance()`:fixed `FGACustomFields` blueprints
+
 **6.0.0**
 * removed static functions, UGameAnalytics is now an object
 * added instance of UGameAnalytics inside UGameAnalyticsModule

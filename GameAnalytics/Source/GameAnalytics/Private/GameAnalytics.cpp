@@ -6,8 +6,9 @@
 #include "Serialization/JsonSerializer.h"
 
 #include "GameAnalyticsPerformance.h"
+#include "GameAnalyticsModule.h"
 
-#define GA_VERSION TEXT("6.0.0")
+#define GA_VERSION TEXT("6.1.0")
 
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     #define GA_USE_CPP_SDK 1
@@ -146,6 +147,11 @@ FString FGACustomFields::ToString() const
     FJsonSerializer::Serialize(Json, Writer);
 
     return FieldsString;
+}
+
+UGameAnalytics* UGameAnalytics::GetInstance()
+{
+    return FGameAnalyticsModule::Get().GetInstance();
 }
 
 UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)

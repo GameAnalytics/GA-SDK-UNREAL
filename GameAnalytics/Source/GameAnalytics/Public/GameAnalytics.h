@@ -21,19 +21,19 @@ struct FGACustomValue
 {
     GENERATED_BODY();
 
-    UPROPERTY()
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
     FString Key;
 
-    UPROPERTY()
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
     FString ValueString;
 
-    UPROPERTY()
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
     double ValueNumber = 0.0;
 
-    UPROPERTY()
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
     bool ValueBool = false;
 
-    UPROPERTY()
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
     EGAValueType ValueType = EGAValueType::value_number;
 };
 
@@ -42,7 +42,7 @@ struct GAMEANALYTICS_API FGACustomFields
 {
     GENERATED_BODY();
 
-    UPROPERTY()
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
     TArray<FGACustomValue> Values;
 
     bool IsEmpty() const;
@@ -72,6 +72,9 @@ class GAMEANALYTICS_API UGameAnalytics : public UObject
 public:
 
     virtual void BeginDestroy() override;
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static UGameAnalytics* GetInstance();
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     void ConfigureAvailableCustomDimensions01(const TArray<FString>& List);
