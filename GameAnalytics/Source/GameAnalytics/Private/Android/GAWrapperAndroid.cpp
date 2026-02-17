@@ -1436,6 +1436,7 @@ namespace gameanalytics
                     __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", methodName);
                 }
 
+                env->DeleteLocalRef(javaTracker);
                 env->DeleteLocalRef(jClass);
             }
             else

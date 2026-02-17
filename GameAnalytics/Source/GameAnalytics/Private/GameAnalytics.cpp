@@ -8,7 +8,7 @@
 #include "GameAnalyticsPerformance.h"
 #include "GameAnalyticsModule.h"
 
-#define GA_VERSION TEXT("6.1.1")
+#define GA_VERSION TEXT("6.1.2")
 
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     #define GA_USE_CPP_SDK 1

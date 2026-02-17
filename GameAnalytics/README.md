@@ -20,6 +20,10 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**6.1.2**
+* update GameAnalytics Android SDK dependecy to v7.0.1
+* update GameAnalytics iOS SDK dependency to v5.0.1
+
 **6.1.1**
 * updated GameAnalyticsCpp dependency to 5.1.1
 * bugfix: boolean custom fields
