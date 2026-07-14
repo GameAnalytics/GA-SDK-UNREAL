@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UObject/Object.h"
+#include "GAEnums.generated.h"
 
 UENUM()
 enum class EGAResourceFlowType : uint8
@@ -73,3 +74,5 @@ enum class EGAValueType : uint8
     value_string,
     value_bool
 };
+
+DECLARE_DYNAMIC_DELEGATE_OneParam(FRemoteConfigListener, FString, RemoteConfigs);

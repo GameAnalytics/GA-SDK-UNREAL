@@ -396,6 +396,11 @@ namespace gameanalytics
         return s;
     }
 
+    void GAWrapperIOS::RegisterRemoteConfigListener(FRemoteConfigListener listener) {
+        (void)listener;
+        NSLog(@"RegisterRemoteConfigListener -> Function not available for iOS");
+    }
+
     std::string GAWrapperIOS::GetUserId() {
         NSString* uid = [GameAnalytics getUserId];
         return FromNSString(uid);

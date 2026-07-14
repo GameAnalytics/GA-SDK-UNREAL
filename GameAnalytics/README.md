@@ -20,6 +20,12 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**6.2.0**
+* support for UE 5.8
+* remove 3rd party dependencies, use Unreal's  http client
+* add RegisterRemoteConfigListener for desktop platform
+* fixed a bug where \'GetRemoteConfigsValueAs*\' would return empty even if remote configs have been populated
+
 **6.1.2**
 * update GameAnalytics Android SDK dependecy to v7.0.1
 * update GameAnalytics iOS SDK dependency to v5.0.1

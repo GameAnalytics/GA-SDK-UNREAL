@@ -88,6 +88,8 @@ namespace gameanalytics
 
         virtual std::string GetABTestingVariantId() = 0;
 
+        virtual void RegisterRemoteConfigListener(FRemoteConfigListener listener) = 0;
+
         /////////////////// HEALTH /////////////////////////
 
         virtual void EnableSDKInitEvent(bool flag) = 0;

@@ -83,6 +83,8 @@ namespace gameanalytics
 
         virtual std::string GetRemoteConfigsValueAsJson(std::string const& key) override;
 
+        virtual void RegisterRemoteConfigListener(FRemoteConfigListener listener) override;
+
         virtual bool IsRemoteConfigsReady() override;
 
         virtual std::string GetRemoteConfigsContentAsString() override;

@@ -8,7 +8,7 @@
 #include "GameAnalyticsPerformance.h"
 #include "GameAnalyticsModule.h"
 
-#define GA_VERSION TEXT("6.1.2")
+#define GA_VERSION TEXT("6.2.0")
 
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     #define GA_USE_CPP_SDK 1
@@ -695,6 +695,18 @@ bool UGameAnalytics::IsRemoteConfigsReady()
     {
         GA_NOT_SUPPORTED_WARNING();
         return false;
+    }
+}
+
+void UGameAnalytics::RegisterRemoteConfigsListener(FRemoteConfigListener listener)
+{
+    if (_impl)
+    {
+        return _impl->RegisterRemoteConfigListener(listener);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
     }
 }
 

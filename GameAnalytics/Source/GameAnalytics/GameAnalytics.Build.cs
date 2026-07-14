@@ -19,7 +19,10 @@ namespace UnrealBuildTool.Rules
             var GA_SDK_CppPath = Path.GetFullPath(Path.Combine(ThirdPartyPath, "GA-SDK-CPP", "lib"));
             var libPath = Path.Combine(ThirdPartyPath, "lib");
 
-            if(Target.Platform == UnrealTargetPlatform.Win64)
+            PublicDefinitions.Add("CURL_STATICLIB=1");
+            PrivateDefinitions.Add("CURL_STATICLIB=1");
+
+            if (Target.Platform == UnrealTargetPlatform.Win64)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(GA_SDK_CppPath, "Win64", "GameAnalytics.lib"));
                 PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl", "nghttp2", "zlib" });
@@ -110,7 +113,8 @@ namespace UnrealBuildTool.Rules
                 {
                     "Analytics",
                     "Engine",
-                    "Json"
+                    "Json",
+                    "HTTP"
                 }
             );
 
@@ -119,7 +123,8 @@ namespace UnrealBuildTool.Rules
                 {
                     "Analytics",
                     "Engine",
-                    "Json"
+                    "Json",
+                    "HTTP"
                 }
             );
 

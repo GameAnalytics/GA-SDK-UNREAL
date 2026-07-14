@@ -1,8 +1,28 @@
 #include "GAWrapperCpp.h"
 #include "GameAnalytics/GameAnalytics.h"
+#include "GAHttpClientUnreal.h"
 
 namespace gameanalytics
 {
+    struct UnrealRemoteConfigsListener:
+        public gameanalytics::IRemoteConfigsListener
+    {
+        UnrealRemoteConfigsListener(FRemoteConfigListener callback):
+            _callback(callback)
+        {
+        }
+
+        virtual void onRemoteConfigsUpdated(std::string const& remoteConfigs) override
+        {
+            FString RemoteConfigs = UTF8_TO_TCHAR(remoteConfigs.c_str());
+            return _callback.Execute(RemoteConfigs);
+        }
+
+        private:
+
+            FRemoteConfigListener _callback;
+    };
+
     void GAWrapperCpp::SetAvailableCustomDimensions01(const std::vector<std::string>& list) {
         GameAnalytics::configureAvailableCustomDimensions01(list);
     }
@@ -45,6 +65,8 @@ namespace gameanalytics
     }
 
     void GAWrapperCpp::Initialize(std::string const& gameKey, std::string const& gameSecret) {
+
+        GameAnalytics::configureHttpClient<gameanalytics::GAHttpClientUnreal>();
         GameAnalytics::initialize(gameKey, gameSecret);
     }
 
@@ -159,6 +181,11 @@ namespace gameanalytics
 
     std::string GAWrapperCpp::GetRemoteConfigsContentAsString() {
         return GameAnalytics::getRemoteConfigsContentAsString();
+    }
+
+    void GAWrapperCpp::RegisterRemoteConfigListener(FRemoteConfigListener listener) {
+        auto ptr = std::make_shared<UnrealRemoteConfigsListener>(listener);
+        return GameAnalytics::addRemoteConfigsListener(ptr);
     }
 
     std::string GAWrapperCpp::GetABTestingId() {
