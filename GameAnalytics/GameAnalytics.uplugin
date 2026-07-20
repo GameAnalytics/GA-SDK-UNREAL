@@ -1,27 +1,35 @@
 {
-    "FileVersion" : 3,
-
-    "FriendlyName" : "GameAnalytics",
-    "Version" : 1,
-    "VersionName" : "6.1.2",
-    "CreatedBy" : "GameAnalytics",
-    "CreatedByURL" : "http://gameanalytics.com",
-    "MarketplaceURL" : "com.epicgames.launcher://ue/marketplace/content/d070c3fab7b74c08bab3a89c9cbf4490",
-    "Description" : "GameAnalytics is a free analytics platform that helps game developers understand their players' behaviour by delivering relevant insights.",
-    "Category" : "Analytics",
-
-    "Modules" :
-    [
-        {
-            "Name" : "GameAnalytics",
-            "Type" : "Runtime",
-            "LoadingPhase" : "PreDefault",
-            "WhitelistPlatforms" : [ "Android", "IOS", "Mac", "Win64", "Linux" ]
-        },
-        {
-            "Name" : "GameAnalyticsEditor",
-            "Type" : "UncookedOnly",
-            "LoadingPhase" : "PreDefault"
-        }
-    ]
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "6.2.0",
+	"FriendlyName": "GameAnalytics",
+	"Description": "GameAnalytics is a free analytics platform that helps game developers understand their players' behaviour by delivering relevant insights.",
+	"Category": "Analytics",
+	"CreatedBy": "GameAnalytics",
+	"CreatedByURL": "http://gameanalytics.com",
+	"DocsURL": "",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/d070c3fab7b74c08bab3a89c9cbf4490",
+	"SupportURL": "",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "GameAnalytics",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"PlatformAllowList": [
+				"Android",
+				"IOS",
+				"Mac",
+				"Win64",
+				"Linux"
+			]
+		},
+		{
+			"Name": "GameAnalyticsEditor",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "PreDefault"
+		}
+	]
 }

@@ -205,6 +205,9 @@ public:
     bool IsRemoteConfigsReady();
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    void RegisterRemoteConfigsListener(FRemoteConfigListener listener);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     FString GetRemoteConfigsContentAsString();
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
