@@ -80,6 +80,7 @@ namespace gameanalytics
 
     struct IRemoteConfigsListener
     {
+        virtual ~IRemoteConfigsListener() {};
         virtual void onRemoteConfigsUpdated(std::string const& remoteConfigs) = 0;
     };
 }

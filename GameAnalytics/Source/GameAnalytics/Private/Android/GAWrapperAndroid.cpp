@@ -1209,6 +1209,12 @@ namespace gameanalytics
             return "";
         }
 
+        void GAWrapperAndroid::RegisterRemoteConfigListener(FRemoteConfigListener listener)
+        {
+            (void)listener;
+            __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "RegisterRemoteConfigListener -> Function not available for Android");
+        }
+
         std::string GAWrapperAndroid::GetRemoteConfigsValueAsString(std::string const& key, std::string const& defaultValue)
         {
             JNIEnv* env = GetJavaEnv();

@@ -56,19 +56,19 @@ namespace gameanalytics
         virtual void AddBusinessEventAndAutoFetchReceipt(std::string const& currency, int amount, std::string const& itemType, std::string const& itemId, std::string const& cartType, std::string const& fields, bool mergeFields) override;
         virtual void AddBusinessEventWithReceipt(std::string const& currency, int amount, std::string const& itemType, std::string const& itemId, std::string const& cartType, std::string const& receipt, std::string const& store, std::string const& signature, std::string const& fields, bool mergeFields) override;
 
-        virtual void AddResourceEvent(EGAResourceFlowType flowType, std::string const& currency, float amount, std::string const& itemType, std::string const& itemId, std::string const&  fields, bool mergeFields) override;
+        virtual void AddResourceEvent(::EGAResourceFlowType flowType, std::string const& currency, float amount, std::string const& itemType, std::string const& itemId, std::string const&  fields, bool mergeFields) override;
 
-        virtual void AddProgressionEvent(EGAProgressionStatus progressionStatus, std::string const& progression01, std::string const& progression02, std::string const& progression03, std::string const&  fields, bool mergeFields) override;
-        virtual void AddProgressionEventWithScore(EGAProgressionStatus progressionStatus, std::string const& progression01, std::string const& progression02, std::string const& progression03, int score, std::string const& fields, bool mergeFields) override;
+        virtual void AddProgressionEvent(::EGAProgressionStatus progressionStatus, std::string const& progression01, std::string const& progression02, std::string const& progression03, std::string const&  fields, bool mergeFields) override;
+        virtual void AddProgressionEventWithScore(::EGAProgressionStatus progressionStatus, std::string const& progression01, std::string const& progression02, std::string const& progression03, int score, std::string const& fields, bool mergeFields) override;
         
         virtual void AddDesignEvent(std::string const& eventID, std::string const&  fields, bool mergeFields) override;
         virtual void AddDesignEventWithValue(std::string const& eventId, float value, std::string const& fields, bool mergeFields) override;
 
         virtual void AddErrorEvent(EGAErrorSeverity severity, std::string const& message, std::string const&  fields, bool mergeFields) override;
 
-        virtual void AddAdEventWithDuration(EGAAdAction adAction, EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, int64_t duration, std::string const& fields, bool mergeFields) override;
-        virtual void AddAdEventWithReason(EGAAdAction adAction, EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, EGAAdError noAdReason, std::string const& fields, bool mergeFields) override;
-        virtual void AddAdEvent(EGAAdAction adAction, EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, std::string const& fields, bool mergeFields) override;
+        virtual void AddAdEventWithDuration(::EGAAdAction adAction, ::EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, int64_t duration, std::string const& fields, bool mergeFields) override;
+        virtual void AddAdEventWithReason(::EGAAdAction adAction, ::EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, ::EGAAdError noAdReason, std::string const& fields, bool mergeFields) override;
+        virtual void AddAdEvent(::EGAAdAction adAction, ::EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, std::string const& fields, bool mergeFields) override;
 
         virtual void SetInfoLog(bool enabled) override;
 
@@ -82,6 +82,8 @@ namespace gameanalytics
         virtual double GetRemoteConfigsValueAsNumber(std::string const& key, double defaultValue) override;
 
         virtual std::string GetRemoteConfigsValueAsJson(std::string const& key) override;
+
+        virtual void RegisterRemoteConfigListener(FRemoteConfigListener listener) override;
 
         virtual bool IsRemoteConfigsReady() override;
 

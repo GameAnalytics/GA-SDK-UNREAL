@@ -19,10 +19,10 @@ namespace UnrealBuildTool.Rules
             var GA_SDK_CppPath = Path.GetFullPath(Path.Combine(ThirdPartyPath, "GA-SDK-CPP", "lib"));
             var libPath = Path.Combine(ThirdPartyPath, "lib");
 
-            if(Target.Platform == UnrealTargetPlatform.Win64)
+            if (Target.Platform == UnrealTargetPlatform.Win64)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(GA_SDK_CppPath, "Win64", "GameAnalytics.lib"));
-                PrivateDependencyModuleNames.AddRange(new string[] {  "OpenSSL", "libcurl", "nghttp2", "zlib" });
+                PrivateDependencyModuleNames.AddRange(new string[] { "nghttp2", "zlib" });
                 PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "GA-SDK-CPP")));
             }
             else if(Target.Platform == UnrealTargetPlatform.Android)
@@ -44,7 +44,7 @@ namespace UnrealBuildTool.Rules
                         "MetalKit"
                     }
                 );
-                PrivateDependencyModuleNames.AddRange(new string[] { "OpenSSL", "libcurl", "nghttp2" });
+                PrivateDependencyModuleNames.AddRange(collection: new string[] { "OpenSSL", "libcurl", "nghttp2" });
 
                 PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "GA-SDK-CPP")));
             }
@@ -110,7 +110,8 @@ namespace UnrealBuildTool.Rules
                 {
                     "Analytics",
                     "Engine",
-                    "Json"
+                    "Json",
+                    "HTTP"
                 }
             );
 
@@ -119,7 +120,8 @@ namespace UnrealBuildTool.Rules
                 {
                     "Analytics",
                     "Engine",
-                    "Json"
+                    "Json",
+                    "HTTP"
                 }
             );
 
