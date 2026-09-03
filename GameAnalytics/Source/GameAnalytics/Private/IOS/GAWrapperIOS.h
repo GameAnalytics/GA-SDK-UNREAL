@@ -2,7 +2,7 @@
 
 #include "GAWrapper.h"
 
-namespace gameanalytics 
+namespace gameanalytics
 {
     class GAWrapperIOS:
         public GAWrapper

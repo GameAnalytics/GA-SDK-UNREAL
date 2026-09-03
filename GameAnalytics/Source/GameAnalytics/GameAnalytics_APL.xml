@@ -14,6 +14,14 @@
 					  dst="$S(BuildDir)/gradle/AFSProject/app/libs/gameanalytics.aar"/>
 	</gradleCopies-->
 
+    <!-- copy the JNI bridge classes into the staging src tree; this gets mirrored into
+         the gradle project's Java sources afterwards, so it must NOT target gradle/app directly
+         (that directory is clean-copied from $S(BuildDir)/src and would wipe it out) -->
+    <resourceCopies>
+        <copyFile src="$S(PluginDir)/Private/Android/Java/com/gameanalytics/sdk/NativeRemoteConfigsListener.java"
+                  dst="$S(BuildDir)/src/com/gameanalytics/sdk/NativeRemoteConfigsListener.java"/>
+    </resourceCopies>
+
     <!-- optional additions to proguard -->
     <proguardAdditions>
         <insert>
@@ -31,7 +39,7 @@ repositories {
     flatDir { dirs("libs") }
 }
  dependencies {
-     implementation('com.gameanalytics.sdk:gameanalytics-android:7.0.1')
+     implementation('com.gameanalytics.sdk:gameanalytics-android:7.1.0')
      implementation('com.google.android.gms:play-services-appset:16.0.1')
  }
         </insert>

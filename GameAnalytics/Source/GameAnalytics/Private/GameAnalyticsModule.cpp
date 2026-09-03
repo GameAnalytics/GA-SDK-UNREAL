@@ -26,16 +26,20 @@ FGameAnalyticsModule::FGameAnalyticsProjectSettings::PlatformInfo FGameAnalytics
 
 void FGameAnalyticsModule::StartupModule()
 {
-    UE_LOG(LogGameAnalytics, Display, TEXT("FGameAnalyticsModule Constructor"));
+    UE_LOG(LogGameAnalytics, Verbose, TEXT("FGameAnalyticsModule Constructor"));
 
     GameAnalytics = NewObject<UGameAnalytics>(GetTransientPackage(), UGameAnalytics::StaticClass(), "GameAnalytics", EObjectFlags::RF_Standalone);
     GameAnalytics->AddToRoot();
+
+    OnQuitDelegate = FCoreDelegates::OnPreExit.AddUObject(GameAnalytics, &UGameAnalytics::OnQuit);
 
     GameAnalyticsProvider = MakeShareable(new FGameAnalyticsProvider(GameAnalytics));
 }
 
 void FGameAnalyticsModule::ShutdownModule()
 {
+    FCoreDelegates::OnPreExit.Remove(OnQuitDelegate);
+
     if (!GExitPurge && IsValid(GameAnalytics))
     {
         GameAnalytics->RemoveFromRoot();

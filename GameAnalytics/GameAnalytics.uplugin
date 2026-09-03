@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "6.2.0",
+	"VersionName": "6.2.1",
 	"FriendlyName": "GameAnalytics",
 	"Description": "GameAnalytics is a free analytics platform that helps game developers understand their players' behaviour by delivering relevant insights.",
 	"Category": "Analytics",

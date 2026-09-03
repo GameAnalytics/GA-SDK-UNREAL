@@ -1,6 +1,12 @@
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**6.2.1**
+* fix HTTP requests hanging process on exit
+* updated Android depdendency
+* fix socket leak when getting the connection type on linux
+* add remote config listeners for all platforms
+
 **6.0.0**
 * removed static functions, UGameAnalytics is now an object
 * added instance of UGameAnalytics inside UGameAnalyticsModule

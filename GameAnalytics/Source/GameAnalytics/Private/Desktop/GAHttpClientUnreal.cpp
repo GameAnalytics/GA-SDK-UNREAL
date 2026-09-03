@@ -3,19 +3,19 @@
 #include "HttpModule.h"
 #include "Interfaces/IHttpRequest.h"
 #include "Interfaces/IHttpResponse.h"
-#include <atomic>
+#include "HAL/Event.h"
 
 namespace gameanalytics
 {
     void GAHttpClientUnreal::initialize()
     {
         FHttpModule::Get();
-        UE_LOG(LogTemp, Display, TEXT("Initializing Unreal HTTP Client"));
+        UE_LOG(LogTemp, Verbose, TEXT("Initializing Unreal HTTP Client"));
     }
 
     void GAHttpClientUnreal::cleanup()
     {
-        UE_LOG(LogTemp, Display, TEXT("Cleanup Unreal HTTP Client"));
+        UE_LOG(LogTemp, Verbose, TEXT("Cleanup Unreal HTTP Client"));
     }
 
     GAHttpClient::Response GAHttpClientUnreal::sendRequest(
@@ -25,12 +25,14 @@ namespace gameanalytics
         bool useGzip,
         void* /*userData*/)
     {
-        UE_LOG(LogTemp, Display, TEXT("Send http request %hs with auth %hs"), url.c_str(), auth.c_str());
+        UE_LOG(LogTemp, Verbose, TEXT("Send http request %hs with auth %hs"), url.c_str(), auth.c_str());
 
         TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
 
         Request->SetURL(UTF8_TO_TCHAR(url.c_str()));
         Request->SetVerb(TEXT("POST"));
+
+        Request->SetDelegateThreadPolicy(EHttpRequestDelegateThreadPolicy::CompleteOnHttpThread);
 
         if (useGzip)
         {
@@ -55,28 +57,40 @@ namespace gameanalytics
         Content.Append(payloadData.data(), payloadData.size());
         Request->SetContent(MoveTemp(Content));
 
-        GAHttpClient::Response response = {};
-        std::atomic<bool> bDone{ false };
+        struct FRequestState
+        {
+            GAHttpClient::Response response = {};
+            FEventRef RequestFinished{ EEventMode::AutoReset };
+        };
+        TSharedRef<FRequestState, ESPMode::ThreadSafe> State = MakeShared<FRequestState, ESPMode::ThreadSafe>();
 
+        // Runs on the HTTP thread, so it only touches State and never the request itself.
         Request->OnProcessRequestComplete().BindLambda(
-            [&response, &bDone](FHttpRequestPtr /*Req*/, FHttpResponsePtr Resp, bool bSucceeded)
+            [State](FHttpRequestPtr /*Req*/, FHttpResponsePtr Resp, bool bSucceeded)
             {
                 if (bSucceeded && Resp.IsValid())
                 {
-                    response.code = Resp->GetResponseCode();
+                    State->response.code = Resp->GetResponseCode();
                     const TArray<uint8>& Payload = Resp->GetContent();
-                    response.packet.assign(
+                    State->response.packet.assign(
                         reinterpret_cast<const char*>(Payload.GetData()),
                         reinterpret_cast<const char*>(Payload.GetData()) + Payload.Num());
                 }
-                bDone.store(true);
+
+                State->RequestFinished->Trigger();
             });
 
         Request->ProcessRequest();
 
-        // block the GA thread because we want the response
-        while (!bDone.load()) {}
+        // 21 seconds, requests are always done on GA thread
+        constexpr int TIMEOUT = 21 * 1000;
 
-        return response;
+        if (!State->RequestFinished->Wait(TIMEOUT))
+        {
+            Request->CancelRequest();
+            return {};
+        }
+
+        return State->response;
     }
 }

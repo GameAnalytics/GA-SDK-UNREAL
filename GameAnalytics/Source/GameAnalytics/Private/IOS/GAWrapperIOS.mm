@@ -26,6 +26,29 @@
 }
 @end
 
+// Objective-C++ wrapper for remote config update notifications
+@interface GARemoteConfigsProvider : NSObject <GARemoteConfigsDelegate>
+{
+    std::function<void()> remoteConfigsUpdatedCallback;
+}
+- (instancetype)initWithCallback:(const std::function<void()>&)callback;
+@end
+
+@implementation GARemoteConfigsProvider
+- (instancetype)initWithCallback:(const std::function<void()>&)callback {
+    self = [super init];
+    if (self) {
+        remoteConfigsUpdatedCallback = callback;
+    }
+    return self;
+}
+- (void)onRemoteConfigsUpdated {
+    if (remoteConfigsUpdatedCallback) {
+        remoteConfigsUpdatedCallback();
+    }
+}
+@end
+
 namespace gameanalytics
 {
     NSString* ToNSString(std::string const& str)
@@ -397,8 +420,14 @@ namespace gameanalytics
     }
 
     void GAWrapperIOS::RegisterRemoteConfigListener(FRemoteConfigListener listener) {
-        (void)listener;
-        NSLog(@"RegisterRemoteConfigListener -> Function not available for iOS");
+        GARemoteConfigsProvider *provider = [[GARemoteConfigsProvider alloc] initWithCallback:[this, listener]()
+        {
+            const std::string remoteConfigs = GetRemoteConfigsContentAsString();
+            FString asFString = UTF8_TO_TCHAR(remoteConfigs.c_str());
+            listener.Execute(asFString);
+        }];
+
+        [GameAnalytics setRemoteConfigsDelegate:provider];
     }
 
     std::string GAWrapperIOS::GetUserId() {
@@ -439,8 +468,6 @@ namespace gameanalytics
     {
         [GameAnalytics enableSDKInitEvent:value];
     }
-
-
 
     void GAWrapperIOS::EnableFpsHistogram(FPSTracker tracker, bool value)
     {
@@ -488,7 +515,6 @@ namespace gameanalytics
 
     void GAWrapperIOS::OnQuit()
     {
-
     }
 
     void GAWrapperIOS::SetWritablePath(std::string const& path)

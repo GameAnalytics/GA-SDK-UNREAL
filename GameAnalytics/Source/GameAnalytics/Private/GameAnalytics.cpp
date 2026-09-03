@@ -8,7 +8,11 @@
 #include "GameAnalyticsPerformance.h"
 #include "GameAnalyticsModule.h"
 
-#define GA_VERSION TEXT("6.2.0")
+#include "HttpModule.h"
+#include "HttpManager.h"
+#include "Async/Async.h"
+
+#define GA_VERSION TEXT("6.2.1")
 
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     #define GA_USE_CPP_SDK 1
@@ -169,8 +173,6 @@ UGameAnalytics::UGameAnalytics(const FObjectInitializer& ObjectInitializer) : Su
 
 void UGameAnalytics::BeginDestroy()
 {
-    OnQuit();
-
     if(IsValid(_performanceTracker))
     {
         _performanceTracker->RemoveFromRoot();
@@ -644,7 +646,39 @@ void UGameAnalytics::OnQuit()
 {
     if(_impl)
     {
-        _impl->OnQuit();
+        // only needed for desktop platforms -> other platforms do not use Unreal's HTTP client
+        #if GA_USE_CPP_SDK
+
+            // timeout is 21 seconds
+            constexpr float TIMEOUT = 21.0;
+
+            // join GA thread
+            TFuture<void> Done = Async(EAsyncExecution::Thread, [this]()
+                {
+                    _impl->OnQuit();
+                }
+            );
+
+            const float StartTime = FPlatformTime::Seconds();
+
+            // we need to tick unreal's HTTP client for outstanding requests
+            while (!Done.IsReady())
+            {
+                FPlatformProcess::Sleep(0.2);
+                FHttpModule::Get().GetHttpManager().Flush(EHttpFlushReason::Default);
+
+                float TimePassed = FPlatformTime::Seconds() - StartTime;
+                if (TimePassed > TIMEOUT)
+                {
+                    break;
+                }
+            }
+
+        #else
+
+            _impl->OnQuit();
+
+        #endif
     }
     else
     {

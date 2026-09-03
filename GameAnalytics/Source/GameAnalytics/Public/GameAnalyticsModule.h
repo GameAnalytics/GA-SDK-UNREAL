@@ -101,6 +101,8 @@ private:
 
     UGameAnalytics* GameAnalytics{nullptr};
 
+    FDelegateHandle OnQuitDelegate;
+
     virtual void StartupModule() override;
     virtual void ShutdownModule() override;
 

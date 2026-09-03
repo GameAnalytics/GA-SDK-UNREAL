@@ -8,6 +8,7 @@ namespace gameanalytics
         constexpr const char* GAMEANALYTICS_CLASS_NAME = "com/gameanalytics/sdk/GameAnalytics";
 
         static FPSTracker androidFPSTracker;
+        static std::function<void()> androidRemoteConfigListener;
 
         GAWrapperAndroid::GAWrapperAndroid():
             GAWrapper()
@@ -1211,8 +1212,45 @@ namespace gameanalytics
 
         void GAWrapperAndroid::RegisterRemoteConfigListener(FRemoteConfigListener listener)
         {
-            (void)listener;
-            __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "RegisterRemoteConfigListener -> Function not available for Android");
+            androidRemoteConfigListener = [=, this]()
+            {
+                const std::string remoteConfigs = GetRemoteConfigsContentAsString();
+                
+                FString asFString = UTF8_TO_TCHAR(remoteConfigs.c_str());
+                listener.Execute(asFString);
+            };
+
+            JNIEnv* env = GetJavaEnv();
+            jclass jClass = GetGameAnalyticsClass();
+
+            constexpr const char* methodName = "addRemoteConfigsListener";
+
+            if(jClass)
+            {
+                jmethodID jMethod = env->GetStaticMethodID(jClass, methodName, "(Lcom/gameanalytics/sdk/IRemoteConfigsListener;)V");
+
+                if(jMethod)
+                {
+                    jclass nativeRemoteConfigsListenerClass = FAndroidApplication::FindJavaClass("com/gameanalytics/sdk/NativeRemoteConfigsListener");
+
+                    jmethodID ctor = env->GetMethodID(nativeRemoteConfigsListenerClass, "<init>", "()V");
+                    jobject javaListener = env->NewObject(nativeRemoteConfigsListenerClass, ctor);
+
+                    env->CallStaticVoidMethod(jClass, jMethod, javaListener);
+
+                    env->DeleteLocalRef(javaListener);
+                }
+                else
+                {
+                    __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", methodName);
+                }
+
+                env->DeleteLocalRef(jClass);
+            }
+            else
+            {
+                __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", GAMEANALYTICS_CLASS_NAME);
+            }
         }
 
         std::string GAWrapperAndroid::GetRemoteConfigsValueAsString(std::string const& key, std::string const& defaultValue)
@@ -1614,4 +1652,11 @@ JNIEXPORT jfloat JNICALL
 Java_com_gameanalytics_sdk_health_NativeFpsTracker_getFPSNative(JNIEnv *env, jobject _this) 
 {
     return gameanalytics::androidFPSTracker();
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_gameanalytics_sdk_NativeRemoteConfigsListener_onRemoteConfigsUpdatedNative(JNIEnv *env, jobject _this)
+{
+    return gameanalytics::androidRemoteConfigListener();
 }
