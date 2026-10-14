@@ -1,6 +1,13 @@
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**6.3.0**
+* added AddBusinessEventWithValidation (C++ and Blueprints) for server-side validation of in-app purchases on iOS and Android
+* added FGAReceipt: set TransactionId on iOS (App Store transaction id), ProductId and PurchaseToken on Android (Google Play)
+* AddBusinessEventWithValidation is not supported on Windows, macOS and Linux: it logs a warning and no event is sent
+* updated iOS dependency to GA iOS v5.1.0, now linked as an xcframework (device and simulator)
+* updated Android dependency to GA Android v7.2.0
+
 **6.2.1**
 * fix HTTP requests hanging process on exit
 * updated Android depdendency

@@ -11,8 +11,9 @@
 #include "HttpModule.h"
 #include "HttpManager.h"
 #include "Async/Async.h"
+#include "HAL/PlatformProcess.h"
 
-#define GA_VERSION TEXT("6.2.1")
+#define GA_VERSION TEXT("6.3.0")
 
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     #define GA_USE_CPP_SDK 1
@@ -367,6 +368,24 @@ void UGameAnalytics::AddBusinessEventAndAutoFetchReceipt(FString const& currency
     if(_impl)
     {
         _impl->AddBusinessEventAndAutoFetchReceipt(ToStdString(currency), amount, ToStdString(itemType), ToStdString(itemId), ToStdString(cartType), ToStdString(CustomFields.ToString()), mergeFields);
+    }
+    else
+    {
+        GA_NOT_SUPPORTED_WARNING();
+    }
+}
+
+void UGameAnalytics::AddBusinessEventWithValidation(FString const& Currency, int Amount, FString const& ItemType, FString const& ItemId, FString const& CartType, const FGAReceipt& Receipt, const FGACustomFields CustomFields, bool MergeFields)
+{
+    if(_impl)
+    {
+        #if PLATFORM_IOS
+            _impl->AddBusinessEventWithValidation(ToStdString(Currency), Amount, ToStdString(ItemType), ToStdString(ItemId), ToStdString(CartType), "apple_app_store", "", ToStdString(Receipt.TransactionId), ToStdString(CustomFields.ToString()), MergeFields);
+        #elif PLATFORM_ANDROID
+            _impl->AddBusinessEventWithValidation(ToStdString(Currency), Amount, ToStdString(ItemType), ToStdString(ItemId), ToStdString(CartType), "google_play_store", ToStdString(Receipt.ProductId), ToStdString(Receipt.PurchaseToken), ToStdString(CustomFields.ToString()), MergeFields);
+        #else
+            UE_LOG(LogGameAnalytics, Warning, TEXT("Business Event with validation is only available for iOS and Android"));
+        #endif
     }
     else
     {

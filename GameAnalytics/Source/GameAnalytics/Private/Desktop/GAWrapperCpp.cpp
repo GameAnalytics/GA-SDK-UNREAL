@@ -80,6 +80,14 @@ namespace gameanalytics
         GameAnalytics::addBusinessEvent(currency, amount, itemType, itemId, cartType, fields, mergeFields);
     }
 
+    void GAWrapperCpp::AddBusinessEventWithValidation(std::string const& currency, int amount, std::string const& itemType, std::string const& itemId, std::string const& cartType, std::string const& store, std::string const& productId, std::string const& purchaseToken, std::string const& fields, bool mergeFields) {
+        (void)store;
+        (void)productId;
+        (void)purchaseToken;
+        GameAnalytics::addBusinessEvent(currency, amount, itemType, itemId, cartType, fields, mergeFields);
+    }
+
+
     void GAWrapperCpp::AddBusinessEventWithReceipt(std::string const& currency, int amount, std::string const& itemType, std::string const& itemId, std::string const& cartType, std::string const& receipt, std::string const& store, std::string const& signature, std::string const& fields, bool mergeFields) {
         (void)receipt;
         (void)store;

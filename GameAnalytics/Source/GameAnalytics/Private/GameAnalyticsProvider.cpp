@@ -2,6 +2,8 @@
 #include "GameAnalyticsModule.h"
 #include "Misc/ConfigCacheIni.h"
 #include "Interfaces/IAnalyticsProvider.h"
+#include "HAL/PlatformMisc.h"
+#include "Misc/Paths.h"
 #include "GameAnalytics.h"
 
 #if PLATFORM_WINDOWS

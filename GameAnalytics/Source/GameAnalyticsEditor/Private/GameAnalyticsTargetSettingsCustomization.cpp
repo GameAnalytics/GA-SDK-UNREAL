@@ -16,6 +16,8 @@
 #include "EditorStyleSet.h"
 
 #include "Json.h"
+#include "HAL/PlatformProcess.h"
+#include "Misc/ConfigCacheIni.h"
 
 #define LOCTEXT_NAMESPACE "GameAnalyticsTargetSettingsCustomization"
 
