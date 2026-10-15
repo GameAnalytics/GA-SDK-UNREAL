@@ -56,7 +56,8 @@ namespace UnrealBuildTool.Rules
             }
             else if(Target.Platform == UnrealTargetPlatform.IOS)
             {
-                PublicAdditionalLibraries.Add(Path.Combine(libPath, "ios", "libGameAnalytics.a"));
+                // Static xcframework: UBT picks the ios-arm64 or ios-arm64_x86_64-simulator slice per architecture
+                PublicAdditionalFrameworks.Add(new Framework("GameAnalytics", Path.Combine(libPath, "ios", "GameAnalytics.xcframework"), Framework.FrameworkMode.Link));
                 PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/IOS"));
                 PublicFrameworks.AddRange(
                     new string[] {

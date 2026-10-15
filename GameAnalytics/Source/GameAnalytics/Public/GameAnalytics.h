@@ -38,6 +38,24 @@ struct FGACustomValue
 };
 
 USTRUCT(BlueprintType)
+struct FGAReceipt
+{
+    GENERATED_BODY();
+
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
+    FString Store;
+
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
+    FString ProductId;
+
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
+    FString PurchaseToken;
+
+    UPROPERTY(BlueprintReadWrite, Category = "GameAnalytics")
+    FString TransactionId;
+};
+
+USTRUCT(BlueprintType)
 struct GAMEANALYTICS_API FGACustomFields
 {
     GENERATED_BODY();
@@ -146,6 +164,9 @@ public:
     
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     void AddBusinessEventWithReceipt(FString const& Currency, int Amount, FString const& ItemType, FString const& ItemId, FString const& CartType, FString const& Receipt, FString const& Store, FString const& Signature, const FGACustomFields CustomFields = FGACustomFields(), bool MergeFields = false);
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    void AddBusinessEventWithValidation(FString const& Currency, int Amount, FString const& ItemType, FString const& ItemId, FString const& CartType, const FGAReceipt& Receipt, const FGACustomFields CustomFields = FGACustomFields(), bool MergeFields = false);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     void AddResourceEvent(EGAResourceFlowType FlowType, const FString &Currency, float Amount, const FString &ItemType, const FString &ItemId, const FGACustomFields CustomFields = FGACustomFields(), bool MergeFields = false);

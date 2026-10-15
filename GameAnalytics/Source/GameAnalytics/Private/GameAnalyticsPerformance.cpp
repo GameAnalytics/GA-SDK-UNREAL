@@ -1,4 +1,5 @@
 #include "GameAnalyticsPerformance.h"
+#include "HAL/PlatformMisc.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsDebug, Display, All);
 
