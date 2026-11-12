@@ -13,7 +13,7 @@
 #include "ObjectEditorUtils.h"
 #include "IDocumentation.h"
 #include "Misc/OutputDevice.h"
-#include "EditorStyleSet.h"
+#include "Styling/AppStyle.h"
 
 #include "Json.h"
 #include "HAL/PlatformProcess.h"
@@ -117,8 +117,8 @@ void FGameAnalyticsTargetSettingsCustomization::CustomizeDetails(IDetailLayoutBu
 				[
 					SNew(SRichTextBlock)
 					.Text(LOCTEXT("DocumentationInfoMessage", "<a id=\"browser\" href=\"http://support.gameanalytics.com\" style=\"HoverOnlyHyperlink\">View the GameAnalytics Unreal documentation here.</> Please login to your GameAnalytics account to automatically retrieve game and secret keys. If you don?t have an account yet, <a id=\"browser\" href=\"https://go.gameanalytics.com/signup\" style=\"HoverOnlyHyperlink\">please sign up to create your account.</>"))
-					.TextStyle(FEditorStyle::Get(), "MessageLog")
-					.DecoratorStyleSet(&FEditorStyle::Get())
+					.TextStyle(FAppStyle::Get(), "MessageLog")
+					.DecoratorStyleSet(&FAppStyle::Get())
 					.AutoWrapText(true)
 					+ SRichTextBlock::HyperlinkDecorator(TEXT("browser"), FSlateHyperlinkRun::FOnClick::CreateStatic(&OnBrowserLinkClicked))
 				]
