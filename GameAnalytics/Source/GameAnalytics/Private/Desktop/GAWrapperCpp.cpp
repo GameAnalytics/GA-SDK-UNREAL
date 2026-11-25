@@ -153,7 +153,7 @@ namespace gameanalytics
 
     void GAWrapperCpp::SetEnabledEventSubmission(bool flag, bool doCache) {
         (void)doCache;
-        GameAnalytics::setEnabledErrorReporting(flag);
+        GameAnalytics::setEnabledEventSubmission(flag);
     }
 
     void GAWrapperCpp::SetCustomDimension01(std::string const& customDimension) {

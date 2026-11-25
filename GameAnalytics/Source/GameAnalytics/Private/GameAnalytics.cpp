@@ -13,7 +13,7 @@
 #include "Async/Async.h"
 #include "HAL/PlatformProcess.h"
 
-#define GA_VERSION TEXT("6.3.0")
+#define GA_VERSION TEXT("6.3.1")
 
 #if PLATFORM_MAC || PLATFORM_WINDOWS || PLATFORM_LINUX
     #define GA_USE_CPP_SDK 1
@@ -323,7 +323,7 @@ void UGameAnalytics::ConfigureGameEngineVersion(FString const& gameEngineVersion
 {
     if(_impl)
     {
-        _impl->SetSDKVersion(ToStdString(gameEngineVersion));
+        _impl->SetGameEngineVersion(ToStdString(gameEngineVersion));
     }
     else
     {
