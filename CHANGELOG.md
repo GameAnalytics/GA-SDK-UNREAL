@@ -1,6 +1,13 @@
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**6.3.1**
+* fixed SetEnabledEventSubmission toggling error reporting instead of event submission on desktop platforms
+* fixed ConfigureGameEngineVersion setting the SDK version instead of the engine version
+* fixed deprecated FEditorStyle warnings when building the plugin from source (editor settings panel now uses FAppStyle)
+* updated C++ dependency to GA C++ v5.4.3: fixed events not being stored when the project or user directory contains non-ASCII characters, fixed a crash on Linux when HOME is unset, Linux library built with -fPIC, improved Windows OS version and CPU model detection
+* updated Android dependency to GA Android v7.2.1: fixed AddBusinessEventWithValidation events being rejected on Android (store id google_play_store now accepted), fixed a crash on devices whose framework lacks SystemClock.currentNetworkTimeClock()
+
 **6.3.0**
 * added AddBusinessEventWithValidation (C++ and Blueprints) for server-side validation of in-app purchases on iOS and Android
 * added FGAReceipt: set TransactionId on iOS (App Store transaction id), ProductId and PurchaseToken on Android (Google Play)

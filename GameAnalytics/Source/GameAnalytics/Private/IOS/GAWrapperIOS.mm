@@ -128,9 +128,9 @@ namespace gameanalytics
         [GameAnalytics configureUserId:userIdString];
     }
 
-    void GAWrapperIOS::SetGameEngineVersion(std::string const& gameEngineSdkVersion) {
-        NSString *gameEngineSdkVersionString = ToNSString(gameEngineSdkVersion);
-        [GameAnalytics configureSdkVersion:gameEngineSdkVersionString];
+    void GAWrapperIOS::SetGameEngineVersion(std::string const& gameEngineVersion) {
+        NSString *gameEngineVersionString = ToNSString(gameEngineVersion);
+        [GameAnalytics configureEngineVersion:gameEngineVersionString];
     }
 
     void GAWrapperIOS::SetSDKVersion(std::string const& sdkVersion) {
